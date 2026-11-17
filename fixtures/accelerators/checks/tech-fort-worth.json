@@ -1,6 +1,6 @@
 {
   "programId": "tech-fort-worth",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "http://techfortworth.org",
     "https://www.techfortworth.org/faq",
@@ -89,13 +89,6 @@
       "title": "TECH Fort Worth — terms page",
       "excerpt": "for weekly sessions for the duration of the 8-week cohort. ​ What can I expect during the 8-week",
       "page": "terms"
-    },
-    {
-      "id": "check-duration-aa56c1a546",
-      "url": "https://www.techfortworth.org/post/techfw-accepts-six-startups-into-its-thinklab-program",
-      "title": "TECH Fort Worth — program page",
-      "excerpt": "into its ThinkLab program. ThinkLab is a12-to-16 weeks, structured program that evaluates the",
-      "page": "details"
     },
     {
       "id": "check-location-da7435a910",
@@ -500,10 +493,6 @@
       {
         "value": "24",
         "evidenceId": "check-duration-4cadb2a5a6"
-      },
-      {
-        "value": "16",
-        "evidenceId": "check-duration-aa56c1a546"
       }
     ],
     "format": [],

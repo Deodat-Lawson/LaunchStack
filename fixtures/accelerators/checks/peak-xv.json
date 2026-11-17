@@ -1,15 +1,13 @@
 {
   "programId": "peak-xv",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.peakxv.com/",
     "https://www.peakxv.com/faqs",
     "https://www.peakxv.com/insight/would-it-help-the-3-words-to-deal-with-anxiety",
     "https://www.peakxv.com/newsletter/peak-xv-ups-surge-seed-investment-ceiling-to-5m-unveils-18-startup-cohort",
-    "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
     "https://www.peakxv.com/insight/meet-the-first-cohort-of-the-sequoia-spark-fellowship-for-female-founders",
     "https://www.peakxv.com/about-us",
-    "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
     "https://www.peakxv.com/insight/cursor-co-founder-aman-sanger-on-the-journey-from-0--100m-in-12-months-the-future-of-programming",
     "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
     "https://www.peakxv.com/insight/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
@@ -18,18 +16,11 @@
     "https://www.peakxv.com/newsletter/peak-xv-s-mohit-bhatnagar-bullish-on-ai-deep-tech-sees-50-portfolio-firms-nearing-ipo-scale",
     "https://www.peakxv.com/our-companies",
     "https://www.peakxv.com/our-companies?e6a89e8b_page=2",
-    "https://www.peakxv.com/companies/10-minute-school",
-    "https://www.peakxv.com/companies/1mg",
-    "https://www.peakxv.com/companies/aampe"
+    "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
+    "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
+    "https://www.peakxv.com/companies/10-minute-school"
   ],
   "evidence": [
-    {
-      "id": "check-deal-f8262a833e",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "title": "Peak XV — program page",
-      "excerpt": "soon after. Key highlights include: Capital : Surge will invest $1.5M in every start-up that is a part of Surge, before the start of the",
-      "page": "details"
-    },
     {
       "id": "check-duration-28908f897f",
       "url": "https://www.peakxv.com/insight/cursor-co-founder-aman-sanger-on-the-journey-from-0--100m-in-12-months-the-future-of-programming",
@@ -136,27 +127,6 @@
       "page": "details"
     },
     {
-      "id": "check-email-57f4cee5cc",
-      "url": "https://www.peakxv.com/companies/10-minute-school",
-      "title": "Peak XV — portfolio page",
-      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-email-5e82741ed3",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "title": "Peak XV — program page",
-      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
-      "page": "details"
-    },
-    {
-      "id": "check-email-61509f6cb1",
-      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
-      "title": "Peak XV — batches page",
-      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
-      "page": "batches"
-    },
-    {
       "id": "check-email-690c6cac45",
       "url": "https://www.peakxv.com/newsletter/model-companies-have-to-ensure-unsafe-models-are-not-released-rajan-anandan",
       "title": "Peak XV — portfolio page",
@@ -190,13 +160,6 @@
       "title": "Peak XV — program page",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
       "page": "details"
-    },
-    {
-      "id": "check-email-98b53a7b7e",
-      "url": "https://www.peakxv.com/companies/aampe",
-      "title": "Peak XV — portfolio page",
-      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
-      "page": "portfolio"
     },
     {
       "id": "check-email-9c2dfeacaf",
@@ -238,20 +201,6 @@
       "url": "https://www.peakxv.com/newsletter/peak-xv-s-mohit-bhatnagar-bullish-on-ai-deep-tech-sees-50-portfolio-firms-nearing-ipo-scale",
       "title": "Peak XV — portfolio page",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-email-cb5cbe775b",
-      "url": "https://www.peakxv.com/companies/aampe",
-      "title": "Peak XV — portfolio page",
-      "excerpt": "contactus@peakxv.com",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-email-cb9f38737c",
-      "url": "https://www.peakxv.com/companies/1mg",
-      "title": "Peak XV — portfolio page",
-      "excerpt": "contactus@peakxv.com",
       "page": "portfolio"
     },
     {
@@ -318,13 +267,6 @@
       "page": "portfolio"
     },
     {
-      "id": "check-email-e74ba8f828",
-      "url": "https://www.peakxv.com/companies/1mg",
-      "title": "Peak XV — portfolio page",
-      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
-      "page": "portfolio"
-    },
-    {
       "id": "check-email-e7d3408f22",
       "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
       "title": "Peak XV — batches page",
@@ -344,13 +286,6 @@
       "title": "Peak XV — homepage",
       "excerpt": "contactus@peakxv.com",
       "page": "details"
-    },
-    {
-      "id": "check-format-19f4f90bba",
-      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
-      "title": "Peak XV — batches page",
-      "excerpt": "run from October 2024 to February 2025, featuring a mix of in-person and online sessions, and events focused on founder",
-      "page": "batches"
     },
     {
       "id": "check-format-48f0d744bc",
@@ -549,13 +484,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-67322cf377",
-      "url": "https://www.peakxv.com/companies/aampe",
-      "title": "Peak XV — portfolio page",
-      "excerpt": "← Back → https://www.peakxv.com/our-companies",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-6a092c492b",
       "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
       "title": "Peak XV — batches page",
@@ -568,13 +496,6 @@
       "title": "Peak XV — program page",
       "excerpt": "Companies → https://www.peakxv.com/our-companies",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-73af473974",
-      "url": "https://www.peakxv.com/companies/aampe",
-      "title": "Peak XV — portfolio page",
-      "excerpt": "Companies → https://www.peakxv.com/our-companies",
-      "page": "portfolio"
     },
     {
       "id": "check-portfolio-7c906557ea",
@@ -647,13 +568,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-d873e3a301",
-      "url": "https://www.peakxv.com/companies/1mg",
-      "title": "Peak XV — portfolio page",
-      "excerpt": "Companies → https://www.peakxv.com/our-companies",
-      "page": "portfolio"
-    },
-    {
       "id": "check-portfolio-da861109e5",
       "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
       "title": "Peak XV — batches page",
@@ -680,13 +594,6 @@
       "title": "Peak XV — program page",
       "excerpt": "Companies → https://www.peakxv.com/our-companies",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-fe63b22da3",
-      "url": "https://www.peakxv.com/companies/1mg",
-      "title": "Peak XV — portfolio page",
-      "excerpt": "← Back → https://www.peakxv.com/our-companies",
-      "page": "portfolio"
     },
     {
       "id": "check-route-601d0e0716",
@@ -842,30 +749,6 @@
       "excerpt": "Peak XV ups Surge seed investment ceiling to $5M, unveils 18-startup cohort Team Companies Surge News & Insights About ← Back CONNECTING THE DOTS Peak XV ups Surge seed investment ceiling to $5M, unveils 18-startup cohort By September 28, 2026 • 5 min read copy Share this post copy Related newsletters Read the latest from our leadership team. Newsletter News POST Video PODCAST Case study Read AI Is Leaving The Screen: Rajan Anandan On The Next Wave Of Startups News September 29, 2026 Date Newsletter News POST Video PODCAST Case study Read Model companies have to ensure unsafe models are not released: Rajan Anandan News September 29, 2026 Date Newsletter News POST Video PODCAST Case study Read Peak XV sees India’s next big bets in wealth, wellness and premium consumer businesses News September 16, 2026 Date Learning is becoming. For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
     },
     {
-      "id": "check-page-3c1e3a709d",
-      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
-      "page": "batches",
-      "excerpt": "Surge 10 Kicks off With Our Most Global & Sector-Diverse Cohort Yet | Peak XV Team Companies Surge News & Insights About ← Back Announcements Surge 10 Kicks off With Our Most Global & Sector-Diverse Cohort Yet By Team Peak XV October 22, 2024 • 5 min read copy Founders from our tenth cohort met in Bengaluru and spent three days getting to know us – and each other – as we chart the beginning of another chapter at Surge, Peak XV’s seed-stage platform for founders. Surge 10 is special for many reasons: Comprising startups building from India, Singapore, the Philippines, UAE, Australia, UK, and the US, the new cohort of 14 companies brings together a mix of innovative startups with continued focus on AI, developer tools, consumer brands, next-generation fintech, healthcare and more. We kicked off with some insightful sessions, including deep dives with Shailendra Singh and Rajan Anandan on Founder’s DNA and Making the Most of Surge. We also had Peak XV founders—CRED’s Kunal Shah, Meesho’s Vidit Aatrey, Whatfix’s Khadim Batti—join us to share their reflections, along with sector focused roundtables with founders such as Mokobara’s Sangeet Agrawal and Navin Parwal. Founders from previous cohorts—Skillmatics’ Dhvanil Sheth, Khatabook’s Ravish Naresh and Plum’s Abhishek Poddar—also joined us to share their zero-to-one journeys with new founders in the Surge community. Much like the"
-    },
-    {
-      "id": "check-page-9ef40d57e1",
-      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
-      "page": "batches",
-      "excerpt": "The program culminates with a US immersion experience, providing founders with exposure to the Silicon Valley ecosystem, where they will visit the Open AI and Notion campuses in February 2025."
-    },
-    {
-      "id": "check-page-4d34694121",
-      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
-      "page": "batches",
-      "excerpt": "As always, each company in the cohort will receive one-on-one mentorship from leading global founders and operators, making Surge a launchpad for startups looking to shine in their home markets and, in many cases, build global, enduring businesses."
-    },
-    {
-      "id": "check-page-c3cacd61ab",
-      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
-      "page": "batches",
-      "excerpt": "For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV."
-    },
-    {
       "id": "check-page-fcc7b8480b",
       "url": "https://www.peakxv.com/insight/meet-the-first-cohort-of-the-sequoia-spark-fellowship-for-female-founders",
       "page": "batches",
@@ -972,84 +855,6 @@
       "url": "https://www.peakxv.com/about-us",
       "page": "details",
       "excerpt": "Our Team For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV."
-    },
-    {
-      "id": "check-page-b690413462",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "Introducing Surge, a rapid scale-up program for early-stage startups in India & Southeast Asia | Peak XV Team Companies Surge News & Insights About ← Back Announcements Introducing Surge, a rapid scale-up program for early-stage startups in India & Southeast Asia By Shailendra Singh 5 min read copy Being an early-stage founder is possibly the toughest job in the world. At a time when very few believe in a founder’s dreams, when there is little proof of concept and few resources, the most critical decisions have to be made. These early design choices – the first few hires, the early product features, finding the early-adopting customers – can make or break a company. This stage also coincides with the most challenging fund raises. The process can be draining for founders, who typically go through pre-seed, seed and multiple bridges before getting to Series A. At Sequoia India, we always ask ourselves – are we making the right choices to best serve our founders? Can we do more to give them an ‘unfair advantage’ on the road to success? Born out of our desire to take a big leap forward for early-stage start-ups in India & SEA, we are thrilled to announce an ambitious new program, called Surge . Last November, we did a series of Twitter polls to gauge how founders in our region are faring. Here’s what we learned: Seed start-ups are under-capitalized. While CB Insights reports that"
-    },
-    {
-      "id": "check-page-18409d8815",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "While CB Insights reports that the average seed/angel round size globally is now $1.3 million, the first cheque in India remains relatively small."
-    },
-    {
-      "id": "check-page-1e89706651",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "The majority of respondents (78%) to the Twitter poll reckon the typical seed round in India is under 5 crores (US$800,000 at the time of the survey)."
-    },
-    {
-      "id": "check-page-196d19c68c",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "Nearly half (45%) of respondents say that Indian founders go through a seed and one bridge/extension round before they raise a $5 million + Series A."
-    },
-    {
-      "id": "check-page-255bcd81c7",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "Another 39% say founders will go through a seed and two bridge/extension rounds before they hit that point."
-    },
-    {
-      "id": "check-page-9b45fd8eab",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "Early stage fund raising takes up way too much time."
-    },
-    {
-      "id": "check-page-d2909f3b1e",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "More than half of respondents reckon that startup founders in India are spending more than 25% of their time on fundraising across the angel, seed and seed-plus stages leading up to a Series A."
-    },
-    {
-      "id": "check-page-9d6df53839",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "Half of the survey respondents said that by the time founders in India get to a sizeable Series A, they’ve diluted their shareholding by more than 25% in various angel and seed rounds ."
-    },
-    {
-      "id": "check-page-dc6702afe6",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "The message was clear: early-stage founders are still under-served in India."
-    },
-    {
-      "id": "check-page-ec71a04eb2",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "Surge is a rapid scale-up program for start-ups, created to give founders an unfair advantage to scale and grow, make smart business model choices at the start, and raise a Series A round soon after."
-    },
-    {
-      "id": "check-page-b82bd4b9d2",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "Mentors : Surge is super excited to welcome an incredible list of mentors, who have agreed to share their time with founders."
-    },
-    {
-      "id": "check-page-435a5d49a9",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "We have dozens of mentors in the pipeline that we will announce soon."
-    },
-    {
-      "id": "check-page-d8bcb64df7",
-      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
-      "page": "details",
-      "excerpt": "Cross-border Immersion : Surge is designed to have five modules, which will be hosted across the globe in China, India, Silicon Valley and in Singapore."
     },
     {
       "id": "check-page-ad9af3e6f9",
@@ -1178,22 +983,22 @@
       "excerpt": "Portfolio Companies | Peak XV Partners Team Companies Surge News & Insights About Building for tomorrow. We fuel the founders and companies that dare to reshape the world. Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Suggested Carousell Cars24 Catalyst Chargebee Charlotte Tilbury Checkbox Chocolate Finance Circles.Life Citrus Payment Claimhealth Clarisights ClassPlus ClearFeed ClearTax CleverTap Climes Cloudnine Cloudphysician Clouted Cognizant Technology Coinswitch CoLearn Companion Labs Convosight Cuemath Curatio Healthcare Cybrilla Dailyhunt Darwinbox Dashverse DeHaat Dezy Digit Insurance Diri Care Distyl Ditto DrinkPrime Drip Capital Druva Dubbing AI Durianpay eClerx Edelweiss Elivaas Enterpret Epsilo Equilibrium Equitas Eruditus Exaforce FamApp Felo AI Finova Capital Finster AI Fintellix FirstClub Fitbudd Fittr Five Star Business Finance Flip Flobiz Foodics ForgeCode Freecharge Freshworks Funding Societies GameStock Gan.ai Genesis Colors GlobalLogic Go Colors GoKwik GoodScore GoTo Groww Gumlet Haast Happay Harper Hashnode Havells India Heads Up For Tails HealthKart Hector Beverages Helion Hevo Data Hex HeyMax Hightouch hiloop Hippo Video HomeLane Hoola Health Horizon Quantum Computing Hubble Huspy HYOU Fine Jewelry Hyperbrowser Hyuga Life ICRA Previous Next 2 / 5 Spotlights All companies Thank you! Your submission has"
     },
     {
+      "id": "check-page-3c1e3a709d",
+      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
+      "page": "batches",
+      "excerpt": "Surge 10 Kicks off With Our Most Global & Sector-Diverse Cohort Yet | Peak XV Team Companies Surge News & Insights About ← Back Announcements Surge 10 Kicks off With Our Most Global & Sector-Diverse Cohort Yet By Team Peak XV October 22, 2024 • 5 min read copy Founders from our tenth cohort met in Bengaluru and spent three days getting to know us – and each other – as we chart the beginning of another chapter at Surge, Peak XV’s seed-stage platform for founders. Surge 10 is special for many reasons: Comprising startups building from India, Singapore, the Philippines, UAE, Australia, UK, and the US, the new cohort of 14 companies brings together a mix of innovative startups with continued focus on AI, developer tools, consumer brands, next-generation fintech, healthcare and more. We kicked off with some insightful sessions, including deep dives with Shailendra Singh and Rajan Anandan on Founder’s DNA and Making the Most of Surge. We also had Peak XV founders—CRED’s Kunal Shah, Meesho’s Vidit Aatrey, Whatfix’s Khadim Batti—join us to share their reflections, along with sector focused roundtables with founders such as Mokobara’s Sangeet Agrawal and Navin Parwal. Founders from previous cohorts—Skillmatics’ Dhvanil Sheth, Khatabook’s Ravish Naresh and Plum’s Abhishek Poddar—also joined us to share their zero-to-one journeys with new founders in the Surge community. Much like the"
+    },
+    {
+      "id": "check-page-b690413462",
+      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
+      "page": "details",
+      "excerpt": "Introducing Surge, a rapid scale-up program for early-stage startups in India & Southeast Asia | Peak XV Team Companies Surge News & Insights About ← Back Announcements Introducing Surge, a rapid scale-up program for early-stage startups in India & Southeast Asia By Shailendra Singh 5 min read copy Being an early-stage founder is possibly the toughest job in the world. At a time when very few believe in a founder’s dreams, when there is little proof of concept and few resources, the most critical decisions have to be made. These early design choices – the first few hires, the early product features, finding the early-adopting customers – can make or break a company. This stage also coincides with the most challenging fund raises. The process can be draining for founders, who typically go through pre-seed, seed and multiple bridges before getting to Series A. At Sequoia India, we always ask ourselves – are we making the right choices to best serve our founders? Can we do more to give them an ‘unfair advantage’ on the road to success? Born out of our desire to take a big leap forward for early-stage start-ups in India & SEA, we are thrilled to announce an ambitious new program, called Surge . Last November, we did a series of Twitter polls to gauge how founders in our region are faring. Here’s what we learned: Seed start-ups are under-capitalized. While CB Insights reports that"
+    },
+    {
       "id": "check-page-5e144ad5ee",
       "url": "https://www.peakxv.com/companies/10-minute-school",
       "page": "portfolio",
       "excerpt": "10 Minute School | Peak XV Partners Portfolio Company Team Companies Surge News & Insights About ← Back 10 Minute School 10 Minute School provides affordable and accessible education for K-12 school and college students, university admission test candidates, and job-seekers in Bangladesh. Website https://10minuteschool.com/ social media LinkedIn sector Consumer Founded 2013 Partnered 2021 current Stage Seed investment stage Seed ; region APAC Founders Abdullah Raied Ayman Sadiq For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
-    },
-    {
-      "id": "check-page-902be1939e",
-      "url": "https://www.peakxv.com/companies/1mg",
-      "page": "portfolio",
-      "excerpt": "1mg | Peak XV Partners Portfolio Company Team Companies Surge News & Insights About ← Back 1mg Indian online pharmacy and healthcare marketplace selling prescription and OTC medicines, vitamins, and health products, with home delivery, lab tests, and doctor consultations across India. Website https://www.1mg.com/ social media LinkedIn sector Consumer Founded 2015 Partnered 2016 current Stage Growth investment stage Venture ; Growth ; region India Founders Prashant Tandon Gaurav Agarwal For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
-    },
-    {
-      "id": "check-page-3a1c98ddaf",
-      "url": "https://www.peakxv.com/companies/aampe",
-      "page": "portfolio",
-      "excerpt": "Aampe | Peak XV Partners Portfolio Company Team Companies Surge News & Insights About ← Back Aampe Aampe turns customer communication into a retention growth engine. Website https://www.aampe.com/ social media LinkedIn sector AI Founded 2020 Partnered 2020 current Stage Seed investment stage Seed ; region India Founders Paul Meinshausen Sami Abboud Schaun Wheeler Kate Field For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
     }
   ],
   "findings": {
@@ -1233,48 +1038,26 @@
     ],
     "format": [
       {
-        "value": "in-person",
-        "evidenceId": "check-format-19f4f90bba"
-      },
-      {
         "value": "remote",
         "evidenceId": "check-format-851e0702f7"
       },
       {
         "value": "hybrid",
         "evidenceId": "check-format-9cdf76e41c"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-ef52ccab76"
       }
     ],
     "location": [],
     "selectivity": [],
-    "dealText": [
-      {
-        "value": "soon after. Key highlights include: Capital : Surge will invest $1.5M in every start-up that is a part of Surge, before the start of the",
-        "evidenceId": "check-deal-f8262a833e"
-      }
-    ],
-    "dealComponents": [
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "1500000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-f8262a833e"
-      }
-    ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.peakxv.com/our-companies",
         "evidenceId": "check-portfolio-d1071ceb04"
-      },
-      {
-        "value": "https://surge.peakxv.com/startups/",
-        "evidenceId": "check-portfolio-6a092c492b"
       },
       {
         "value": "https://www.peakxv.com/our-companies?e6a89e8b_page=2",
@@ -1287,6 +1070,10 @@
       {
         "value": "https://www.peakxv.com/our-companies?e6a89e8b_page=3",
         "evidenceId": "check-portfolio-a4619c92c7"
+      },
+      {
+        "value": "https://surge.peakxv.com/startups/",
+        "evidenceId": "check-portfolio-6a092c492b"
       }
     ],
     "name": [

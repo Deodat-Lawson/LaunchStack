@@ -1,6 +1,6 @@
 {
   "programId": "boost-vc",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.boost.vc/",
     "https://www.boost.vc/fellowship",
@@ -21,13 +21,6 @@
       "title": "Boost VC — terms page",
       "excerpt": "Bio Sciences, and New Limit. How much does Boost invest? We invest $500k to lead or co-lead pre-seed rounds! We are okay being the first",
       "page": "terms"
-    },
-    {
-      "id": "check-format-9aa47d1116",
-      "url": "https://www.boost.vc/portfolio",
-      "title": "Boost VC — portfolio page",
-      "excerpt": "Featured Space Bio / Health Climate Robotics Crypto AI Virtual Reality & Augmented Reality Other Ready to change the",
-      "page": "portfolio"
     },
     {
       "id": "check-name-aa08883f10",
@@ -198,12 +191,7 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-9aa47d1116"
-      }
-    ],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [

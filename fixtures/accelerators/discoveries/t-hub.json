@@ -1,6 +1,6 @@
 {
   "programId": "t-hub",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://www.t-hub.co/about-us",
@@ -83,38 +83,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.t-hub.co/case-studies/aws-space-accelerator-case-study",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.t-hub.co/case-studies/kotak-bizlabs-accelerator",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.t-hub.co/case-studies/mercedes-benz-climate-tech-incubator-launchpad-program",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.t-hub.co/case-studies/startup-catalyst-program-t-hub-hexagon",
-      "page": "details",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.t-hub.co/corporate",
       "page": "details",
       "anchor": "Corporates Corporate Innovation Programs",
@@ -124,6 +92,38 @@
     },
     {
       "url": "https://www.t-hub.co/digital-india-scale-up-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/fintech-innovation-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/global-springboard-programme",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/india-innovation-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/india-market-access-program",
       "page": "details",
       "anchor": "",
       "fetched": true,

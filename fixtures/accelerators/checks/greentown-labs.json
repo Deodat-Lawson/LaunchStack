@@ -1,11 +1,9 @@
 {
   "programId": "greentown-labs",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://greentown.org/",
     "https://greentown.org/apply-now",
-    "https://greentown.org/members/agira",
-    "https://greentown.org/members/xtpl",
     "https://greentown.org/terms-of-service",
     "https://greentown.org/about",
     "https://greentown.org/about/history",
@@ -14,6 +12,7 @@
     "https://greentown.org/houston-ion-district-investor-activation-program",
     "https://greentown.org/houston-overview-brochure",
     "https://greentown.org/investor-program",
+    "https://greentown.org/members/priority-investor-loans",
     "https://greentown.org/programs",
     "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
     "https://greentown.org/news/announcing-go-make-2026-with-shell-and-technip-energies-apply-now",
@@ -21,39 +20,11 @@
   ],
   "evidence": [
     {
-      "id": "check-duration-439291e611",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs — application page",
-      "excerpt": "for example, take at least 9 months altogether: 3 months to apply, 3 months to hear whether you won the",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-4efaa7e050",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs — application page",
-      "excerpt": "to hear whether you won the award, and another 3 months to receive the funding. After receiving the",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-bb6cf8dc16",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs — application page",
-      "excerpt": "funds. SBIR grants, for example, take at least 9 months altogether: 3 months to apply, 3 months to hear",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-cf4bfd953e",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs — application page",
-      "excerpt": "at least 9 months altogether: 3 months to apply, 3 months to hear whether you won the award, and another 3",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-daff96241e",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs — application page",
-      "excerpt": "to Phase I Awards, which award up to $150K for 6 months, Phase II awards can fund up to $1M for 2 years,",
-      "page": "application"
+      "id": "check-duration-99ede7f225",
+      "url": "https://greentown.org/",
+      "title": "Greentown Labs — homepage",
+      "excerpt": "water from atmospheric humidity Launch Academy A 10-week coding bootcamp that adds value to junior",
+      "page": "details"
     },
     {
       "id": "check-duration-ef0aeeb05f",
@@ -67,13 +38,6 @@
       "url": "https://greentown.org/apply-now",
       "title": "Greentown Labs — application page",
       "excerpt": "Visit our Boston or Houston campus and see the incubator in person. Step 04 Committee Review Our review committee makes a",
-      "page": "application"
-    },
-    {
-      "id": "check-location-551cfac257",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs — application page",
-      "excerpt": "Anzu Partners , an investment firm located in Washington DC that teams with entrepreneurs and",
       "page": "application"
     },
     {
@@ -119,6 +83,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-79644af98e",
+      "url": "https://greentown.org/members/priority-investor-loans",
+      "title": "Greentown Labs — program page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-7988407345",
       "url": "https://greentown.org/about",
       "title": "Greentown Labs — program page",
@@ -154,25 +125,11 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-bdeafe9fbf",
-      "url": "https://greentown.org/members/xtpl",
-      "title": "Greentown Labs — application page",
-      "excerpt": "Startups → https://greentown.org/members",
-      "page": "application"
-    },
-    {
       "id": "check-portfolio-e78bd164c8",
       "url": "https://greentown.org/houston-overview-brochure",
       "title": "Greentown Labs — program page",
       "excerpt": "Startups → https://greentown.org/members",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-ebfd726b71",
-      "url": "https://greentown.org/members/agira",
-      "title": "Greentown Labs — application page",
-      "excerpt": "Startups → https://greentown.org/members",
-      "page": "application"
     },
     {
       "id": "check-portfolio-ec0cd03bbf",
@@ -196,24 +153,10 @@
       "page": "details"
     },
     {
-      "id": "check-route-0789c5721b",
-      "url": "https://greentown.org/members/agira",
-      "title": "Greentown Labs — application page",
-      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
-      "page": "application"
-    },
-    {
       "id": "check-route-0d8edc10ac",
       "url": "https://greentown.org/programs",
       "title": "Greentown Labs — program page",
       "excerpt": "Apply for Membership → https://greentown.org/apply-now",
-      "page": "details"
-    },
-    {
-      "id": "check-route-1296140d89",
-      "url": "https://greentown.org/",
-      "title": "Greentown Labs — homepage",
-      "excerpt": "XTPL Manufacturing & Processing Ultra-precise printing of nanomaterials for flexible electronics and photovoltaic applications → https://greentown.org/members/xtpl",
       "page": "details"
     },
     {
@@ -238,6 +181,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-6cd091ee64",
+      "url": "https://greentown.org/members/priority-investor-loans",
+      "title": "Greentown Labs — program page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "details"
+    },
+    {
       "id": "check-route-6d8c262a74",
       "url": "https://greentown.org/houston-ion-district-investor-activation-program",
       "title": "Greentown Labs — program page",
@@ -257,13 +207,6 @@
       "title": "Greentown Labs — program page",
       "excerpt": "Apply to Join the Network Apply to Join the Network → https://forms.greentown.org/260546409900052",
       "page": "details"
-    },
-    {
-      "id": "check-route-8fbdb03b3e",
-      "url": "https://greentown.org/members/xtpl",
-      "title": "Greentown Labs — application page",
-      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
-      "page": "application"
     },
     {
       "id": "check-route-aa39554302",
@@ -322,13 +265,6 @@
       "page": "details"
     },
     {
-      "id": "check-route-e99bb81999",
-      "url": "https://greentown.org/",
-      "title": "Greentown Labs — homepage",
-      "excerpt": "Agira Energy & Power Light management platform for advanced lighting and display applications → https://greentown.org/members/agira",
-      "page": "details"
-    },
-    {
       "id": "check-route-ea8f9e707e",
       "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
       "title": "Greentown Labs — application page",
@@ -348,7 +284,7 @@
       "id": "check-page-a40ff73da8",
       "url": "https://greentown.org/",
       "page": "details",
-      "excerpt": "Greentown - Where Entrepreneurs Move Faster Supporting Startups Startups Industry Engage About Apply for Membership Helping climate & energy startups Transform industries faster Membership Benefits Membership Benefits [ 01 ] How we support founders Entrepreneurs move faster at Greentown Labs Equipment. Workshops. Warm introductions. We connect companies with the people and resources they need to scale, at the pace the world needs. Build Faster Machine shops, prototyping labs, specialized equipment, and more for rapid R&D. Get Customers Faster Customer discovery, technical validation, field trials, pilots, and more to bridge tech to market. Raise Capital Faster Investor introductions, pitch coaching, grant support, and fundraising guidance. Scale Faster Partner with international industry giants and take your ground-breaking tech to the global level. [ 02 ] Our Startups Our Member Companies View All Startups View All Startups Corvus Robotics Manufacturing & Processing Autonomous vehicles for warehouses to improve inventory management Torres Orbital Mining Inc (TOM) Infrastructure & Construction Autonomous excavation system that suppresses dust at the source for terrestrial and lunar mining operations Kanin Energy Energy & Power Waste heat recovery systems that convert industrial thermal losses into clean power for on-site use Agira Energy & Power Light management platform for"
+      "excerpt": "Greentown - Where Entrepreneurs Move Faster Supporting Startups Startups Industry Engage About Apply for Membership Helping climate & energy startups Transform industries faster Membership Benefits Membership Benefits [ 01 ] How we support founders Entrepreneurs move faster at Greentown Labs Equipment. Workshops. Warm introductions. We connect companies with the people and resources they need to scale, at the pace the world needs. Build Faster Machine shops, prototyping labs, specialized equipment, and more for rapid R&D. Get Customers Faster Customer discovery, technical validation, field trials, pilots, and more to bridge tech to market. Raise Capital Faster Investor introductions, pitch coaching, grant support, and fundraising guidance. Scale Faster Partner with international industry giants and take your ground-breaking tech to the global level. [ 02 ] Our Startups Our Member Companies View All Startups View All Startups ConnectDER Energy & Power Meter collar devices enabling faster, lower-cost residential solar, battery, and EV interconnection with grid data Adiabatic Materials Manufacturing & Processing Unlocking clean, affordable chemical production with electricity Highland Park Technologies Infrastructure & Construction Bio-based insulated cladding systems with parametric design and automated manufacturing for building retrofits Polymer-X Manufacturing & Processing"
     },
     {
       "id": "check-page-c16fa55ff3",
@@ -451,24 +387,6 @@
       "url": "https://greentown.org/apply-now",
       "page": "application",
       "excerpt": "Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
-    },
-    {
-      "id": "check-page-bec2423602",
-      "url": "https://greentown.org/members/agira",
-      "page": "application",
-      "excerpt": "Agira - Greentown Boston Alumni Supporting Startups Startups Industry Engage About Apply for Membership Back to directory Agira Light management platform for advanced lighting and display applications Greentown Boston Alumni Founded 2014 Visit website Agira on LinkedIn Energy & Power Building Efficiency & Retrofits [ 01 ] About Agira Photonics designs optical films for superior light management. Applications requiring highly collimated light with minimal chromatic aberration, such as LED lighting and displays, can be made more efficient with Agira's film technology. [ 02 ] Leadership Bal Mukund Dhar CEO and Founder Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your"
-    },
-    {
-      "id": "check-page-e37e10816e",
-      "url": "https://greentown.org/members/agira",
-      "page": "application",
-      "excerpt": "Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
-    },
-    {
-      "id": "check-page-e495ac1745",
-      "url": "https://greentown.org/members/xtpl",
-      "page": "application",
-      "excerpt": "XTPL - Greentown Boston Member Supporting Startups Startups Industry Engage About Apply for Membership Back to directory XTPL Ultra-precise printing of nanomaterials for flexible electronics and photovoltaic applications Greentown Boston Member Founded 2018 Visit website XTPL on LinkedIn Manufacturing & Processing Additive Manufacturing [ 01 ] About XTPL is an innovative company developing breakthrough, additive manufacturing technology for ultra-precise printing of nanomaterials. [ 02 ] Leadership Filip Granek CEO Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
     },
     {
       "id": "check-page-ef0c0715c4",
@@ -699,6 +617,18 @@
       "excerpt": "Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
     },
     {
+      "id": "check-page-ab619f6034",
+      "url": "https://greentown.org/members/priority-investor-loans",
+      "page": "details",
+      "excerpt": "Priority Investor Loans - Greentown Houston Member Supporting Startups Startups Industry Engage About Apply for Membership Back to directory Priority Investor Loans Simplified loan programs to fund real estate investors nationwide with income-producing properties Greentown Houston Member Founded 2008 Visit website Infrastructure & Construction Building Efficiency & Retrofits Climate Finance & Risk [ 01 ] About Priority Investor Loans (PIL) has been a devoted money lender to real estate investors in the greater Houston areas since 2008. Our programs enable clients nationwide with income-producing properties to receive funding in a short period of time with our simplified loan process. [ 02 ] Leadership Dimitri Ang Co-Founder Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First"
+    },
+    {
+      "id": "check-page-8874c15d1b",
+      "url": "https://greentown.org/members/priority-investor-loans",
+      "page": "details",
+      "excerpt": "Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
+    },
+    {
       "id": "check-page-3b2b6f9d41",
       "url": "https://greentown.org/programs",
       "page": "details",
@@ -756,14 +686,6 @@
         "evidenceId": "check-route-e58b424fe4"
       },
       {
-        "value": "https://greentown.org/members/agira",
-        "evidenceId": "check-route-e99bb81999"
-      },
-      {
-        "value": "https://greentown.org/members/xtpl",
-        "evidenceId": "check-route-1296140d89"
-      },
-      {
         "value": "https://forms.greentown.org/260546409900052",
         "evidenceId": "check-route-8e3a437508"
       }
@@ -782,20 +704,12 @@
     "cohortStarts": [],
     "durationWeeks": [
       {
+        "value": "10",
+        "evidenceId": "check-duration-99ede7f225"
+      },
+      {
         "value": "2",
         "evidenceId": "check-duration-ef0aeeb05f"
-      },
-      {
-        "value": "9 months",
-        "evidenceId": "check-duration-bb6cf8dc16"
-      },
-      {
-        "value": "3 months",
-        "evidenceId": "check-duration-439291e611"
-      },
-      {
-        "value": "6 months",
-        "evidenceId": "check-duration-daff96241e"
       }
     ],
     "format": [
@@ -804,12 +718,7 @@
         "evidenceId": "check-format-12b5f05948"
       }
     ],
-    "location": [
-      {
-        "value": "Washington DC",
-        "evidenceId": "check-location-551cfac257"
-      }
-    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
     "dealComponents": [],

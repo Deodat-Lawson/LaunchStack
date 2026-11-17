@@ -1,6 +1,6 @@
 {
   "programId": "northzone",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://northzone.com/",
     "https://northzone.com/responsible-investment-policy",
@@ -50,13 +50,6 @@
       "url": "https://northzone.com/responsible-investment-policy",
       "title": "Northzone — terms page",
       "excerpt": "Contact (hello@northzone.com)",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-dc4be3f062",
-      "url": "https://northzone.com/insights/annoucing-investment-fubotv",
-      "title": "Northzone — terms page",
-      "excerpt": "soccer service, fuboTV has evolved into one of the top virtual MVPDs in the U.S., bringing subscribers access to dozens",
       "page": "terms"
     },
     {
@@ -301,12 +294,7 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-dc4be3f062"
-      }
-    ],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [],

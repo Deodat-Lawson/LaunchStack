@@ -1,14 +1,11 @@
 {
   "programId": "launchvic",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://launchvic.org/",
-    "https://launchvic.org/announcements/applications-open-for-basecamp-2026/",
     "https://launchvic.org/civvic-labs/civvic-labs-is-calling-for-startups-to-apply-for-their-accelerator-program/",
     "https://launchvic.org/nova/applications-now-open-for-nova/",
     "https://launchvic.org/alice-anderson-fund/big-name-investors-join-new-alice-investment-committee/",
-    "https://launchvic.org/announcements/investment-in-artificial-intelligence-is-real-deal-for-victoria/",
-    "https://launchvic.org/announcements/snapshot-of-victorian-startup-investment-released/",
     "https://launchvic.org/co-investment-opportunities/",
     "https://launchvic.org/faqs-for-founders/",
     "https://launchvic.org/faqs/",
@@ -21,7 +18,10 @@
     "https://launchvic.org/funding-news/inspiring-investment-in-victorian-agtech-startups/",
     "https://launchvic.org/funding-news/investment-boost-for-womens-startups/",
     "https://launchvic.org/funding-news/skalata-investment-to-unlock-20-million-for-victorian-startups/",
-    "https://launchvic.org/get-ready-for-investment/"
+    "https://launchvic.org/get-ready-for-investment/",
+    "https://launchvic.org/grants/grant-faqs/",
+    "https://launchvic.org/investment/",
+    "https://launchvic.org/our-funds/"
   ],
   "evidence": [
     {
@@ -30,6 +30,13 @@
       "title": "LaunchVic — application page",
       "excerpt": "targeted masterclasses and ongoing coaching. Places are limited, and applications close Monday 1 September. Register for the information session on Tuesday 19 August to learn",
       "page": "application"
+    },
+    {
+      "id": "check-announced-9aa7758ca2",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "title": "LaunchVic — terms page",
+      "excerpt": "program must deliver, nor are we able to provide a recommendation on cohort size. We recognise that programs may vary in structure, intensity, and delivery model. Applicants should",
+      "page": "terms"
     },
     {
       "id": "check-announced-bf883f4c57",
@@ -71,6 +78,13 @@
       "url": "https://launchvic.org/funding-news/skalata-investment-to-unlock-20-million-for-victorian-startups/",
       "title": "LaunchVic — terms page",
       "excerpt": "and went onto raise a $5.5 million Series A just 18 months later. Co-founder Rohan Workman said the Skalata",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d5e13391a4",
+      "url": "https://launchvic.org/investment/",
+      "title": "LaunchVic — terms page",
+      "excerpt": "ten early-stage AgTech startups over the next 12 months. LaunchVic Funded Angel Investor Groups An angel",
       "page": "terms"
     },
     {
@@ -123,11 +137,11 @@
       "page": "terms"
     },
     {
-      "id": "check-format-5175ea5a45",
-      "url": "https://launchvic.org/announcements/applications-open-for-basecamp-2026/",
-      "title": "LaunchVic — application page",
-      "excerpt": "constant founder oversight. The program runs across seven in-person days between April and June 2026, combining executive",
-      "page": "application"
+      "id": "check-format-60b925f43f",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "title": "LaunchVic — terms page",
+      "excerpt": "Does LaunchVic prefer programs delivered online, in person, or hybrid? LaunchVic has no preference regarding delivery",
+      "page": "terms"
     },
     {
       "id": "check-format-6804a91696",
@@ -153,6 +167,20 @@
     {
       "id": "check-format-7c48e5a36a",
       "url": "https://launchvic.org/faqs/",
+      "title": "LaunchVic — terms page",
+      "excerpt": "LaunchVic prefer programs delivered online, in person, or hybrid? LaunchVic has no preference regarding delivery mode.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-920ae1161c",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "title": "LaunchVic — terms page",
+      "excerpt": "regarding delivery mode. Programs may be delivered online, in person, or hybrid, provided the choice is clearly justified in",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-941caba3cb",
+      "url": "https://launchvic.org/grants/grant-faqs/",
       "title": "LaunchVic — terms page",
       "excerpt": "LaunchVic prefer programs delivered online, in person, or hybrid? LaunchVic has no preference regarding delivery mode.",
       "page": "terms"
@@ -186,10 +214,24 @@
       "page": "terms"
     },
     {
+      "id": "check-format-e549664778",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "title": "LaunchVic — terms page",
+      "excerpt": "mode. Programs may be delivered online, in person, or hybrid, provided the choice is clearly justified in the",
+      "page": "terms"
+    },
+    {
       "id": "check-format-ff22563892",
       "url": "https://launchvic.org/alice-anderson-fund/big-name-investors-join-new-alice-investment-committee/",
       "title": "LaunchVic — terms page",
       "excerpt": "A Victorian HealthTech building Australia’s largest virtual clinic Connect with me on LinkedIn Natassia Nicolao",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-2654e1a309",
+      "url": "https://launchvic.org/investment/",
+      "title": "LaunchVic — terms page",
+      "excerpt": "is a climate-focused Angel Network based in Victoria connecting the growing number of",
       "page": "terms"
     },
     {
@@ -329,24 +371,6 @@
       "excerpt": "Discover More Discover More EnAccess Maps is taking the anxiety out of everyday trips for mobility aid users Meet Sabrina from EnAccess Maps, a platform to help people using mobility aids find accessibility information on the places they’re planning to visit."
     },
     {
-      "id": "check-page-5cfd7ec0df",
-      "url": "https://launchvic.org/announcements/applications-open-for-basecamp-2026/",
-      "page": "application",
-      "excerpt": "Applications open for Basecamp 2026 | LaunchVic LaunchVic is now Innovation Victoria Explore innovationvictoria.com Startup Ecosystem About the Ecosystem Sector Analysis Startup Database Explore the ecosystem Startup Investors Accelerator & Pre Accelerators Universities Co-Working Spaces & Labs Government Partners Community Groups Research & Insights Ecosystem Reports Industry Insights For Startups Get Started Programs for New Startups CivVic Labs Innovation Challenge Grow Your Startup Product-Market Fit Get Ready for Investment Programs for Growing Startups Scale your Startup Build Your Team Enter New Markets Preparing for an Exit Programs for Scaling Startups 30X30 Scaleup Program Basecamp Startup Program Fund your Startup Types of Funding The Alice Anderson Fund Find an Investor Community Events & Networking Program Finder Community Groups Coworking Spaces & Labs Resources for Founders Success Stories Frequently Asked Questions Startup Glossary Investor Insights For Investors For Individual Investors Get started in Victoria Investor Education Connect with Funds & Angel Networks Find Investable Startups For Funds & Angel Networks Support available Fund & Angel Directory Startup Database Co-Investment Opportunities The Alice Anderson Fund For Programs Support for Programs LaunchVic Program Strategy Grants for Programs Explore Active Programs Find Program Participants"
-    },
-    {
-      "id": "check-page-db8fd2ed71",
-      "url": "https://launchvic.org/announcements/applications-open-for-basecamp-2026/",
-      "page": "application",
-      "excerpt": "For media enquires please contact holly.clark@launchvic.org Learn more Related Posts Basecamp 06 May 2025 Inside LaunchVic’s first Basecamp cohort Basecamp LaunchVic has unveiled the first cohort of its exciting new program, Basecamp, aimed at helping early-stage founders navigate one of the toughest hurdles in scaling a business – hiring their first executive team."
-    },
-    {
-      "id": "check-page-cdaae47423",
-      "url": "https://launchvic.org/announcements/applications-open-for-basecamp-2026/",
-      "page": "application",
-      "excerpt": "DEBUG VALUES: post date: 06 May 2025 Case Studies 02 Jul 2025 The legaltech startup revolutionising due diligence with AI Case Studies Deeligence built strong foundations in Melbourne."
-    },
-    {
       "id": "check-page-1530cf60e1",
       "url": "https://launchvic.org/civvic-labs/civvic-labs-is-calling-for-startups-to-apply-for-their-accelerator-program/",
       "page": "application",
@@ -447,42 +471,6 @@
       "url": "https://launchvic.org/alice-anderson-fund/big-name-investors-join-new-alice-investment-committee/",
       "page": "terms",
       "excerpt": "Read More Close Dr Evelyn Chan Smileyscope Connect with me on LinkedIn Irene Tsang LIFTWomen Group Lift Women enables female founders to source equity-free and debt-free capital to start their business journey."
-    },
-    {
-      "id": "check-page-f7b1215050",
-      "url": "https://launchvic.org/announcements/investment-in-artificial-intelligence-is-real-deal-for-victoria/",
-      "page": "terms",
-      "excerpt": "Investment In Artificial Intelligence Is Real Deal For Victoria | LaunchVic LaunchVic is now Innovation Victoria Explore innovationvictoria.com Startup Ecosystem About the Ecosystem Sector Analysis Startup Database Explore the ecosystem Startup Investors Accelerator & Pre Accelerators Universities Co-Working Spaces & Labs Government Partners Community Groups Research & Insights Ecosystem Reports Industry Insights For Startups Get Started Programs for New Startups CivVic Labs Innovation Challenge Grow Your Startup Product-Market Fit Get Ready for Investment Programs for Growing Startups Scale your Startup Build Your Team Enter New Markets Preparing for an Exit Programs for Scaling Startups 30X30 Scaleup Program Basecamp Startup Program Fund your Startup Types of Funding The Alice Anderson Fund Find an Investor Community Events & Networking Program Finder Community Groups Coworking Spaces & Labs Resources for Founders Success Stories Frequently Asked Questions Startup Glossary Investor Insights For Investors For Individual Investors Get started in Victoria Investor Education Connect with Funds & Angel Networks Find Investable Startups For Funds & Angel Networks Support available Fund & Angel Directory Startup Database Co-Investment Opportunities The Alice Anderson Fund For Programs Support for Programs LaunchVic Program Strategy Grants for Programs Explore Active Programs Find"
-    },
-    {
-      "id": "check-page-e74d1f3365",
-      "url": "https://launchvic.org/announcements/investment-in-artificial-intelligence-is-real-deal-for-victoria/",
-      "page": "terms",
-      "excerpt": "Backed by LaunchVic, Victoria’s startup agency, Boab AI in partnership with Artesian, Victorian universities and Artesian’s international partner programs will unlock millions of dollars of private sector capital to help high growth AI scaleups."
-    },
-    {
-      "id": "check-page-08616ccd71",
-      "url": "https://launchvic.org/announcements/investment-in-artificial-intelligence-is-real-deal-for-victoria/",
-      "page": "terms",
-      "excerpt": "Artificial Intelligence uses data to build systems that simulate human intelligence processes."
-    },
-    {
-      "id": "check-page-2eda3ee8c2",
-      "url": "https://launchvic.org/announcements/investment-in-artificial-intelligence-is-real-deal-for-victoria/",
-      "page": "terms",
-      "excerpt": "There are more than 300 AI startups in Australia – including 65 in Victoria – applying AI in sectors ranging from health care and medicine to transport, agriculture, recruitment and construction."
-    },
-    {
-      "id": "check-page-068dea50ae",
-      "url": "https://launchvic.org/announcements/snapshot-of-victorian-startup-investment-released/",
-      "page": "terms",
-      "excerpt": "Snapshot of Victorian Startup Investment Released | LaunchVic LaunchVic is now Innovation Victoria Explore innovationvictoria.com Startup Ecosystem About the Ecosystem Sector Analysis Startup Database Explore the ecosystem Startup Investors Accelerator & Pre Accelerators Universities Co-Working Spaces & Labs Government Partners Community Groups Research & Insights Ecosystem Reports Industry Insights For Startups Get Started Programs for New Startups CivVic Labs Innovation Challenge Grow Your Startup Product-Market Fit Get Ready for Investment Programs for Growing Startups Scale your Startup Build Your Team Enter New Markets Preparing for an Exit Programs for Scaling Startups 30X30 Scaleup Program Basecamp Startup Program Fund your Startup Types of Funding The Alice Anderson Fund Find an Investor Community Events & Networking Program Finder Community Groups Coworking Spaces & Labs Resources for Founders Success Stories Frequently Asked Questions Startup Glossary Investor Insights For Investors For Individual Investors Get started in Victoria Investor Education Connect with Funds & Angel Networks Find Investable Startups For Funds & Angel Networks Support available Fund & Angel Directory Startup Database Co-Investment Opportunities The Alice Anderson Fund For Programs Support for Programs LaunchVic Program Strategy Grants for Programs Explore Active Programs Find Program"
-    },
-    {
-      "id": "check-page-1ebfb75e19",
-      "url": "https://launchvic.org/announcements/snapshot-of-victorian-startup-investment-released/",
-      "page": "terms",
-      "excerpt": "The review undertaken by dandolpartners examined seed, angel and venture capital raises by Victorian startups and scaleups – the first time there has been a detailed understanding of the local investor landscape."
     },
     {
       "id": "check-page-23a2733eb5",
@@ -1029,6 +1017,198 @@
       "url": "https://launchvic.org/get-ready-for-investment/",
       "page": "terms",
       "excerpt": "Get ready for investment LaunchVic can help Victorian startups secure funding through accelerator programs, grants and investment."
+    },
+    {
+      "id": "check-page-083d0dcea7",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "Startup Grants | FAQs | LaunchVic LaunchVic is now Innovation Victoria Explore innovationvictoria.com Startup Ecosystem About the Ecosystem Sector Analysis Startup Database Explore the ecosystem Startup Investors Accelerator & Pre Accelerators Universities Co-Working Spaces & Labs Government Partners Community Groups Research & Insights Ecosystem Reports Industry Insights For Startups Get Started Programs for New Startups CivVic Labs Innovation Challenge Grow Your Startup Product-Market Fit Get Ready for Investment Programs for Growing Startups Scale your Startup Build Your Team Enter New Markets Preparing for an Exit Programs for Scaling Startups 30X30 Scaleup Program Basecamp Startup Program Fund your Startup Types of Funding The Alice Anderson Fund Find an Investor Community Events & Networking Program Finder Community Groups Coworking Spaces & Labs Resources for Founders Success Stories Frequently Asked Questions Startup Glossary Investor Insights For Investors For Individual Investors Get started in Victoria Investor Education Connect with Funds & Angel Networks Find Investable Startups For Funds & Angel Networks Support available Fund & Angel Directory Startup Database Co-Investment Opportunities The Alice Anderson Fund For Programs Support for Programs LaunchVic Program Strategy Grants for Programs Explore Active Programs Find Program Participants Professional"
+    },
+    {
+      "id": "check-page-5969011caa",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "Back to Open Grants Contact us Frequently Asked Questions Grants for Pre-accelerator Programs If I am an AI or DeepTech startup, can I apply for this grant?"
+    },
+    {
+      "id": "check-page-42dac7dcf6",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "It is specifically for pre-accelerator program providers that support early-stage founders and startup development."
+    },
+    {
+      "id": "check-page-f27dac5084",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "If you are unsure about your eligibility or have questions about the grant, please contact us via email at grants@launchvic.org."
+    },
+    {
+      "id": "check-page-d6b7f08853",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "LaunchVic is seeking to fund pre-accelerators that support early-stage founders focused on AI and DeepTech startups."
+    },
+    {
+      "id": "check-page-b672731f70",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "Additionally, we welcome pre-accelerators aligned with the Victorian Government’s priority sectors, including: Health technologies, Circular economy, Agribusiness, Digital technologies, including AI and quantum, Advanced manufacturing and defence."
+    },
+    {
+      "id": "check-page-482ea55509",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "Sector-agnostic pre-accelerators may also apply, but they should demonstrate a strong AI or DeepTech focus in their program delivery."
+    },
+    {
+      "id": "check-page-cf9f78db74",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "The grant program timeline will conclude in April 2028."
+    },
+    {
+      "id": "check-page-0eaebcd334",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "LaunchVic adheres to Victorian Government Policy on ESG Prohibited Activities."
+    },
+    {
+      "id": "check-page-31cddcdb09",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "While the aim is to award up to eight grants, the final number will be determined by the strength of the proposals submitted."
+    },
+    {
+      "id": "check-page-1d04b82c27",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "Would receiving this funding affect eligibility for other grants, such as the ARENA hydrogen development scheme?"
+    },
+    {
+      "id": "check-page-96e5d0eb4c",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "From LaunchVic’s perspective, applying for or receiving other grants does not impact your eligibility for this grant round."
+    },
+    {
+      "id": "check-page-9e6dc532a8",
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "excerpt": "Can a program accept a mix of DeepTech/AI and non-DeepTech/AI participants?"
+    },
+    {
+      "id": "check-page-b091ce59cb",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "Funding For Startups In Victoria | Find Investors | LaunchVic LaunchVic is now Innovation Victoria Explore innovationvictoria.com Startup Ecosystem About the Ecosystem Sector Analysis Startup Database Explore the ecosystem Startup Investors Accelerator & Pre Accelerators Universities Co-Working Spaces & Labs Government Partners Community Groups Research & Insights Ecosystem Reports Industry Insights For Startups Get Started Programs for New Startups CivVic Labs Innovation Challenge Grow Your Startup Product-Market Fit Get Ready for Investment Programs for Growing Startups Scale your Startup Build Your Team Enter New Markets Preparing for an Exit Programs for Scaling Startups 30X30 Scaleup Program Basecamp Startup Program Fund your Startup Types of Funding The Alice Anderson Fund Find an Investor Community Events & Networking Program Finder Community Groups Coworking Spaces & Labs Resources for Founders Success Stories Frequently Asked Questions Startup Glossary Investor Insights For Investors For Individual Investors Get started in Victoria Investor Education Connect with Funds & Angel Networks Find Investable Startups For Funds & Angel Networks Support available Fund & Angel Directory Startup Database Co-Investment Opportunities The Alice Anderson Fund For Programs Support for Programs LaunchVic Program Strategy Grants for Programs Explore Active Programs Find Program"
+    },
+    {
+      "id": "check-page-14f418fad0",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "LaunchVic addresses this market challenge through targeted funds and programs that catalyse investment and seed funding in Victoria’s early-stage startups."
+    },
+    {
+      "id": "check-page-9f9ccb8192",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "The Alice Anderson Fund for women entrepreneurs The Hugh Victor McKay Fund for agtech founders, in partnership with Agriculture Victoria Both funds operate in a sidecar structure."
+    },
+    {
+      "id": "check-page-544c6a423f",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "This approach provides essential seed funding and supports early-stage ventures."
+    },
+    {
+      "id": "check-page-c6c709ecac",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "Alice Anderson Fund Between 2018-2021 only 4% of Australian VC funding went to women-founded startups."
+    },
+    {
+      "id": "check-page-1cf2d2eb95",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "Hugh Victor McKay Fund The Hugh Victor McKay Fund is a sidecar fund for Victorian AgTech startups run by LaunchVic with funding from Agriculture Victoria."
+    },
+    {
+      "id": "check-page-8b81e1fc50",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "The fund will co-invest between $100,000-$200,000 into at least ten early-stage AgTech startups over the next 12 months."
+    },
+    {
+      "id": "check-page-c90ca82ae4",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "LaunchVic has funded ten angel networks to establish in Victoria and invest in startups, enhancing the availability of seed funding and venture capital for local entrepreneurs."
+    },
+    {
+      "id": "check-page-76aceb2fce",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "Ecotone Ventures is a climate-focused Angel Network based in Victoria connecting the growing number of climate-conscious investors to early-stage ventures with climate solutions."
+    },
+    {
+      "id": "check-page-2164e918e4",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "Australian Medical Angels is predominately made up of practising clinicians that offers both clinical validation and invaluable links to the healthcare industry for Victorian-based HealthTech Startups."
+    },
+    {
+      "id": "check-page-9f48f5c0de",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "Flying Fox aims to back teams solving big problems in large markets that are undergoing macro shifts, with a preference for solutions that bring people together, improve everyday life, or address physical and environmental health."
+    },
+    {
+      "id": "check-page-edf5faec5d",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "Scale Investors is Australia’s first and only network of angel investors committed to investing in and empowering exceptional women entrepreneurs."
+    },
+    {
+      "id": "check-page-0ee678b04b",
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "excerpt": "Archangel is an early stage venture capital fund investing in Australian startups."
+    },
+    {
+      "id": "check-page-ab78d48a5e",
+      "url": "https://launchvic.org/our-funds/",
+      "page": "terms",
+      "excerpt": "Our Funds | LaunchVic LaunchVic is now Innovation Victoria Explore innovationvictoria.com Startup Ecosystem About the Ecosystem Sector Analysis Startup Database Explore the ecosystem Startup Investors Accelerator & Pre Accelerators Universities Co-Working Spaces & Labs Government Partners Community Groups Research & Insights Ecosystem Reports Industry Insights For Startups Get Started Programs for New Startups CivVic Labs Innovation Challenge Grow Your Startup Product-Market Fit Get Ready for Investment Programs for Growing Startups Scale your Startup Build Your Team Enter New Markets Preparing for an Exit Programs for Scaling Startups 30X30 Scaleup Program Basecamp Startup Program Fund your Startup Types of Funding The Alice Anderson Fund Find an Investor Community Events & Networking Program Finder Community Groups Coworking Spaces & Labs Resources for Founders Success Stories Frequently Asked Questions Startup Glossary Investor Insights For Investors For Individual Investors Get started in Victoria Investor Education Connect with Funds & Angel Networks Find Investable Startups For Funds & Angel Networks Support available Fund & Angel Directory Startup Database Co-Investment Opportunities The Alice Anderson Fund For Programs Support for Programs LaunchVic Program Strategy Grants for Programs Explore Active Programs Find Program Participants Professional Development Join the"
+    },
+    {
+      "id": "check-page-6578942735",
+      "url": "https://launchvic.org/our-funds/",
+      "page": "terms",
+      "excerpt": "The Alice Anderson Fund for women entrepreneurs The Hugh Victor McKay Fund for agtech founders, in partnership with Agriculture Victoria Both funds operate in a sidecar structure."
+    },
+    {
+      "id": "check-page-ee47f8e252",
+      "url": "https://launchvic.org/our-funds/",
+      "page": "terms",
+      "excerpt": "This approach provides essential seed funding and supports early-stage ventures."
+    },
+    {
+      "id": "check-page-fa6aeae108",
+      "url": "https://launchvic.org/our-funds/",
+      "page": "terms",
+      "excerpt": "LaunchVic invests alongside VCs and angels to back early-stage ventures across all sectors."
+    },
+    {
+      "id": "check-page-2b67c3c5fe",
+      "url": "https://launchvic.org/our-funds/",
+      "page": "terms",
+      "excerpt": "For women-led startups The Hugh Victor McKay Fund Co-investment funding for agtech startups, delivered in partnership with Agriculture Victoria."
+    },
+    {
+      "id": "check-page-fb494aa19b",
+      "url": "https://launchvic.org/our-funds/",
+      "page": "terms",
+      "excerpt": "LaunchVic invests alongside private investors to support early-stage agricultural innovation."
     }
   ],
   "findings": {
@@ -1088,16 +1268,20 @@
       {
         "value": "18 months",
         "evidenceId": "check-duration-7e608fe0f4"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-d5e13391a4"
       }
     ],
     "format": [
       {
-        "value": "in-person",
-        "evidenceId": "check-format-5175ea5a45"
-      },
-      {
         "value": "remote",
         "evidenceId": "check-format-4c4a901e8a"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-2b4eed558f"
       },
       {
         "value": "hybrid",

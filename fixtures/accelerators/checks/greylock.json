@@ -1,6 +1,6 @@
 {
   "programId": "greylock",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://greylock.com/",
     "https://greylock.com/change-agents/pioneering-agentic-application/",
@@ -10,20 +10,6 @@
     "https://greylock.com/blog/greylock-our-investment-in-gem/"
   ],
   "evidence": [
-    {
-      "id": "check-duration-10c7e269e4",
-      "url": "https://greylock.com/blog/experts-on-day-one-our-investment-in-cresta/",
-      "title": "Greylock — terms page",
-      "excerpt": "ramped, and have short average tenures (only 11 months) with expertise scattered across the team. The",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-2ea2e402fb",
-      "url": "https://greylock.com/blog/experts-on-day-one-our-investment-in-cresta/",
-      "title": "Greylock — terms page",
-      "excerpt": "Yet agents at contact centers can take up to 7 months to be fully ramped, and have short average",
-      "page": "terms"
-    },
     {
       "id": "check-name-b9b301d7e1",
       "url": "https://greylock.com/",
@@ -93,16 +79,7 @@
     "rolling": [],
     "announcedIntake": [],
     "cohortStarts": [],
-    "durationWeeks": [
-      {
-        "value": "7 months",
-        "evidenceId": "check-duration-2ea2e402fb"
-      },
-      {
-        "value": "11 months",
-        "evidenceId": "check-duration-10c7e269e4"
-      }
-    ],
+    "durationWeeks": [],
     "format": [],
     "location": [],
     "selectivity": [],

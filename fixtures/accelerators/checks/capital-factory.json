@@ -1,6 +1,6 @@
 {
   "programId": "capital-factory",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://capitalfactory.com/",
     "https://apply.workable.com/capital-factory/",
@@ -203,13 +203,6 @@
       "page": "application"
     },
     {
-      "id": "check-format-55ddf7015c",
-      "url": "https://capitalfactory.com/portfolio",
-      "title": "Capital Factory — portfolio page",
-      "excerpt": "after an enterprise’s best-performing people - helping hybrid teams maximize business outcomes, boost productivity and",
-      "page": "portfolio"
-    },
-    {
       "id": "check-format-5e606fb619",
       "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
       "title": "Capital Factory — application page",
@@ -224,25 +217,11 @@
       "page": "application"
     },
     {
-      "id": "check-format-cfc182072b",
-      "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
-      "title": "Capital Factory — portfolio page",
-      "excerpt": "Coordination allows us to provide Chronic Care Management, Remote Patient Monitoring, and Transitional Care Management at",
-      "page": "portfolio"
-    },
-    {
       "id": "check-format-d415db45b5",
       "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
       "title": "Capital Factory — application page",
       "excerpt": "Venture Team reporting to Venture Principal This is a hybrid role The next generation of American industry is being",
       "page": "application"
-    },
-    {
-      "id": "check-format-d475b939d2",
-      "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
-      "title": "Capital Factory — portfolio page",
-      "excerpt": "← Portfolio 1 True Health - Care Management, Inc. Virtual-First Preventative Care through delightful services and",
-      "page": "portfolio"
     },
     {
       "id": "check-format-d96c1791ed",
@@ -1308,10 +1287,6 @@
       {
         "value": "hybrid",
         "evidenceId": "check-format-20569b8b2c"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-d475b939d2"
       }
     ],
     "location": [

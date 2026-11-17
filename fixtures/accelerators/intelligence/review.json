@@ -258,19 +258,6 @@
       "status": "open"
     },
     {
-      "id": "dmz:applicationsOpen",
-      "programId": "dmz",
-      "group": "identity",
-      "field": "applicationsOpen",
-      "state": "conflicting",
-      "evidenceIds": [
-        "check-status-d947bfc531",
-        "check-status-f300c3daac"
-      ],
-      "detail": "The checked pages say both that applications are open and that they are closed.",
-      "status": "open"
-    },
-    {
       "id": "entrepreneurs-first:stale:ef-apply-hub",
       "programId": "entrepreneurs-first",
       "group": "identity",

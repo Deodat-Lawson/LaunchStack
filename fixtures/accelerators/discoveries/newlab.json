@@ -1,15 +1,7 @@
 {
   "programId": "newlab",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
-    {
-      "url": "https://newlab.com/membership/",
-      "page": "other",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
     {
       "url": "https://www.newlab.com/about",
       "page": "details",
@@ -45,14 +37,6 @@
     {
       "url": "https://www.newlab.com/post/apply-to-use-detroits-advanced-aerial-innovation-region",
       "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
-      "page": "terms",
       "anchor": "",
       "fetched": true,
       "blocked": null,

@@ -1,6 +1,6 @@
 {
   "programId": "eqt-ventures",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://eqtgroup.com/private-capital/eqt-ventures",
     "https://eqtgroup.com/about/scaleup-europe/investment-guidelines",
@@ -11,8 +11,6 @@
     "https://eqtgroup.com/thinq/Education/how-does-private-equity-compare-to-investment-banking",
     "https://eqtgroup.com/thinq/Education/what-are-alternative-investments",
     "https://eqtgroup.com/thinq/Education/what-is-a-co-investment",
-    "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-    "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
     "https://eqtgroup.com/thinq/early-stage/cancer-cure-breakthrough-will-come-from-early-stage-investments-not-big-pharma",
     "https://eqtgroup.com/thinq/equity/anatomy-of-a-private-equity-deal",
     "https://eqtgroup.com/thinq/equity/done-deal-inside-the-indian-fertility-market-with-indira-ivf",
@@ -21,21 +19,23 @@
     "https://eqtgroup.com/thinq/healthcare/building-on-three-decades-of-investment-in-life-sciences",
     "https://eqtgroup.com/thinq/infrastructure/six-transformational-infrastructure-investments-shaping-future-cities",
     "https://eqtgroup.com/thinq/opinion/europe-ai-and-deal-exits-an-eqt-guide-to-2026",
-    "https://eqtgroup.com/thinq/opinion/there-is-a-full-pipeline-of-deals-despite-tariff-shock"
+    "https://eqtgroup.com/thinq/opinion/there-is-a-full-pipeline-of-deals-despite-tariff-shock",
+    "https://eqtgroup.com/thinq/real-estate/eqt-exits-minority-stake-in-real-estate-platform-idealista",
+    "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment"
   ],
   "evidence": [
-    {
-      "id": "check-duration-59c61d6721",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "title": "EQT Ventures — terms page",
-      "excerpt": "paid off: In the first clinical trial, around 18 months later, 59 percent of patients responded to",
-      "page": "terms"
-    },
     {
       "id": "check-duration-9769acf763",
       "url": "https://eqtgroup.com/thinq/equity/anatomy-of-a-private-equity-deal",
       "title": "EQT Ventures — terms page",
       "excerpt": "Accellency, helps get companies into shape 18-24 months before they enter a deal process. The process is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d0a562b22a",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "real estate investment? Following the COVID-19 pandemic, hybrid looks set to stay and this has reduced demand for large",
       "page": "terms"
     },
     {
@@ -55,13 +55,6 @@
     {
       "id": "check-phone-3291759896",
       "url": "https://eqtgroup.com/thinq/Education/what-is-a-co-investment",
-      "title": "EQT Ventures — terms page",
-      "excerpt": "+46850655300",
-      "page": "terms"
-    },
-    {
-      "id": "check-phone-34092425d8",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
       "title": "EQT Ventures — terms page",
       "excerpt": "+46850655300",
       "page": "terms"
@@ -104,6 +97,13 @@
     {
       "id": "check-phone-558f35e73f",
       "url": "https://eqtgroup.com/thinq/opinion/europe-ai-and-deal-exits-an-eqt-guide-to-2026",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-5e3827762c",
+      "url": "https://eqtgroup.com/thinq/real-estate/eqt-exits-minority-stake-in-real-estate-platform-idealista",
       "title": "EQT Ventures — terms page",
       "excerpt": "+46850655300",
       "page": "terms"
@@ -172,8 +172,8 @@
       "page": "terms"
     },
     {
-      "id": "check-phone-d4cb1cf73f",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
+      "id": "check-phone-d9bba08de0",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
       "title": "EQT Ventures — terms page",
       "excerpt": "+46850655300",
       "page": "terms"
@@ -542,108 +542,6 @@
       "url": "https://eqtgroup.com/thinq/Education/what-is-a-co-investment",
       "page": "terms",
       "excerpt": "Contact us Offices +46850655300 Press Newsroom [email protected] Careers Careers at EQT Follow us LinkedIn X YouTube Instagram Legal Terms and Conditions of Use Cookie Notice Privacy Notice EQT Policies & Statements Complaints Handling Procedure Sustainable Finance Disclosure Fraud and Phishing Awareness Local sites Japan - 日本 Go to the top ©EQT AB 2026 ."
-    },
-    {
-      "id": "check-page-92638ba1fe",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "excerpt": "How a Rare Public Markets Deal Took a Swedish AC Firm to the US | ThinQ by EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login Case Study A Rare Public Markets Deal Enabled Swedish AC Firm to Take On the US Market Copy Link May 30, 2025, 08:19 Share The link was copied! The 159-year-old company is one of the world’s largest distributors of heating, ventilation and air conditioning and refrigeration units. With EQT’s support, Beijer accelerated its growth through M&A and a focus on innovation. TL;DR Stockholm-listed Beijer Ref is one of the world’s largest distributors of heating, ventilation, air conditioning and refrigeration units. Strong long-term sector growth and Beijer’s position as an expanding player made it attractive to EQT, which took a minority stake in December 2020. EQT accelerated Beijer’s growth through M&A and a focus on innovation. Read more EQT had been following Beijer Ref for years before the opportunity arose in 2020 to invest in the Malmö-headquartered distributor of heating, ventilation and air conditioning (HVAC) and commercial refrigeration. “A layman might say HVAC distribution sounds boring, but it is one of the most attractive distribution markets that I have ever come across,” says Juho Frilander , an EQT Managing Director. Several factors stood out. Firstly, long-term, structural market growth driven by an"
-    },
-    {
-      "id": "check-page-d05aea35ff",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "excerpt": "Firstly, long-term, structural market growth driven by an expanding global middle class and tightening environmental regulations in response to climate change is leading to investment in heat pumps."
-    },
-    {
-      "id": "check-page-03eda4ab3b",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "excerpt": "Beijer specifically had the advantage of being the sole major distributor in Europe, in an industry primarily served by small, local players."
-    },
-    {
-      "id": "check-page-6a0825003a",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "excerpt": "EQT supported due diligence and gave confidence to the board and management to launch the $1.3bn rights issue that funded the purchase of Heritage – equal to approximately a quarter of Beijer’s share capital, and at the time represented the largest rights issue in Sweden for more than 10 years."
-    },
-    {
-      "id": "check-page-7161dd966c",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "excerpt": "“We brought a lot of credibility in the capital markets, which rewarded us for doing it, rather than sending the share price down.” The result has been transformative, Frilander says, extending the M&A runway for the next decade in a market that is even more fragmented than Europe."
-    },
-    {
-      "id": "check-page-92101fcc64",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "excerpt": "EQT’s digital team worked closely with Lexander to standardize enterprise planning and other software, which brought direct efficiency gains and allowed for better performance visibility for Beijer’s 500-plus branches."
-    },
-    {
-      "id": "check-page-4fea2b6f15",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "excerpt": "It also lent expertise to support Beijer’s e-commerce push, which last year accounted for 16 percent of sales, a key growth driver in HVAC distribution, which Frilander says can be “old school”."
-    },
-    {
-      "id": "check-page-eb087558c2",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "excerpt": "“It is testament that in the right situations you can do quite amazing things for value creation despite a minority role in a public setting.” Europe HVAC M&A Public Markets ThinQ by EQT: A publication where private markets meet open minds."
-    },
-    {
-      "id": "check-page-9bfe6f0701",
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "excerpt": "Equity EQT acquires majority stake in CluePoints Education 30 Years of Being More Than Capital Equity 8 Tips from World-class Industrialists Equity What Matters Most When Building “Good” Companies?"
-    },
-    {
-      "id": "check-page-66c1b7c210",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "page": "terms",
-      "excerpt": "Tubulis Turns Novel Cancer Approach Into $5bn Deal | ThinQ by EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login Case Study Tubulis Turns Novel Cancer Approach Into $5bn Deal Copy Link June 19, 2026, 12:51 Share The link was copied! German biotech company uses novel chemistry to build “guided-missile” cancer drugs for precision chemotherapy. TL;DR Tubulis uses novel chemistry to design more stable “guided-missile” cancer drugs. EQT Life Sciences co-led a €128m funding round for Tubulis in 2024. Gilead agreed to acquire the German company in 2026 for up to $5bn. Read more In 2019, two scientists in Germany set out to solve a problem that had frustrated cancer researchers for decades. Just seven years later, Gilead Sciences agreed to acquire their company for up to $5bn in the biggest deal ever for a privately-held European biotech. Tubulis co-founder Dominik Schumacher attributes the company’s rise to a few key principles: a strong belief in the company’s science, an openness to advice from experienced outsiders, and the discipline to adapt to new data. Underpinning all of that was a determination to deliver on the long-held promise of “guided-missile” cancer drugs. The goal was straightforward in theory: hunt down tumor cells and deliver powerful drugs at close range. Yet early efforts to develop these treatments, known as antibody-drug"
-    },
-    {
-      "id": "check-page-d48a2b61c9",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "page": "terms",
-      "excerpt": "Through their academic work in Munich and Berlin, they spent the 2010s applying novel chemistry to the problem."
-    },
-    {
-      "id": "check-page-49ebae4a20",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "page": "terms",
-      "excerpt": "Despite wider pessimism about ADCs, the promise of their work was recognized by the local biotech community."
-    },
-    {
-      "id": "check-page-5a78ec3ee3",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "page": "terms",
-      "excerpt": "In 2017, the team was awarded a €500,000 grant by BioM , an organization that supports the Munich biomedicine sector."
-    },
-    {
-      "id": "check-page-71c41b8f28",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "page": "terms",
-      "excerpt": "“That strategic pivot made it more investable for us,” says Christoph Broja, partner at EQT Life Sciences, which co-led a €128m funding round in March 2024."
-    },
-    {
-      "id": "check-page-3b22c6526e",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "page": "terms",
-      "excerpt": "“We all want to see these drugs come to the market because that means we can hopefully improve a lot of people’s lives.” Healthcare ThinQ by EQT: A publication where private markets meet open minds."
-    },
-    {
-      "id": "check-page-a8afc935da",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "page": "terms",
-      "excerpt": "Join the conversation – [email protected] On the topic of Case Studies See all Case Studies How Six Schools Became a $14.5bn Education Leader Case Studies Creating a Market-leading Respiratory Device Maker Case Study How EQT-Backed Beijer Took on the US Aircon Market Case Study Exploring Anticimex’s Rise to Pest Control Leader Case Study How Does Private Capital Create Value?"
-    },
-    {
-      "id": "check-page-45699b5fe1",
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "page": "terms",
-      "excerpt": "Sign up now Contact us Offices +46850655300 Press Newsroom [email protected] Careers Careers at EQT Follow us LinkedIn X YouTube Instagram Legal Terms and Conditions of Use Cookie Notice Privacy Notice EQT Policies & Statements Complaints Handling Procedure Sustainable Finance Disclosure Fraud and Phishing Awareness Local sites Japan - 日本 Go to the top ©EQT AB 2026 ."
     },
     {
       "id": "check-page-e80d3ab692",
@@ -1250,6 +1148,108 @@
       "url": "https://eqtgroup.com/thinq/opinion/there-is-a-full-pipeline-of-deals-despite-tariff-shock",
       "page": "terms",
       "excerpt": "See all articles Private Capital Real Estate Logistics ThinQ by EQT: A publication where private markets meet open minds."
+    },
+    {
+      "id": "check-page-b5537202e2",
+      "url": "https://eqtgroup.com/thinq/real-estate/eqt-exits-minority-stake-in-real-estate-platform-idealista",
+      "page": "terms",
+      "excerpt": "EQT Exits Minority Stake in Real Estate Platform, Idealista | ThinQ by EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login Real Estate EQT Exits Minority Stake in Real Estate Platform, Idealista Copy Link July 30, 2024, 18:35 Share The link was copied! EQT have sold their majority stake in Idealista, the online real estate platform to the private Equity firm Cinven, in what marks Spain’s largest-ever technology sector acquisition. TL;DR EQT AB sells a 70% stake in Idealista to Cinven for €2.9bn, retaining an 18% stake. Despite real estate sector concerns, this is Spain's largest technology acquisition. Idealista’s founder Jesùs Encinar and EQT will continue to support its growth across southern Europe. Read more EQT AB has reached an agreement to sell a majority stake in Idealista to the private equity firm Cinven, in a deal valuing the online real estate platform at €2.9bn ($3.1bn). EQT, which acquired Idealista in 2020 at a valuation of €1.3bn, will retain an 18% stake in the business, while Cinven will acquire a 70% stake. Despite ongoing apprehension about interest rates in the real estate sector, which have reached their lowest levels since at least 2019 amid concerns about the interest rate trajectory, this deal marks Spain’s largest-ever technology sector acquisition. Apax Partners and Oakley Capital will sell their holdings as part of"
+    },
+    {
+      "id": "check-page-60aa3e55bb",
+      "url": "https://eqtgroup.com/thinq/real-estate/eqt-exits-minority-stake-in-real-estate-platform-idealista",
+      "page": "terms",
+      "excerpt": "We believe strongly in Idealista’s future potential and are excited to remain invested.” Today, Idealista serves as a vital platform connecting around 60,000 real estate agents with more than 38 million unique monthly visitors, generating over one billion visits annually across southern Europe."
+    },
+    {
+      "id": "check-page-5cb16c8d51",
+      "url": "https://eqtgroup.com/thinq/real-estate/eqt-exits-minority-stake-in-real-estate-platform-idealista",
+      "page": "terms",
+      "excerpt": "Europe Infrastructure ThinQ by EQT: A publication where private markets meet open minds."
+    },
+    {
+      "id": "check-page-f45305ecf9",
+      "url": "https://eqtgroup.com/thinq/real-estate/eqt-exits-minority-stake-in-real-estate-platform-idealista",
+      "page": "terms",
+      "excerpt": "Join the conversation – [email protected] More Essential Reading Healthcare EQT Joins $100M Round Backing Asceneuron Equity Done Deal: Indira IVF Insights What Does an Election Year Mean for Investors?"
+    },
+    {
+      "id": "check-page-3f252b80ba",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "The Sliding Scale of Real Estate Investment | ThinQ by EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login Real Estate The Sliding Scale of Real Estate Investment Copy Link January 7, 2025, 10:17 Share The link was copied! Investing in real estate offers the potential for stable income and long-term capital growth, and there are several ways to invest. TL;DR Real estate investing is looking increasingly attractive as interest rates fall again Average annual returns have been 6 percent to 8 percent over the past decade The growth of AI and the aim to achieve net zero are influencing real estate investments Read more Legendary investor, Warren Buffett, once said diversification makes little sense if you know what you’re doing. Yet many risk-averse investors would disagree about the merits of putting your eggs in one basket and real estate has long been seen as a useful tool for diversifying your portfolio – and with speculation that interest rates may yet fall, some expect investment activity to rise. Real estate investment is a broad church, ranging from individual homeowners and landlords to large institutional trusts and funds and, increasingly, high-net-worth individuals. The attraction is understandable. Real estate is a tangible asset, potentially providing investors a steady stream of income through rent, as well as the potential for"
+    },
+    {
+      "id": "check-page-48789f6b1b",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "Real estate is a tangible asset, potentially providing investors a steady stream of income through rent, as well as the potential for long-term capital growth while the investment keeps pace with inflation as rent and the value of the property rise over time."
+    },
+    {
+      "id": "check-page-4687c9d43a",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "Average annual returns in private real estate were 6 percent to 8% a year in the 10 years to 2023, according to global real estate investor JLL ."
+    },
+    {
+      "id": "check-page-c85375b37f",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "As with any investment, there are risks to consider with real estate."
+    },
+    {
+      "id": "check-page-78b58c600f",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "Real estate offerings There are several types of real estate spanning the residential and commercial sectors, which include properties used for offices, retail, industrial, and hospitality businesses."
+    },
+    {
+      "id": "check-page-79bee91309",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "Individuals can invest in real estate through a number of ways, including: Direct investment."
+    },
+    {
+      "id": "check-page-d66a8a4a93",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "Real Estate Investment Trusts (REITs)."
+    },
+    {
+      "id": "check-page-d27586adbc",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "These are listed companies that invest in real estate."
+    },
+    {
+      "id": "check-page-4dc9a20032",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "Funds pool investors’ money to invest in real estate."
+    },
+    {
+      "id": "check-page-6dff273685",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "Unlike investing through the stock market, it will take longer to sell a privately held real estate investment because there is a limited pool of buyers."
+    },
+    {
+      "id": "check-page-3c0a336e26",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "This should be considered carefully when investing in real estate."
+    },
+    {
+      "id": "check-page-a33026f3ad",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "Popularity of real estate investing It is commonly acknowledged that commercial real estate is the third-largest asset class after stocks and bonds for institutional investors (large organizations such as pension funds that invest in a wide range of assets)."
+    },
+    {
+      "id": "check-page-54c933dadb",
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
+      "page": "terms",
+      "excerpt": "Institutional investors allocate 10.8 percent of their investment portfolios to real estate on average."
     }
   ],
   "findings": {
@@ -1280,15 +1280,16 @@
     "cohortStarts": [],
     "durationWeeks": [
       {
-        "value": "18 months",
-        "evidenceId": "check-duration-59c61d6721"
-      },
-      {
         "value": "24 months",
         "evidenceId": "check-duration-9769acf763"
       }
     ],
-    "format": [],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-d0a562b22a"
+      }
+    ],
     "location": [
       {
         "value": "Europe",

@@ -1,10 +1,9 @@
 {
   "programId": "antler",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.antler.co/",
     "https://www.antler.co/apply",
-    "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
     "https://www.antler.co/cohort-start-dates",
     "https://www.antler.co/about",
     "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
@@ -12,41 +11,6 @@
     "https://www.antler.co/blog/1000-investments-from-day-zero"
   ],
   "evidence": [
-    {
-      "id": "check-deal-63c989d993",
-      "url": "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
-      "title": "Antler — application page",
-      "excerpt": "valuation of AU$1,875,000. Then, if the founders secure at least $300,000 from sophisticated investors within 12 months of that investment,",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-e9d61ae964",
-      "url": "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
-      "title": "Antler — application page",
-      "excerpt": "of $225,000 for a 12% equity stake. At this point, Antler receives a $68,000 platform fee and the Company receives $157,000 net at a post-money",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-425cb52cac",
-      "url": "https://www.antler.co/blog/1000-investments-from-day-zero",
-      "title": "Antler — terms page",
-      "excerpt": "Announces Improved Investment Terms and 6-Week Residency Antler Singapore today announced",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-5f39428fc6",
-      "url": "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
-      "title": "Antler — application page",
-      "excerpt": "initial VC funding and strategic support. The 10-week in-person residency, which runs twice a year in",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-795c1f8498",
-      "url": "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
-      "title": "Antler — application page",
-      "excerpt": "$300,000 from sophisticated investors within 12 months of that investment, Antler will invest again.",
-      "page": "application"
-    },
     {
       "id": "check-duration-916d33eca7",
       "url": "https://www.antler.co/about",
@@ -69,34 +33,6 @@
       "page": "details"
     },
     {
-      "id": "check-duration-a52353ada0",
-      "url": "https://www.antler.co/blog/1000-investments-from-day-zero",
-      "title": "Antler — terms page",
-      "excerpt": "improved investment terms and a revamped 6-week residency for founders building global software",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-afd07c4246",
-      "url": "https://www.antler.co/blog/1000-investments-from-day-zero",
-      "title": "Antler — terms page",
-      "excerpt": "57 founders have been selected. They will spend 10 weeks in an intensive early-stage venture generation",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-ba17580449",
-      "url": "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
-      "title": "Antler — application page",
-      "excerpt": "from sophisticated investors within the first 12 months. This is part of Antler’s commitment to backing",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-e37b7b6594",
-      "url": "https://www.antler.co/blog/the-who-what-and-why-of-applying-to-antler-southeast-asia",
-      "title": "Antler — application page",
-      "excerpt": "an AI-native operating model. ‍ Rebolt In just 18 months, Rebolt has grown from an idea into a",
-      "page": "application"
-    },
-    {
       "id": "check-format-4e907bff59",
       "url": "https://www.antler.co/about",
       "title": "Antler — program page",
@@ -104,32 +40,11 @@
       "page": "details"
     },
     {
-      "id": "check-format-547ac8c6b4",
-      "url": "https://www.antler.co/blog/https-www-antler-co-blog-apply-to-antler-australia-residency-brisbane-sydney-melbourne",
-      "title": "Antler — application page",
-      "excerpt": "initial VC funding and strategic support. The 10-week in-person residency, which runs twice a year in February and August,",
-      "page": "application"
-    },
-    {
       "id": "check-format-6b2fdd8760",
       "url": "https://www.antler.co/about",
       "title": "Antler — program page",
       "excerpt": "movies. At General Motors, he developed and deployed virtual reality cave environments for automotive design and car",
       "page": "details"
-    },
-    {
-      "id": "check-format-de79daefbd",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "title": "Antler — terms page",
-      "excerpt": "AI, including:some text ReelBlend : Marketplace for virtual product placement, utilizing AI and Computer Vision to",
-      "page": "terms"
-    },
-    {
-      "id": "check-location-9d60a7ad00",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "title": "Antler — terms page",
-      "excerpt": "early-stage venture capital firm based in Singapore, today announced its largest pre-seed",
-      "page": "terms"
     },
     {
       "id": "check-location-f72704f965",
@@ -200,13 +115,6 @@
       "title": "Antler — homepage",
       "excerpt": "https://www.antler.co/portfolio",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-c0dd68e853",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "title": "Antler — terms page",
-      "excerpt": "Portfolio → https://www.antler.co/portfolio",
-      "page": "terms"
     },
     {
       "id": "check-rolling-b8c157d6b9",
@@ -348,84 +256,6 @@
       "url": "https://www.antler.co/apply",
       "page": "application",
       "excerpt": "LOCATIONS Australia Brazil Canada Denmark Finland France Germany India Indonesia Japan Kenya Korea MENAP Malaysia Netherlands Nigeria Norway Singapore Sweden UK US Vietnam INVESTORS Investors Investors portal Sustainability Antler Elevate ABOUT Insights Portfolio Careers Portfolio Jobs Newsroom Privacy Policy Fraud Disclaimer Report a Concern SOCIALS Instagram Facebook LinkedIn YouTube X / Twitter"
-    },
-    {
-      "id": "check-page-098a769c6c",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "Antler Leads $5.1M Pre-Seed Funding for 37 Startups in SEA; Targets Investments in Verticalized AI and Industry 4.0 Skip to main content Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges, from idea to scale. View Antler founder stories View Antler founder stories Cohort Start dates See when new cohorts begin and find the right moment to start building with Antler. View cohort start dates View cohort start dates Portfolio Investors About Founder Login Founder Login Founder Login Pitch Us Pitch Us Pitch Us Locations Asia Pacific Australia India Indonesia Japan Korea Malaysia Singapore Vietnam Europe UK Continental Europe Nordics Americas Brazil Canada US Middle East and Africa Kenya Nigeria Saudi Arabia United Arab Emirates Resources ANTLER INSIGHTS Expert perspectives, founder stories, and data-driven insights for early-stage builders. Visit Antler insights Visit Antler insights FOUNDER STORIES Discover how Antler founders are solving the world’s biggest challenges,"
-    },
-    {
-      "id": "check-page-d0da6c0bb7",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "This round also marks the highest number of pre-seed deals completed in a single round in the region, demonstrating Antler’s commitment to backing the next generation of SEA tech entrepreneurs. ‍ The diverse portfolio of startups spans 19 sectors ranging from AI and B2B SaaS to fintech and healthcare to address specific regional challenges."
-    },
-    {
-      "id": "check-page-ebbf0c1c94",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "The investment also marks Antler’s initial commitment and footprint in Malaysia, as part of its strategic partnership with sovereign wealth fund Khazanah."
-    },
-    {
-      "id": "check-page-2e8a63c4b8",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "Jussi Salovaara, Co-founder and Managing Partner Asia of Antler said, “As a multi-stage investor, we recognize the immense potential of early-stage startups in Southeast Asia."
-    },
-    {
-      "id": "check-page-e8b8519cf5",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "In this dynamic and challenging climate, we are especially drawn to pre-seed investments, particularly in verticalized AI and industry 4.0 startups that address deep-seated pain points and revolutionize the way models and data translate into tangible products."
-    },
-    {
-      "id": "check-page-752f1bade6",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "Their investments in this round underscore conviction in the following trends: ‍ Shift to verticalized AI - A second wave of AI startups is expected in 2024 as AI continues to mature and solutions are being tailored to specific industries."
-    },
-    {
-      "id": "check-page-513b3e0295",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "We will see a greater shift towards building durable businesses in verticalized AI, notably in media, customer lifecycle management, and LLM integration."
-    },
-    {
-      "id": "check-page-52f46479e7",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "34% of startups in this round are in verticalized AI, including:some text ReelBlend : Marketplace for virtual product placement, utilizing AI and Computer Vision to facilitate accurate ad insertions in various media."
-    },
-    {
-      "id": "check-page-9dd7273c67",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "EigenAI : No-code AI/ML platform specializing in analyzing customer behavior and building comprehensive Customer Lifecycle Management (CLM) models."
-    },
-    {
-      "id": "check-page-db0c4e87d5",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "RapidaAI : LLM router and prompt engineering platform for businesses to experiment, test and deploy LLM powered applications at speed."
-    },
-    {
-      "id": "check-page-9869dc9606",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "Emereg : AI-first platform focused on risk management automation specifically tailored for the fintech sector."
-    },
-    {
-      "id": "check-page-3a35336bbe",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "CapGo : Platform to deploy AI agents for fast and autonomous data acquisition, specifically tailored for market research."
-    },
-    {
-      "id": "check-page-b9f812d86f",
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "excerpt": "Buildas : Human-assisted AI platform that aids businesses in planning, customizing, and maintaining software without requiring extensive technical expertise."
     },
     {
       "id": "check-page-60199df83e",
@@ -585,73 +415,23 @@
       {
         "value": "20 months",
         "evidenceId": "check-duration-916d33eca7"
-      },
-      {
-        "value": "12 months",
-        "evidenceId": "check-duration-ba17580449"
-      },
-      {
-        "value": "10",
-        "evidenceId": "check-duration-5f39428fc6"
-      },
-      {
-        "value": "6",
-        "evidenceId": "check-duration-425cb52cac"
       }
     ],
     "format": [
       {
         "value": "remote",
-        "evidenceId": "check-format-de79daefbd"
-      },
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-547ac8c6b4"
+        "evidenceId": "check-format-4e907bff59"
       }
     ],
     "location": [
       {
         "value": "Singapore",
-        "evidenceId": "check-location-9d60a7ad00"
+        "evidenceId": "check-location-f72704f965"
       }
     ],
     "selectivity": [],
-    "dealText": [
-      {
-        "value": "of $225,000 for a 12% equity stake. At this point, Antler receives a $68,000 platform fee and the Company receives $157,000 net at a post-money",
-        "evidenceId": "check-deal-e9d61ae964"
-      },
-      {
-        "value": "valuation of AU$1,875,000. Then, if the founders secure at least $300,000 from sophisticated investors within 12 months of that investment,",
-        "evidenceId": "check-deal-63c989d993"
-      }
-    ],
-    "dealComponents": [
-      {
-        "value": {
-          "kind": "fee",
-          "amount": "68000",
-          "currency": "USD",
-          "equity": "12%",
-          "label": "Fee",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-e9d61ae964"
-      },
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "300000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-63c989d993"
-      }
-    ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.antler.co/portfolio",

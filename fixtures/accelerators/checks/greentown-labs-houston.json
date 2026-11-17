@@ -1,6 +1,6 @@
 {
   "programId": "greentown-labs-houston",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://greentown.org/news/all-news",
     "https://greentown.org/apply-now",
@@ -19,41 +19,6 @@
   ],
   "evidence": [
     {
-      "id": "check-duration-439291e611",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs Houston — application page",
-      "excerpt": "for example, take at least 9 months altogether: 3 months to apply, 3 months to hear whether you won the",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-4efaa7e050",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs Houston — application page",
-      "excerpt": "to hear whether you won the award, and another 3 months to receive the funding. After receiving the",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-bb6cf8dc16",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs Houston — application page",
-      "excerpt": "funds. SBIR grants, for example, take at least 9 months altogether: 3 months to apply, 3 months to hear",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-cf4bfd953e",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs Houston — application page",
-      "excerpt": "at least 9 months altogether: 3 months to apply, 3 months to hear whether you won the award, and another 3",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-daff96241e",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs Houston — application page",
-      "excerpt": "to Phase I Awards, which award up to $150K for 6 months, Phase II awards can fund up to $1M for 2 years,",
-      "page": "application"
-    },
-    {
       "id": "check-duration-ef0aeeb05f",
       "url": "https://greentown.org/apply-now",
       "title": "Greentown Labs Houston — application page",
@@ -65,13 +30,6 @@
       "url": "https://greentown.org/apply-now",
       "title": "Greentown Labs Houston — application page",
       "excerpt": "Visit our Boston or Houston campus and see the incubator in person. Step 04 Committee Review Our review committee makes a",
-      "page": "application"
-    },
-    {
-      "id": "check-location-551cfac257",
-      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
-      "title": "Greentown Labs Houston — application page",
-      "excerpt": "Anzu Partners , an investment firm located in Washington DC that teams with entrepreneurs and",
       "page": "application"
     },
     {
@@ -640,18 +598,6 @@
       {
         "value": "2",
         "evidenceId": "check-duration-ef0aeeb05f"
-      },
-      {
-        "value": "9 months",
-        "evidenceId": "check-duration-bb6cf8dc16"
-      },
-      {
-        "value": "3 months",
-        "evidenceId": "check-duration-439291e611"
-      },
-      {
-        "value": "6 months",
-        "evidenceId": "check-duration-daff96241e"
       }
     ],
     "format": [
@@ -660,12 +606,7 @@
         "evidenceId": "check-format-12b5f05948"
       }
     ],
-    "location": [
-      {
-        "value": "Washington DC",
-        "evidenceId": "check-location-551cfac257"
-      }
-    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
     "dealComponents": [],

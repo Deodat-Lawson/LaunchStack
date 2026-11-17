@@ -1,6 +1,6 @@
 {
   "programId": "eqt-ventures",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://eqtgroup.com/about/careers",
@@ -331,22 +331,6 @@
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/thinq/case-study/a-rare-public-markets-deal-enabled-swedish-ac-firm-to-take-on-the-us-market",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/thinq/case-study/tubulis-turns-novel-cancer-approach-into-5bn-deal",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://eqtgroup.com/thinq/early-stage/cancer-cure-breakthrough-will-come-from-early-stage-investments-not-big-pharma",
       "page": "terms",
       "anchor": "",
@@ -412,6 +396,22 @@
     },
     {
       "url": "https://eqtgroup.com/thinq/opinion/there-is-a-full-pipeline-of-deals-despite-tariff-shock",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/real-estate/eqt-exits-minority-stake-in-real-estate-platform-idealista",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/thinq/real-estate/the-sliding-scale-of-real-estate-investment",
       "page": "terms",
       "anchor": "",
       "fetched": true,

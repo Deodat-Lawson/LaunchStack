@@ -1,6 +1,6 @@
 {
   "programId": "one-eight-seven-one",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://1871.com/",
     "https://1871.com/about/",
@@ -19,13 +19,6 @@
       "page": "batches"
     },
     {
-      "id": "check-duration-74370cbf0c",
-      "url": "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
-      "title": "1871 — batches page",
-      "excerpt": "to the public, nationwide & free to join. This 12-week program and mentoring initiative provide cohort",
-      "page": "batches"
-    },
-    {
       "id": "check-email-9e01c417b2",
       "url": "https://1871.com/about/",
       "title": "1871 — program page",
@@ -38,41 +31,6 @@
       "title": "1871 — program page",
       "excerpt": "info@1871.com",
       "page": "details"
-    },
-    {
-      "id": "check-format-1313499ebb",
-      "url": "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
-      "title": "1871 — batches page",
-      "excerpt": "Cohort 5 Info Sessions 6.13.23 or 6.23.23 | Various Times Virtual Early Stage You’re invited to our two public info sessions",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-67c5a840bc",
-      "url": "https://1871.com/event/wistem-cohort-14-public-info-session/",
-      "title": "1871 — batches page",
-      "excerpt": "14 Public Info Session 01/27/2022 5:30 pm – 6:30 pm CST Virtual Early Stage Event Start Date: November 16, 2026 Event End",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-8f52759054",
-      "url": "https://1871.com/event/wmntech-founders-cohort-17-info-sessions/",
-      "title": "1871 — batches page",
-      "excerpt": "March 21, 2024 Event End Date: March 29, 2024 Event Venue: Virtual About 1871 1871 exists to inspire, equip, and support",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-e21fedb934",
-      "url": "https://1871.com/event/wmntech-founders-cohort-17-info-sessions/",
-      "title": "1871 — batches page",
-      "excerpt": "03.21.24 or 03.29.24 | Various Times 5:30 pm – 6:15 pm CST Virtual 45 minutes Corporate Early Stage Growth Stage Are you a",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-f20c4bd90b",
-      "url": "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
-      "title": "1871 — batches page",
-      "excerpt": "June 13, 2023 Event End Date: June 23, 2023 Event Venue: Virtual We’re recruiting extraordinary Black early-stage tech",
-      "page": "batches"
     },
     {
       "id": "check-name-e115241518",
@@ -279,18 +237,8 @@
       }
     ],
     "cohortStarts": [],
-    "durationWeeks": [
-      {
-        "value": "12",
-        "evidenceId": "check-duration-74370cbf0c"
-      }
-    ],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-1313499ebb"
-      }
-    ],
+    "durationWeeks": [],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [],

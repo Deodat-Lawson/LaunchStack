@@ -1,6 +1,6 @@
 {
   "programId": "sequoia",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://sequoiacap.com/",
     "https://sequoiacap.com/our-companies",
@@ -10,13 +10,6 @@
     "https://sequoiacap.com/article/partnering-with-deno-application-development-for-the-modern-web"
   ],
   "evidence": [
-    {
-      "id": "check-duration-b9f306058f",
-      "url": "https://sequoiacap.com/article/open-source-fellowship-applications",
-      "title": "Sequoia — application page",
-      "excerpt": "to cover reasonable living expenses for 6 to 12 months. They will continue to own the fruits of their",
-      "page": "application"
-    },
     {
       "id": "check-name-1f316c61a2",
       "url": "https://sequoiacap.com/",
@@ -152,12 +145,7 @@
     ],
     "announcedIntake": [],
     "cohortStarts": [],
-    "durationWeeks": [
-      {
-        "value": "12 months",
-        "evidenceId": "check-duration-b9f306058f"
-      }
-    ],
+    "durationWeeks": [],
     "format": [],
     "location": [],
     "selectivity": [],

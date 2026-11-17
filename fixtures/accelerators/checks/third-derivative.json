@@ -1,6 +1,6 @@
 {
   "programId": "third-derivative",
-  "checkedAt": "2026-11-17T00:44:46.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.third-derivative.org/",
     "https://www.third-derivative.org/corporates-application",
@@ -55,13 +55,6 @@
       "page": "application"
     },
     {
-      "id": "check-duration-4dfd05e066",
-      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
-      "title": "Third Derivative — batches page",
-      "excerpt": "Cohort will participate in Third Derivative's 18-month accelerator program, receiving bespoke,",
-      "page": "batches"
-    },
-    {
       "id": "check-duration-502b172a4f",
       "url": "https://www.third-derivative.org/startups",
       "title": "Third Derivative — program page",
@@ -81,13 +74,6 @@
       "title": "Third Derivative — program page",
       "excerpt": "are not one-size-fits-all. Our flexible, virtual 18-month accelerator is designed to meet your startup",
       "page": "details"
-    },
-    {
-      "id": "check-duration-822360a561",
-      "url": "https://www.third-derivative.org/blog/35-graduating-startups-driving-innovation-cohort-23-2-and-first-gigaton-captured",
-      "title": "Third Derivative — batches page",
-      "excerpt": "Captured (FGC) program. After a rewarding 18-month journey with Third Derivative’s accelerator,",
-      "page": "batches"
     },
     {
       "id": "check-duration-ad9f2e288b",
@@ -153,13 +139,6 @@
       "page": "application"
     },
     {
-      "id": "check-format-444f8504e3",
-      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
-      "title": "Third Derivative — batches page",
-      "excerpt": "on supercomputers with utility, market, geospatial, and remote sensing data. Next, each and every property receives a",
-      "page": "batches"
-    },
-    {
       "id": "check-format-47ec13dfd8",
       "url": "https://www.third-derivative.org/startups",
       "title": "Third Derivative — program page",
@@ -207,27 +186,6 @@
       "title": "Third Derivative — program page",
       "excerpt": "models to the world. If accepted, you’ll take part in our virtual, 18-month accelerator program. We’re here to help you",
       "page": "details"
-    },
-    {
-      "id": "check-format-fae5b100a4",
-      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
-      "title": "Third Derivative — batches page",
-      "excerpt": "sleek and smart battery swapping devices provide real-time remote monitoring of battery parameters, parallel discharge",
-      "page": "batches"
-    },
-    {
-      "id": "check-format-fec4494a4f",
-      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
-      "title": "Third Derivative — batches page",
-      "excerpt": "power generation, and one company has a hydrogen-battery hybrid solution. These various approaches not only provide the",
-      "page": "batches"
-    },
-    {
-      "id": "check-location-12184bc046",
-      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
-      "title": "Third Derivative — batches page",
-      "excerpt": "America based startups, six are located in India, three of which are focused on",
-      "page": "batches"
     },
     {
       "id": "check-location-ca6aaa9bd3",
@@ -780,13 +738,6 @@
       "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
       "title": "Third Derivative — batches page",
       "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
-      "page": "batches"
-    },
-    {
-      "id": "check-selectivity-e351700525",
-      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
-      "title": "Third Derivative — batches page",
-      "excerpt": "Inside Cohort 22-1 Cohort 22-1 was selected from over 200 applicants, with an acceptance rate of ~7.5%. We’re particularly thrilled with the diversity among these 16 startups, 85%",
       "page": "batches"
     },
     {
@@ -1448,32 +1399,15 @@
       {
         "value": "in-person",
         "evidenceId": "check-format-0480cc461e"
-      },
-      {
-        "value": "hybrid",
-        "evidenceId": "check-format-fec4494a4f"
       }
     ],
     "location": [
       {
         "value": "Asia",
         "evidenceId": "check-location-ca6aaa9bd3"
-      },
-      {
-        "value": "India",
-        "evidenceId": "check-location-12184bc046"
       }
     ],
-    "selectivity": [
-      {
-        "value": {
-          "rate": 0.075,
-          "bounded": true,
-          "qualifier": "about"
-        },
-        "evidenceId": "check-selectivity-e351700525"
-      }
-    ],
+    "selectivity": [],
     "dealText": [
       {
         "value": "offerings, as well as: Capital Mobilization: Access to an optional $100K convertible note through the Third Derivative program. Tailored",

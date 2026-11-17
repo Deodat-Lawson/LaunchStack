@@ -1,40 +1,54 @@
 {
   "programId": "techstars-london",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.techstars.com/accelerators/london",
     "https://www.techstars.com/application-preview",
     "https://www.techstars.com/communities/community-leader-application",
-    "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-    "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-    "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-    "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-    "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-    "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-    "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-    "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-    "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-    "https://www.techstars.com/accelerators/web3",
     "https://www.techstars.com/apply/",
     "https://www.techstars.com/engagement-terms-and-conditions",
     "https://www.techstars.com/faq",
     "https://www.techstars.com/investment-terms",
     "https://www.techstars.com/mentor-faq",
     "https://mentor.techstars.com",
-    "https://www.techstars.com/newsroom/investment-terms"
+    "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
+    "http://techstars.com/faq",
+    "https://www.techstars.com/about",
+    "https://www.techstars.com/accelerator-hub",
+    "https://www.techstars.com/accelerators",
+    "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+    "https://www.techstars.com/accelerators/anywhere",
+    "https://www.techstars.com/accelerators/baltimore-ai-health",
+    "https://www.techstars.com/accelerators/belfast",
+    "https://www.techstars.com/accelerators/birmingham",
+    "https://www.techstars.com/accelerators/boston"
   ],
   "evidence": [
     {
-      "id": "check-announced-c993c5b0d9",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "accepting applications for our 6th accelerator program in Torino - apply by November 20th. In the past five years , we've had the privilege of investing",
-      "page": "application"
+      "id": "check-deadline-438fea8fb4",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Aug 24 2026 Applications Open Nov 18 2026 Final Deadline Mar 08 2027 Accelerator Starts Jun 03 2027 Demo Day The Techstars AI",
+      "page": "details"
     },
     {
       "id": "check-deadline-d0988ec65c",
       "url": "https://www.techstars.com/accelerators/london",
       "title": "Techstars London Accelerator — homepage",
+      "excerpt": "Aug 24 2026 Applications Open Nov 18 2026 Final Deadline Mar 08 2027 Accelerator Starts Jun 03 2027 Demo Day The Techstars",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-dbab9daa42",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Aug 24 2026 Applications Open Nov 18 2026 Final Deadline Mar 08 2027 Accelerator Starts Jun 03 2027 Demo Day The Techstars",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-e16997e0a2",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Aug 24 2026 Applications Open Nov 18 2026 Final Deadline Mar 08 2027 Accelerator Starts Jun 03 2027 Demo Day The Techstars",
       "page": "details"
     },
@@ -67,24 +81,10 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-3e4858bba3",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "accepted into its accelerator programs. This offer includes $200,000 through an uncapped MFN Safe, plus $20,000 through a Post-Money",
-      "page": "terms"
-    },
-    {
       "id": "check-deal-48d5c07ca9",
       "url": "https://www.techstars.com/investment-terms",
       "title": "Techstars London Accelerator — terms page",
       "excerpt": "exception Techstars accelerator programs in Asia-Pacific offer a $100,000 uncapped MFN Safe (so $120,000 total day-one investment alongside the",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-4c74a5dd0c",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "alumni. The $220,000 offer is made up of two components, including $200,000 through an uncapped MFN Safe and $20,000 through a Post-Money",
       "page": "terms"
     },
     {
@@ -102,31 +102,10 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-597603cfcf",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "February 2025. Apply by November 20th for a chance to receive up to $120K in investment and gain lifelong support. Follow us on LinkedIn for",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-5ded15eb26",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "this cohort, Techstars is offering an enhanced investment package of $220,000 . This includes $20,000 in exchange for 5% common equity under a",
-      "page": "application"
-    },
-    {
       "id": "check-deal-5f906fda8b",
       "url": "https://www.techstars.com/investment-terms",
       "title": "Techstars London Accelerator — terms page",
       "excerpt": "by any new money in the priced round and any option-pool increases. $200,000 uncapped MFN Safe Converts when the company does a priced round of at",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-60203d4245",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "will also convert when the company does a priced round of at least $1 million. It is uncapped, meaning there is no pre-determined valuation cap or",
       "page": "terms"
     },
     {
@@ -144,38 +123,10 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-7d7e4293a2",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "new money in the priced round, as well as any option pool increases. $200,000 uncapped MFN Safe . The Safe will also convert when the company does",
-      "page": "terms"
-    },
-    {
       "id": "check-deal-954ccdeed1",
       "url": "https://www.techstars.com/investment-terms",
       "title": "Techstars London Accelerator — terms page",
       "excerpt": "network. $220K Day-one capital $200K MFN Safe $20K CEA for 5% common $1M Min priced-round trigger How the $220K breaks down $200,000 through",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-9776b5ce44",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "be 5% of the company in common stock plus the future value of the $200,000 uncapped MFN Safe. For example, if your next round is valued at $20M",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-9a8396d230",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "is that Techstars accelerator programs in Asia-Pacific offer a $100,000 uncapped MFN Safe. Incorporating Techstars invests in US corporations",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-a9a0e4c727",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "two components, including $200,000 through an uncapped MFN Safe and $20,000 through a Post-Money Convertible Equity Agreement (CEA). The total",
       "page": "terms"
     },
     {
@@ -186,17 +137,10 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-bef0409497",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "startup receives an investment of $20,000, along with an optional $100,000 convertible note. In exchange, the accelerator acquires 6% ordinary",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-c2b41a3cc4",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-deal-ae415ade84",
+      "url": "http://techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
-      "excerpt": "side letter sets out certain rights Techstars needs in the future. $20,000 fixed percentage convertible equity agreement (CEA) for 5% common",
+      "excerpt": "invests $220K in every company accepted into an accelerator program ($120K in Asia-Pacific programs), in exchange for equity. There is no fee",
       "page": "terms"
     },
     {
@@ -214,20 +158,6 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-cb8f1ef688",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "Details of Techstars’ Accelerator Investment Offer Techstars invests $220,000* in companies accepted into its accelerator programs. This offer",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-cc29edf7ea",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "until May 22. Each participating startup receives an investment of $20,000, along with an optional $100,000 convertible note. In exchange, the",
-      "page": "application"
-    },
-    {
       "id": "check-deal-ccfccb12f4",
       "url": "https://www.techstars.com/investment-terms",
       "title": "Techstars London Accelerator — terms page",
@@ -242,11 +172,11 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-daf6db6cdb",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "terms which means the Fall 2025 founders will benefit from the, now, $220k investment. Three of the most common questions we get at Techstars",
-      "page": "application"
+      "id": "check-deal-e0b9084c7f",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "Does Techstars take equity in startups? Yes. Techstars invests $220K in every company accepted into an accelerator program ($120K in",
+      "page": "terms"
     },
     {
       "id": "check-deal-eec73802aa",
@@ -256,39 +186,11 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-f01405017f",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "offering an enhanced investment package of $220,000 . This includes $20,000 in exchange for 5% common equity under a Post-Money Convertible",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-f09e0fa1e8",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "This offer includes $200,000 through an uncapped MFN Safe, plus $20,000 through a Post-Money Convertible Equity Agreement (CEA). The total",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-f1598d9e17",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "equity under a Post-Money Convertible Equity Agreement (CEA), plus $200,000 via an uncapped SAFE with Most Favored Nation (MFN) terms. Techstars",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-f8d3f3ee5f",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "for 5% common stock (on a post-money basis). Another investment is a $200,000 uncapped MFN post-money Safe. The side letter sets out certain rights",
-      "page": "terms"
-    },
-    {
-      "id": "check-duration-238b48dd4f",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders",
-      "page": "terms"
+      "id": "check-deal-fb9e0af113",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Baltimore is Techstars’ flagship healthcare accelerator, investing $220,000 per company into AI-driven health startups building solutions that",
+      "page": "details"
     },
     {
       "id": "check-duration-23b71f888f",
@@ -298,13 +200,6 @@
       "page": "terms"
     },
     {
-      "id": "check-duration-29980e1cc2",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders",
-      "page": "application"
-    },
-    {
       "id": "check-duration-325a7d7d8d",
       "url": "https://www.techstars.com/investment-terms",
       "title": "Techstars London Accelerator — terms page",
@@ -312,25 +207,11 @@
       "page": "terms"
     },
     {
-      "id": "check-duration-62e814a3d9",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-791b91fbfd",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-83896c3e95",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "programs take place over the course of 13 weeks, our founders experience the network effects of",
-      "page": "application"
+      "id": "check-duration-47b30423f5",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "program? A Techstars accelerator is a hands-on, 13-week program for a small class of companies, built",
+      "page": "terms"
     },
     {
       "id": "check-duration-9c07839159",
@@ -347,60 +228,18 @@
       "page": "terms"
     },
     {
-      "id": "check-duration-a694cd44d2",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-b9227790fa",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-d74144d4b8",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-db8432ef14",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "but typically within 60–90 days of applying, or 4 weeks after applications close. Look out for an email",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-e8ce47df87",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-ea6e05da28",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-duration-dde87b208e",
+      "url": "http://techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
-      "excerpt": "investment comes with all the benefits of our 3-month mentorship-driven accelerator program, valuable",
+      "excerpt": "during it? Techstars accelerator programs last 13 weeks. In month one, Mentor Madness puts founders in",
       "page": "terms"
     },
     {
-      "id": "check-duration-eb59fed24b",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "but typically within 60–90 days of applying, or 4 weeks after applications close. Look out for an email",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-edf7a735ae",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "cycle is generally too long for a fast-paced 13-week accelerator program) ✅ Founders using technology",
-      "page": "application"
+      "id": "check-duration-f14067c308",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "of early-stage companies to join one of our 3-month, mentorship-driven accelerators, investing",
+      "page": "details"
     },
     {
       "id": "check-duration-fd8621b4c5",
@@ -410,53 +249,18 @@
       "page": "terms"
     },
     {
-      "id": "check-format-129e3c74ff",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Dates and Investment Terms The 2024 accelerator will be an in-person program in Amsterdam, running from September 9 to December",
-      "page": "application"
-    },
-    {
-      "id": "check-format-16920e7cf4",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech",
-      "page": "application"
-    },
-    {
-      "id": "check-format-16cde3e132",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people",
-      "page": "application"
-    },
-    {
-      "id": "check-format-1968982c09",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people",
-      "page": "application"
-    },
-    {
-      "id": "check-format-1bba32a0cd",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "10 different cities across three countries, plus one fully remote program. All of our accelerator programs are deeply",
-      "page": "application"
-    },
-    {
-      "id": "check-format-1d74562cf4",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-format-19e2a08ab8",
+      "url": "http://techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
-      "excerpt": "is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech",
+      "excerpt": "to receive U.S. venture funding. Are Techstars programs in person or remote? Most Techstars accelerators are in person, and",
       "page": "terms"
     },
     {
-      "id": "check-format-246e30ff54",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people",
-      "page": "application"
+      "id": "check-format-236d54c338",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "in person or remote? Most Techstars accelerators are in person, and nearly all founders work from the workspace Techstars",
+      "page": "terms"
     },
     {
       "id": "check-format-29bde18c0c",
@@ -466,13 +270,6 @@
       "page": "terms"
     },
     {
-      "id": "check-format-2bc44cd111",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people",
-      "page": "application"
-    },
-    {
       "id": "check-format-2d491411c6",
       "url": "https://www.techstars.com/mentor-faq",
       "title": "Techstars London Accelerator — terms page",
@@ -480,18 +277,18 @@
       "page": "terms"
     },
     {
-      "id": "check-format-48da439c2c",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Want to learn more? Attend the monthly Techstars Virtual Meet and Greet webinar, read the Accelerator Hub , or open",
-      "page": "application"
+      "id": "check-format-65a9d7c150",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "ACCELERATORS Techstars Anywhere Accelerator Techstars’ remote-first Anywhere program was launched in 2017 and supports",
+      "page": "details"
     },
     {
-      "id": "check-format-5d2c3d9b97",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech",
-      "page": "application"
+      "id": "check-format-75d5988e97",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "program without relocating, and meets for three in-person offsites in startup hubs during the program. Get in Touch",
+      "page": "details"
     },
     {
       "id": "check-format-7b282eece7",
@@ -501,25 +298,11 @@
       "page": "terms"
     },
     {
-      "id": "check-format-8774ef1ae9",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people",
-      "page": "application"
-    },
-    {
-      "id": "check-format-8d3acb4999",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Participants will benefit from three months of immersive, in-person support at Northwestern Medicine’s Mansueto Innovation",
-      "page": "application"
-    },
-    {
-      "id": "check-format-95926c99d9",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech",
-      "page": "application"
+      "id": "check-format-8f25901826",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "U.S. venture funding. Are Techstars programs in person or remote? Most Techstars accelerators are in person, and nearly all",
+      "page": "terms"
     },
     {
       "id": "check-format-a0a25021e1",
@@ -529,20 +312,6 @@
       "page": "terms"
     },
     {
-      "id": "check-format-a32779fbc1",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech",
-      "page": "application"
-    },
-    {
-      "id": "check-format-a36727bab2",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Track : Ideal for early-stage founders, this track offers virtual masterclasses, mentorship, and pitch feedback for startups",
-      "page": "application"
-    },
-    {
       "id": "check-format-a61e26e786",
       "url": "https://www.techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
@@ -550,32 +319,18 @@
       "page": "terms"
     },
     {
-      "id": "check-format-b92671f689",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech",
-      "page": "application"
+      "id": "check-format-ae99fc4c8e",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "We run programs in startup hubs worldwide, plus virtual programs and programs built around specific verticals.",
+      "page": "terms"
     },
     {
-      "id": "check-format-ba9492d026",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech",
-      "page": "application"
-    },
-    {
-      "id": "check-format-bc105a70d3",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech",
-      "page": "application"
-    },
-    {
-      "id": "check-format-bd469fd44f",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "weeks of the program will feature the all-expenses-paid, in-person program in Abu Dhabi in October. This opportunity is",
-      "page": "application"
+      "id": "check-format-c4713a2a9f",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Powering founders from Anywhere Techstars Anywhere is a remote-first Techstars accelerator with no relocation necessary.",
+      "page": "details"
     },
     {
       "id": "check-format-c600a1e5a7",
@@ -585,25 +340,11 @@
       "page": "terms"
     },
     {
-      "id": "check-format-ca2d3e90f8",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people",
-      "page": "application"
-    },
-    {
-      "id": "check-format-d19f5a037b",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people",
-      "page": "application"
-    },
-    {
-      "id": "check-format-d49e03c9be",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people",
-      "page": "terms"
+      "id": "check-format-d861d33c2b",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "program without relocating, while still connecting in person through three offsites in VC hubs during the program.",
+      "page": "details"
     },
     {
       "id": "check-format-de8b705341",
@@ -620,13 +361,6 @@
       "page": "terms"
     },
     {
-      "id": "check-format-e4c97bea35",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Want to learn more? Attend the monthly Techstars Virtual Meet and Greet webinar, read the Accelerator Hub , or open",
-      "page": "application"
-    },
-    {
       "id": "check-format-e847874702",
       "url": "https://www.techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
@@ -634,18 +368,11 @@
       "page": "terms"
     },
     {
-      "id": "check-format-e9c117ff1c",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "completed three editions, with the last two being fully in-person in Amsterdam. Our program stands out for its exceptionally",
-      "page": "application"
-    },
-    {
-      "id": "check-location-86115c412a",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Authority (ECA) is a government entity based in Abu Dhabi, overseeing the early childhood",
-      "page": "application"
+      "id": "check-format-ff2201759a",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "Techstars provides in the program city. Some programs are virtual. Each program page states its format. What happens after a",
+      "page": "terms"
     },
     {
       "id": "check-name-689f9c8036",
@@ -655,25 +382,25 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-0839a8d38d",
-      "url": "https://www.techstars.com/accelerators/web3",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-0ac750f9b2",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-14fcc06612",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-portfolio-02ce15c60a",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
       "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "application"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-04e37a811d",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1166fe14b8",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
     },
     {
       "id": "check-portfolio-158bf922f7",
@@ -683,17 +410,24 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-16c8645482",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "application"
-    },
-    {
       "id": "check-portfolio-1921984727",
       "url": "https://www.techstars.com/engagement-terms-and-conditions",
       "title": "Techstars London Accelerator — terms page",
       "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1b5f302803",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Past Companies → https://www.techstars.com/portfolio?program=Techstars%20Alabama%20EnergyTech%20Accelerator#search-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1e2a7a5947",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "portfolio → https://www.techstars.com/portfolio",
       "page": "terms"
     },
     {
@@ -711,6 +445,13 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-33f0cff7fe",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-347efbd220",
       "url": "https://www.techstars.com/communities/community-leader-application",
       "title": "Techstars London Accelerator — application page",
@@ -718,18 +459,18 @@
       "page": "application"
     },
     {
-      "id": "check-portfolio-378ff76f90",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "application"
+      "id": "check-portfolio-37b624280a",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
     },
     {
-      "id": "check-portfolio-3806cd50cd",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "application"
+      "id": "check-portfolio-39931b3f05",
+      "url": "https://www.techstars.com/accelerators/belfast",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
     },
     {
       "id": "check-portfolio-3b03b8cd90",
@@ -739,11 +480,32 @@
       "page": "application"
     },
     {
+      "id": "check-portfolio-44688118b5",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Past Companies → https://www.techstars.com/portfolio?program=ABN%20AMRO%20%26%20Techstars%20Future%20of%20Finance%20Accelerator#search-portfolio",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-449966698f",
       "url": "https://www.techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
       "excerpt": "Alumni → https://www.techstars.com/for/alumni",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-456b1164fc",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4a16adea2e",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
     },
     {
       "id": "check-portfolio-4b1f9693b6",
@@ -753,18 +515,53 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-57523c024a",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-portfolio-4ce015a7b6",
+      "url": "http://techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
-      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-5b744b5dea",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-portfolio-511a4fc754",
+      "url": "https://www.techstars.com/accelerators",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-55de49ed07",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5a07631bf1",
+      "url": "https://www.techstars.com/accelerators/belfast",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "application"
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-62c32a7db8",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-65eacca8f3",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Past Companies → https://www.techstars.com/portfolio?program=Techstars%20Anywhere%20Accelerator#search-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6fb5410f83",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Explore the Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
     },
     {
       "id": "check-portfolio-7070bbecf1",
@@ -774,11 +571,25 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-7fb3d04ef0",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "application"
+      "id": "check-portfolio-81d3a48e47",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8202b49321",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Past Companies → https://www.techstars.com/portfolio?program=Techstars%20AI%20Health%20Baltimore#search-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8495597365",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "details"
     },
     {
       "id": "check-portfolio-89718cfbac",
@@ -788,6 +599,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-8dccc06455",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Past Companies → https://www.techstars.com/portfolio?program=Techstars%20Boston%20Accelerator#search-portfolio",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-8f10f66dcc",
       "url": "https://www.techstars.com/investment-terms",
       "title": "Techstars London Accelerator — terms page",
@@ -795,11 +613,11 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-9378a16d54",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
+      "id": "check-portfolio-98e949252e",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "terms"
+      "page": "details"
     },
     {
       "id": "check-portfolio-9ba8865baa",
@@ -809,11 +627,25 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-9e7c9996bc",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-portfolio-9bcd564bc8",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "application"
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9c5fd71a09",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "resources for alumni → https://www.techstars.com/for/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a35aab7275",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
     },
     {
       "id": "check-portfolio-a8f2771ad1",
@@ -823,18 +655,18 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-b04c3ef2c3",
-      "url": "https://www.techstars.com/accelerators/web3",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-portfolio-afce91d341",
+      "url": "https://www.techstars.com/accelerators",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "application"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-b77c9b8af0",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-portfolio-b213b74480",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "application"
+      "page": "details"
     },
     {
       "id": "check-portfolio-c4c8ad0bd3",
@@ -844,13 +676,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-c992f14808",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "application"
-    },
-    {
       "id": "check-portfolio-c9b7a662ba",
       "url": "https://www.techstars.com/accelerators/london",
       "title": "Techstars London Accelerator — homepage",
@@ -858,36 +683,22 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-cb21ca167a",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-df95dc496b",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-e59508468a",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-portfolio-eabf9f2ba7",
+      "url": "https://www.techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
-      "excerpt": "Startups → https://www.techstars.com/blog/tags/startups",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-eab751da61",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-portfolio-eb10968da6",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "application"
+      "page": "details"
     },
     {
-      "id": "check-portfolio-eabf9f2ba7",
-      "url": "https://www.techstars.com/faq",
+      "id": "check-portfolio-eeb38b9c0a",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "title": "Techstars London Accelerator — terms page",
       "excerpt": "Portfolio → https://www.techstars.com/portfolio",
       "page": "terms"
@@ -900,20 +711,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-f20fee04ad",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Startups → https://www.techstars.com/blog/tags/startups",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-f77e27c58c",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "application"
-    },
-    {
       "id": "check-route-053672acad",
       "url": "https://www.techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
@@ -921,46 +718,46 @@
       "page": "terms"
     },
     {
-      "id": "check-route-0648c3493b",
-      "url": "https://www.techstars.com/accelerators/web3",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-route-08cc54f6e5",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Preview the application → https://www.techstars.com/application-preview",
+      "page": "details"
+    },
+    {
+      "id": "check-route-09d3ade7c4",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "application"
+      "page": "details"
     },
     {
-      "id": "check-route-0a173a6084",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Forgot Password? → https://login.techstars.com/auth/realms/techstars/login-actions/reset-credentials?client_id=apply&tab_id=zX7SRzBfbdM&client_data=eyJydSI6Imh0dHBzOi8vYXBwbHkudGVjaHN0YXJzLmNvbS8iLCJydCI6ImNvZGUiLCJybSI6ImZyYWdtZW50Iiwic3QiOiIxNzk3MDRjZC1lZDE3LTQ3MTgtODZiYy1iZjI3NzFhZDk3MGQifQ",
-      "page": "application"
-    },
-    {
-      "id": "check-route-120f30304a",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Log in with Google → https://login.techstars.com/auth/realms/techstars/broker/google-oidc/login?client_id=apply&tab_id=RyEquow2c3I&client_data=eyJydSI6Imh0dHBzOi8vYXBwbHkudGVjaHN0YXJzLmNvbS8_YWNjZWxlcmF0b3I9QUJOJTIwQU1STyUyMCslMjBUZWNoc3RhcnMlMjBGdXR1cmUlMjBvZiUyMEZpbmFuY2UlMjBBY2NlbGVyYXRvciUyMCIsInJ0IjoiY29kZSIsInJtIjoiZnJhZ21lbnQiLCJzdCI6ImJjNDE1MTg1LWFlYjktNDViNi04NTQ2LTUzMjI3OWQwN2ZjOCJ9&session_code=0Ycm2N2HMBkj1SsLOiPhMFO9Jw61Ds781Oq89dVzG48",
-      "page": "application"
-    },
-    {
-      "id": "check-route-14f89c7bb2",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Sign up → https://login.techstars.com/auth/realms/techstars/login-actions/registration?client_id=apply&tab_id=zX7SRzBfbdM&client_data=eyJydSI6Imh0dHBzOi8vYXBwbHkudGVjaHN0YXJzLmNvbS8iLCJydCI6ImNvZGUiLCJybSI6ImZyYWdtZW50Iiwic3QiOiIxNzk3MDRjZC1lZDE3LTQ3MTgtODZiYy1iZjI3NzFhZDk3MGQifQ",
-      "page": "application"
-    },
-    {
-      "id": "check-route-1656dda011",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-route-0a9f87a4d9",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "application"
+      "page": "details"
     },
     {
-      "id": "check-route-188859f8b0",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "here → https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "page": "application"
+      "id": "check-route-0ab523feae",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-10d90b591d",
+      "url": "https://www.techstars.com/accelerators/belfast",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1b778694ed",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com",
+      "page": "details"
     },
     {
       "id": "check-route-22f18b9749",
@@ -970,18 +767,11 @@
       "page": "terms"
     },
     {
-      "id": "check-route-2ae9fed19e",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "application"
-    },
-    {
-      "id": "check-route-3199da6be7",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "here → https://techstars-universe-edu.notion.site/Apply-to-Anjalz-Techstars-Founder-Catalyst-7b1692f4d818470d9e4c1f25aeff6c7c",
-      "page": "application"
+      "id": "check-route-31491332db",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Before you apply, engage → https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "page": "details"
     },
     {
       "id": "check-route-3425d902c0",
@@ -998,11 +788,25 @@
       "page": "terms"
     },
     {
+      "id": "check-route-3b973284dd",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "details"
+    },
+    {
       "id": "check-route-3c263c76fa",
       "url": "https://www.techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
       "excerpt": "the application and interview process → https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
       "page": "terms"
+    },
+    {
+      "id": "check-route-3e3cb7d2c6",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "details"
     },
     {
       "id": "check-route-41d5549e4f",
@@ -1033,25 +837,18 @@
       "page": "details"
     },
     {
-      "id": "check-route-5d242c8b06",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-route-5dbea5ab29",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "application"
+      "page": "details"
     },
     {
-      "id": "check-route-5d69095e5b",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
+      "id": "check-route-628138fd60",
+      "url": "https://www.techstars.com/accelerators/belfast",
+      "title": "Techstars London Accelerator — program page",
       "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "application"
-    },
-    {
-      "id": "check-route-677d6cdbaa",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Apply now here. → https://www.techstars.com/accelerators/transformative-world-torino",
-      "page": "application"
+      "page": "details"
     },
     {
       "id": "check-route-6aba643a99",
@@ -1061,13 +858,6 @@
       "page": "terms"
     },
     {
-      "id": "check-route-6bc8df18d5",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "application"
-    },
-    {
       "id": "check-route-6e2c9149eb",
       "url": "https://www.techstars.com/application-preview",
       "title": "Techstars London Accelerator — application page",
@@ -1075,32 +865,46 @@
       "page": "application"
     },
     {
-      "id": "check-route-7ac8622b86",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "applications are now open → https://apply.techstars.com/?source=nav&accelerator=northwestern-medicine-healthcare",
-      "page": "application"
+      "id": "check-route-72b9dcbd40",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "details"
     },
     {
-      "id": "check-route-7d33e8dfa2",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Log in with LinkedIn → https://login.techstars.com/auth/realms/techstars/broker/linkedin_oidc/login?client_id=apply&tab_id=RyEquow2c3I&client_data=eyJydSI6Imh0dHBzOi8vYXBwbHkudGVjaHN0YXJzLmNvbS8_YWNjZWxlcmF0b3I9QUJOJTIwQU1STyUyMCslMjBUZWNoc3RhcnMlMjBGdXR1cmUlMjBvZiUyMEZpbmFuY2UlMjBBY2NlbGVyYXRvciUyMCIsInJ0IjoiY29kZSIsInJtIjoiZnJhZ21lbnQiLCJzdCI6ImJjNDE1MTg1LWFlYjktNDViNi04NTQ2LTUzMjI3OWQwN2ZjOCJ9&session_code=0Ycm2N2HMBkj1SsLOiPhMFO9Jw61Ds781Oq89dVzG48",
-      "page": "application"
+      "id": "check-route-73a37e906d",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "terms"
     },
     {
-      "id": "check-route-80b7baa939",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Forgot Password? → https://login.techstars.com/auth/realms/techstars/login-actions/reset-credentials?client_id=apply&tab_id=RyEquow2c3I&client_data=eyJydSI6Imh0dHBzOi8vYXBwbHkudGVjaHN0YXJzLmNvbS8_YWNjZWxlcmF0b3I9QUJOJTIwQU1STyUyMCslMjBUZWNoc3RhcnMlMjBGdXR1cmUlMjBvZiUyMEZpbmFuY2UlMjBBY2NlbGVyYXRvciUyMCIsInJ0IjoiY29kZSIsInJtIjoiZnJhZ21lbnQiLCJzdCI6ImJjNDE1MTg1LWFlYjktNDViNi04NTQ2LTUzMjI3OWQwN2ZjOCJ9",
-      "page": "application"
+      "id": "check-route-85dd3a5314",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "details"
     },
     {
-      "id": "check-route-80bbfef4ea",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Sign up → https://login.techstars.com/auth/realms/techstars/login-actions/registration?client_id=apply&tab_id=RyEquow2c3I&client_data=eyJydSI6Imh0dHBzOi8vYXBwbHkudGVjaHN0YXJzLmNvbS8_YWNjZWxlcmF0b3I9QUJOJTIwQU1STyUyMCslMjBUZWNoc3RhcnMlMjBGdXR1cmUlMjBvZiUyMEZpbmFuY2UlMjBBY2NlbGVyYXRvciUyMCIsInJ0IjoiY29kZSIsInJtIjoiZnJhZ21lbnQiLCJzdCI6ImJjNDE1MTg1LWFlYjktNDViNi04NTQ2LTUzMjI3OWQwN2ZjOCJ9",
-      "page": "application"
+      "id": "check-route-872177973a",
+      "url": "https://www.techstars.com/accelerators",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-89bca090f8",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8a940f2e96",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "Before You Apply, Engage → https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "page": "terms"
     },
     {
       "id": "check-route-8eb116b7b8",
@@ -1110,25 +914,25 @@
       "page": "terms"
     },
     {
-      "id": "check-route-9928ea31a2",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars London Accelerator — terms page",
-      "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "terms"
+      "id": "check-route-9575e96ab6",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Program News 9 April 2026 Applications Open: The 6th Edition of the ABN AMRO + Techstars Future of Finance Accelerator Read More → https://www.techstars.com/blog/program-news/applications-open-the-6th-edition-of-the-abn-amro-techstars-future-of",
+      "page": "details"
     },
     {
-      "id": "check-route-aa51632b08",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Log in with Google → https://login.techstars.com/auth/realms/techstars/broker/google-oidc/login?client_id=apply&tab_id=zX7SRzBfbdM&client_data=eyJydSI6Imh0dHBzOi8vYXBwbHkudGVjaHN0YXJzLmNvbS8iLCJydCI6ImNvZGUiLCJybSI6ImZyYWdtZW50Iiwic3QiOiIxNzk3MDRjZC1lZDE3LTQ3MTgtODZiYy1iZjI3NzFhZDk3MGQifQ&session_code=BJVxyCpP07uW3p6MPtgfLHVaq3oo2ixfXnbEFH-Q0J4",
-      "page": "application"
+      "id": "check-route-960239dae0",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com",
+      "page": "details"
     },
     {
-      "id": "check-route-aa94da5865",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "how to submit a standout application → https://www.techstars.com/blog/advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
-      "page": "application"
+      "id": "check-route-9fefe22c6d",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com",
+      "page": "details"
     },
     {
       "id": "check-route-ab185fde4a",
@@ -1138,18 +942,25 @@
       "page": "terms"
     },
     {
-      "id": "check-route-ab52d5d871",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "applications for the spring 2025 term → https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "page": "application"
+      "id": "check-route-ac334820c8",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "the application and interview process → https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "page": "terms"
     },
     {
-      "id": "check-route-b2301c61f7",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Applications → https://www.techstars.com/accelerators/web3",
-      "page": "application"
+      "id": "check-route-bb22d4c339",
+      "url": "http://techstars.com/faq",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "apply.techstars.com → https://apply.techstars.com/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-bcade1ad1f",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
+      "title": "Techstars London Accelerator — terms page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "terms"
     },
     {
       "id": "check-route-bfb747604c",
@@ -1166,20 +977,6 @@
       "page": "application"
     },
     {
-      "id": "check-route-de5ac3883e",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "application"
-    },
-    {
-      "id": "check-route-e36de06d27",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Log in with LinkedIn → https://login.techstars.com/auth/realms/techstars/broker/linkedin_oidc/login?client_id=apply&tab_id=zX7SRzBfbdM&client_data=eyJydSI6Imh0dHBzOi8vYXBwbHkudGVjaHN0YXJzLmNvbS8iLCJydCI6ImNvZGUiLCJybSI6ImZyYWdtZW50Iiwic3QiOiIxNzk3MDRjZC1lZDE3LTQ3MTgtODZiYy1iZjI3NzFhZDk3MGQifQ&session_code=BJVxyCpP07uW3p6MPtgfLHVaq3oo2ixfXnbEFH-Q0J4",
-      "page": "application"
-    },
-    {
       "id": "check-route-e55f7b114b",
       "url": "https://www.techstars.com/faq",
       "title": "Techstars London Accelerator — terms page",
@@ -1187,25 +984,18 @@
       "page": "terms"
     },
     {
-      "id": "check-route-eb7240860a",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "apply here → https://techstars-universe-edu.notion.site/techstars-universe-edu/Apply-to-Anjalz-Techstars-Founder-Catalyst-7b1692f4d818470d9e4c1f25aeff6c7c",
-      "page": "application"
+      "id": "check-route-ec259a3ced",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "Apply Today → https://apply.techstars.com",
+      "page": "details"
     },
     {
-      "id": "check-route-ed9ea20872",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "application"
-    },
-    {
-      "id": "check-route-f8ad6c8b32",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "APPLY NOW → https://techstars-universe-edu.notion.site/Apply-to-Anjal-Z-Techstars-Founder-Catalyst-7b1692f4d818470d9e4c1f25aeff6c7c",
-      "page": "application"
+      "id": "check-route-f6a102ecd4",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "title": "Techstars London Accelerator — program page",
+      "excerpt": "The application and interview process → https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "page": "details"
     },
     {
       "id": "check-route-f922df2410",
@@ -1213,27 +1003,6 @@
       "title": "Techstars London Accelerator — terms page",
       "excerpt": "Apply Today → https://apply.techstars.com/",
       "page": "terms"
-    },
-    {
-      "id": "check-status-56d2cc81ad",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "to change the play Written by Hugh McGirr & Pete Townsend, Investment Team, Techstars Web3 Accelerator Applications are now open for our Techstars Web3 2025 program, and we thought it was worth sharing some details on how we’re thinking",
-      "page": "application"
-    },
-    {
-      "id": "check-status-93d2a5504f",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Applications are now open for the 6th class of the Techstars Accelerator in Torino - Join the 2nd edition of the Techstars",
-      "page": "application"
-    },
-    {
-      "id": "check-status-c348ff14f1",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "title": "Techstars London Accelerator — application page",
-      "excerpt": "Applications Now Open for Second Class of Northwestern Medicine & Techstars Healthcare Accelerator | Techstars Join Us Portfolio",
-      "page": "application"
     }
   ],
   "pageQuotes": [
@@ -1284,468 +1053,6 @@
       "url": "https://www.techstars.com/communities/community-leader-application",
       "page": "application",
       "excerpt": "Apply to Become a Valued Techstars Community Organizer | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Techstars Community Organizer Application Apply now to help the next generation of founders. Please note we only accept one application per team. About Techstars About Us Blog Newsletter Newsroom Careers Information For Founders Alumni Investors Partners Mentors For Startups Founder Catalyst Startup Weekend Startup Week Startup Digest Events Support FAQ Help Code of Conduct Brand Guidelines Contact Admin Initiatives Techstars Universe Techstars Foundation Apply Today Subscribe to Techstars Privacy Policy | Terms & Conditions | Manage Cookies"
-    },
-    {
-      "id": "check-page-8213b4c7f9",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "page": "application",
-      "excerpt": "Applications Now Open for Second Class of Northwestern Medicine & Techstars Healthcare Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to newsroom Applications Now Open for Second Class of Northwestern Medicine & Techstars Healthcare Accelerator August 25, 2025 Northwestern Medicine and Techstars announce that applications are now open for the second class of the Northwestern Medicine & Techstars Healthcare Accelerator. CHICAGO – Northwestern Medicine and Techstars today announced that applications are now open for the second class of the Northwestern Medicine & Techstars Healthcare Accelerator . Building on the success of the inaugural class, this year’s program aims to attract another cohort of six exceptional health tech startups. Participants will benefit from three months of immersive, in-person support at Northwestern Medicine’s Mansueto Innovation Institute in Chicago, gaining access to funding, mentorship, and collaboration with clinical and technical experts. The 2025 inaugural class delivered powerful innovations, including solutions like AI-optimized workforce management, automated medical coding, supply chain disruption tools, EHR automation, AI-native care environments, and multimodal cardiovascular disease management platforms. These startups showcased their pitch and progress at a high-impact Demo Day last"
-    },
-    {
-      "id": "check-page-c361bd758d",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "page": "application",
-      "excerpt": "These startups showcased their pitch and progress at a high-impact Demo Day last summer at Northwestern Memorial Hospital in front a packed auditorium."
-    },
-    {
-      "id": "check-page-31c7e89ed4",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "page": "application",
-      "excerpt": "\"We were initially drawn to the Northwestern Medicine & Techstars Accelerator for the opportunity to pilot with a leading AMC."
-    },
-    {
-      "id": "check-page-e4fa07a1b7",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "page": "application",
-      "excerpt": "Beyond earning the pilot, we were pleasantly surprised by the growth in hospital sales muscle, product focus, and meaningful connections that we achieved through the openness and expertise of the Northwestern Med and Techstars teams,” said Joey Panella, Co-founder and CEO of Decimal Code, a portfolio company from the accelerator’s inaugural program."
-    },
-    {
-      "id": "check-page-6ca6aec112",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "page": "application",
-      "excerpt": "“Our collaboration with Techstars demonstrates our strong commitment to empowering the next generation of healthcare entrepreneurs,” said Doug King, senior vice president and chief information officer, Northwestern Medicine."
-    },
-    {
-      "id": "check-page-98339d910d",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "page": "application",
-      "excerpt": "Key Dates Application Opens: August 25, 2025 Program Duration: March 9 to June 4, 2026 Demo Day: June 4, 2026 About the Northwestern Medicine & Techstars Healthcare Accelerator A pioneering collaboration, the accelerator combines Northwestern Medicine’s healthcare leadership with Techstars’ world-class startup infrastructure, now entering its second class."
-    },
-    {
-      "id": "check-page-c8ca310e43",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "page": "application",
-      "excerpt": "Tags Northwestern Medicine & Techstars Healthcare Accelerator Brad Schnitzer More from the newsroom Newsroom Introducing the Techstars Healthtech Pre-Accelerator Techstars is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech founders alongside a consortium of healthcare industry leaders."
-    },
-    {
-      "id": "check-page-ec4590d3ba",
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "page": "application",
-      "excerpt": "October 14, 2026 Newsroom Introducing the First Techstars x EIT Urban Mobility Founder Catalyst Cohort Meet the 14 startups from 11 countries joining the first Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people and goods move through Europe’s cities."
-    },
-    {
-      "id": "check-page-85e57e2c38",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "excerpt": "Applications are now open for the 6th class of the Techstars Accelerator in Torino - Join the 2nd edition of the Techstars Transformative World Torino Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to newsroom Applications are now open for the 6th class of the Techstars Accelerator in Torino - Join the 2nd edition of the Techstars Transformative World Torino Accelerator September 2, 2024 Applications are now open for the 6th class of the Techstars Torino Accelerator, kicking off in February 2025. Apply by November 20th for a chance to receive up to $120K in investment and gain lifelong support. Follow us on LinkedIn for updates. By Martin Olczyk, Managing Director of Techstars Transformative World Torino We’re now accepting applications for our 6th accelerator program in Torino - apply by November 20th. In the past five years , we've had the privilege of investing in over 50 companies that span the globe - from the United States to Portugal, the UK to Vietnam, and beyond. Whether B2B or B2C, whether pre-product or already boasting $30k MRR, whether hardware or software, crypto, mobility, marketplaces, quantum, AI or EdTech, these companies all share a common thread: they’re pattern breakers with diverse, visionary teams who use their unique insights to build amazing companies. These companies have collectively raised over"
-    },
-    {
-      "id": "check-page-5a49f4ef0b",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "excerpt": "In this journey, we lift each other up, drawing strength from a robust network of mentors, corporate partners, and investors."
-    },
-    {
-      "id": "check-page-b192b22afe",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "excerpt": "Additionally, our corporate partners - Fondazione Compagnia Di Sanpaolo , Fondazione CRT , and Intesa Sanpaolo Innovation Center - provide invaluable resources, access to their local and international network and expertise."
-    },
-    {
-      "id": "check-page-17dd8bc913",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "excerpt": "We don't invest in ideas, we invest in teams; sector-agnostic; and driven by a vision to build for a future that will break sharply from what we know today."
-    },
-    {
-      "id": "check-page-80b1e03976",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "excerpt": "As already in the previous years, we look for companies across the globe with a strong focus on Europe ."
-    },
-    {
-      "id": "check-page-a6cd411786",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "excerpt": "We’ll be visiting multiple European cities in the upcoming months, follow our LinkedIn page for updates and if you want to learn more about our program, sign up for 1:1 Office Hours here ."
-    },
-    {
-      "id": "check-page-e525ca6a0a",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "excerpt": "About Techstars Techstars invests in early-stage startups led by unstoppable entrepreneurs with transformative businesses."
-    },
-    {
-      "id": "check-page-2bef1a0f05",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "excerpt": "With 45+ accelerators worldwide, and an unrivaled network of alumni, mentors, commercial partners, investors, and dedicated operating teams, Techstars supports entrepreneurs throughout their entire startup journey while helping to build thriving startup communities."
-    },
-    {
-      "id": "check-page-32fdbdcc11",
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "excerpt": "October 14, 2026 Newsroom Introducing the First Techstars x EIT Urban Mobility Founder Catalyst Cohort Meet the 14 startups from 11 countries joining the first Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people and goods move through Europe’s cities."
-    },
-    {
-      "id": "check-page-6abce19d3e",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "Techstars Web3 2025 - Thesis Update | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to newsroom Techstars Web3 2025 - Thesis Update September 10, 2024 Scanning the edges for founders who see openings to change the play Written by Hugh McGirr & Pete Townsend, Investment Team, Techstars Web3 Accelerator Applications are now open for our Techstars Web3 2025 program, and we thought it was worth sharing some details on how we’re thinking about the next class - read on below! Networks Networks, in essence, can be clusters of interconnected people, devices, data, assets and other stakeholders. Networks become more meaningful with ownership and more valuable as they expand. We invest in entrepreneurs who leverage technology to significantly expand access to knowledge, capital, well-being, freedom, energy and other resources that may have previously been more difficult to access. Ownership We spoke about the importance of serving a network participant’s skin in the game in Thesis 2.0 . Well, one way to expand a market is to enable its participants (contributors and consumers) to engage more immersively, with more ‘ownership’. Blockchain promises new possibilities for large-scale human coordination, eliminating intermediaries and utilizing code + incentive systems. Blockchain promises enhanced ownership. This facilitates a new paradigm; a"
-    },
-    {
-      "id": "check-page-10b27642dc",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "Square pegs, round holes Nevertheless, it is very hard (if not - proven impossible) to simply replace centralized entities with blockchain-based services (i.e. build the web3 version of a service we know in web2)."
-    },
-    {
-      "id": "check-page-c3852780fe",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "Doing so typically requires a 10x improvement in user experience, knowledge gained, cost of capital, well-being, or in the use of energy or other resources."
-    },
-    {
-      "id": "check-page-dbe67da82e",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "Lego As we wrote about in Thesis 1.0 , web3's standout feature is its composability, as the ability to mix and match software components enables assets and data to be utilized seamlessly across multiple applications."
-    },
-    {
-      "id": "check-page-6e44a1f7cb",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "Unfortunately we are still quite heavy on the ‘casino’ context of incentivisation and we need greater levels of composable infrastructure and UX to better serve both developers and consumers."
-    },
-    {
-      "id": "check-page-f67c230e7f",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "AI serves as the accelerant, helping to create the openings that enable opportunity (h/t Fred Wilson)."
-    },
-    {
-      "id": "check-page-53b7a4cb1d",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "Infrastructure Primitives - The Developer Layer As an example, the developer conflict between security and usability has run strong in web3 historically."
-    },
-    {
-      "id": "check-page-1c7bc13331",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "As an incentive structure, it adds a value dynamic to an ecosystem - reinventing the social experience, integrating finance with social networks and radically reshaping the on-chain data economy with a proliferation of economic activities and capital markets on blockchain."
-    },
-    {
-      "id": "check-page-025bb34e0e",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "Related themes : gaming economies, social protocols, DeFi and smart contract scaling, DePIN & RWA protocols (and their related accelerants), incentive-linked governance, institutional stablecoin adoption."
-    },
-    {
-      "id": "check-page-9be2f78408",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "Consumerization - The Application Layer Blockchain represents a fundamental shift in how monetary and data networks operate - enabling decentralized, trustless, and secure transactions in a more open financial landscape."
-    },
-    {
-      "id": "check-page-d972991030",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "We’re seeing the adoption and scaling of digital currencies into core components of the global financial infrastructure and additional applications of blockchain are emerging across IP, RWAs, DePIN, payments, prediction markets, gaming and custody."
-    },
-    {
-      "id": "check-page-9ec6d56b13",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "Related themes: social networks as MVP, fintech/remittance, superapps, large addressable markets bringing daily users on-chain, incentivization models breeding network effects, public on-chain data economy, data sovereignty, no gatekeepers, stablecoin scaling, user-controlled data, media/IP networks, AR/VR/XR integration."
-    },
-    {
-      "id": "check-page-e7d371c036",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "excerpt": "The AI effect - The Accelerant Blockchain and AI will interdependently re-invent media, IP and the creator economy as we know it."
-    },
-    {
-      "id": "check-page-7b74056761",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "Applications open for Techstars+ABN AMRO Future of Finance Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to newsroom Applications open for the 2024 Edition of the ABN AMRO + Techstars Future of Finance Accelerator March 6, 2024 Applications open for the 4th time for the Future of Finance Accelerator We're thrilled to open applications for the 2024 edition of the Future of Finance Accelerator , a partnership between ABN AMRO and Techstars. This program is the premier destination for unstoppable founders across Europe, who are looking to accelerate their early-stage fintech and fintech-related startups. The past 1.5 years saw the depths of a downturn that was very challenging for the startup ecosystem. Specifically also for fintech startups, fundraising became very very difficult. As we step into 2024, we see the landscape changing, signaling a renewed phase of interest, investment, and growth in fintech and related fields. The graduating cohort from our 2023 edition launched into a world markedly different from the one the ‘22 class launched into. A world that is starting to show increasing optimism and investment appetite, also for fintech and fintech-related companies. This might be one of the best times to start a tech challenger and join our Amsterdam-based Future of Finance Accelerator. At the Future of Finance"
-    },
-    {
-      "id": "check-page-a93ecc520a",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "At the Future of Finance Accelerator ABN AMRO and Techstars have partnered up to support founders in achieving their vision of a modern, sustainable, and digital financial system."
-    },
-    {
-      "id": "check-page-078d7aa94b",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "The Program Highlights The Future of Finance Accelerator has successfully completed three editions, with the last two being fully in-person in Amsterdam."
-    },
-    {
-      "id": "check-page-d721cf92c7",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "With our program team, our group of experienced fintech operators and investors who form our mentor base, and with the full support of ABN AMRO, we enable true acceleration of the path to early customer success, traction, and funding."
-    },
-    {
-      "id": "check-page-b3e923d678",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "What We Are Looking For We will select 10 early-stage Europe-focused companies to join the class of 2024."
-    },
-    {
-      "id": "check-page-5278a46611",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "We’re looking for unstoppable founders who focus on solving fintech challenges in the widest sense of the word."
-    },
-    {
-      "id": "check-page-83ab84a2fc",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "We are specifically interested in companies operating at the intersection of sustainability and fintech or that are bringing GenAI solutions to the wider financial industry."
-    },
-    {
-      "id": "check-page-f2eb5666d7",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "This year we will also take applications from companies that might not be considered pure fintech but that are developing products that could be core applications for banks’ operations or could be interesting for banks to offer to their customers."
-    },
-    {
-      "id": "check-page-0e8396869c",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "Key Dates and Investment Terms The 2024 accelerator will be an in-person program in Amsterdam, running from September 9 to December 14."
-    },
-    {
-      "id": "check-page-a5249aa052",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "Each participating startup receives an investment of $20,000, along with an optional $100,000 convertible note."
-    },
-    {
-      "id": "check-page-22e6355fde",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "In exchange, the accelerator acquires 6% ordinary stock in each company, offering lifetime access to the Techstars network."
-    },
-    {
-      "id": "check-page-3252d364e0",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "We're hosting in-person events in Amsterdam, London, Berlin, and Paris, offering a unique opportunity to engage with our program team, ABN AMRO, and leading European fintech investors."
-    },
-    {
-      "id": "check-page-abfb660aea",
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "excerpt": "Tags ABN AMRO + Techstars Future of Finance Accelerator Fintech Techstars Voices Artificial Intelligence More from the newsroom Newsroom Introducing the Techstars Healthtech Pre-Accelerator Techstars is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech founders alongside a consortium of healthcare industry leaders."
-    },
-    {
-      "id": "check-page-1c46f24317",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Lead the Change: Apply to the Anjal Z Techstars Founder Catalyst Program and Drive Innovation in Early Childhood Development | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to newsroom Lead the Change: Apply to the Anjal Z Techstars Founder Catalyst Program and Drive Innovation in Early Childhood Development May 13, 2024 Techstars, a global leader in pre-seed investment, joins forces with the Abu Dhabi Early Childhood Authority (ECA) to bring you the latest edition of the Anjal Z Techstars Founder Catalyst Program. Techstars, a global leader in pre-seed investment , joins forces with the Abu Dhabi Early Childhood Authority (ECA) to bring you the latest edition of the Anjal Z Techstars Founder Catalyst Program. This groundbreaking initiative is tailored for startups focused on early childhood development, centering on families and children aged 0-8. With a keen eye on addressing critical issues, the program aligns with ECA's pillars of Health & Nutrition, Early Care & Education, Child Protection, and Family Support. But that's not all! For this upcoming cohort, we're extending the invitation to startups to innovate within three additional thematic areas: Intentional Parenting : This is dedicated to empowering parents on their journey to nurture young children, supporting holistic development from birth through age eight. It emphasizes"
-    },
-    {
-      "id": "check-page-c2c96d6c74",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Culture & Identity : Focusing on the rich UAE heritage, this theme encourages children to appreciate and celebrate their cultural identity."
-    },
-    {
-      "id": "check-page-8b160c14e0",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "The final four weeks of the program will feature the all-expenses-paid, in-person program in Abu Dhabi in October."
-    },
-    {
-      "id": "check-page-11f45da38d",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "This opportunity is tailored for the established founders selected for the Launch Track to help them expand and refine their market strategies within Abu Dhabi and the broader Middle East."
-    },
-    {
-      "id": "check-page-e5bfaa357b",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Two Distinct Startup Tracks: Ignite Track : Ideal for early-stage founders, this track offers virtual masterclasses, mentorship, and pitch feedback for startups with monthly recurring revenue (MRR) under USD 20k, less than USD 250k in funding, and a team size under five."
-    },
-    {
-      "id": "check-page-cdec4796de",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Launch Track : Geared towards more established founders with an MRR over USD 20k, this track includes a comprehensive four-week program in Abu Dhabi."
-    },
-    {
-      "id": "check-page-244a89d975",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Participants will receive masterclasses and mentorship and engage in a localization project that doubles as a go-to-market strategy."
-    },
-    {
-      "id": "check-page-40501c48da",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Unique Aspects of the Anjal Z Techstars Program Now in its fifth cohort, the Anjal Z program offers non-equity funding and an extensive network of local partners, making it a unique accelerator in early childhood development."
-    },
-    {
-      "id": "check-page-ec7fce370e",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Participants can expect high-calibre Techstars Masterclasses & Mentorship, fostering substantial growth and market readiness."
-    },
-    {
-      "id": "check-page-909fdd98c1",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Not only did it provide us with invaluable resources and mentorship, but it also opened doors to new partnerships that accelerated our growth exponentially,” Jim Jacob, Founder of Storybutton, Launch Track."
-    },
-    {
-      "id": "check-page-5be3d2573b",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Startups focusing on the four pillars of the ECA—Health & Nutrition, Early Care & Education, Child Protection, and Family Support—and the three themed spaces are invited to seize this extraordinary chance for growth and influence."
-    },
-    {
-      "id": "check-page-7c3c0b3a1f",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Discussing the next wave of ECD-focused startups in Abu Dhabi Dr."
-    },
-    {
-      "id": "check-page-ce15ba3359",
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "excerpt": "Yousef Alhammadi, Executive Director of Knowledge and Impact of the Abu Dhabi Early Childhood Authority, said, “ As we embark on our fifth cohort, the launch of the Anjal Z program application underscores Abu Dhabi's thriving startup ecosystem."
-    },
-    {
-      "id": "check-page-999d331459",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "page": "application",
-      "excerpt": "Techstars Launches Applications for its Spring 2025 Term of Accelerator Programs | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to newsroom Techstars Launches Applications for its Spring 2025 Term of Accelerator Programs August 26, 2024 Today Techstars launched applications for the spring 2025 term, which will kick off in March 2025. Today Techstars launched applications for the spring 2025 term , which will kick off in March 2025. We’re excited to meet the next wave of early-stage founders looking to join the Techstars universe. Founders who want to apply to the spring term will have the option to choose from 11 accelerator programs in 10 different cities across three countries, plus one fully remote program. All of our accelerator programs are deeply involved in their local startup ecosystems, while some focus on specific industries for those looking for an edge in their respective field: Techstars Anywhere Techstars London Techstars New York City Techstars San Francisco Techstars Web3 Build in Tulsa Techstars Accelerator Techstars Workforce Development Techstars Columbus powered by OSU USC and Techstars Digital Economy Program Techstars AI Health Baltimore powered by Johns Hopkins University and CareFirst Blue Cross Blue Shield Northwestern Medicine & Techstars Healthcare Accelerator If you’re not sure how to decide which to apply"
-    },
-    {
-      "id": "check-page-936374dd81",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "page": "application",
-      "excerpt": "Since 2006, we’ve supported the success of over 4,400 companies by providing funding, dedicated mentorship, hands-on training, and unparalleled access to Techstars' global network of VC investors, corporate partners, and alumni founders."
-    },
-    {
-      "id": "check-page-780e398dcf",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "page": "application",
-      "excerpt": "While our accelerator programs take place over the course of 13 weeks, our founders experience the network effects of Techstars’ community for life (something we call #TechstarsForLife)."
-    },
-    {
-      "id": "check-page-351fd87826",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "page": "application",
-      "excerpt": "Tags Accelerators Startups Early Stage More from the newsroom Newsroom Introducing the Techstars Healthtech Pre-Accelerator Techstars is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech founders alongside a consortium of healthcare industry leaders."
-    },
-    {
-      "id": "check-page-9a15f4f193",
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "page": "application",
-      "excerpt": "October 14, 2026 Newsroom Introducing the First Techstars x EIT Urban Mobility Founder Catalyst Cohort Meet the 14 startups from 11 countries joining the first Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people and goods move through Europe’s cities."
-    },
-    {
-      "id": "check-page-0821d27cb1",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "page": "application",
-      "excerpt": "Good Things Come in Threes: Techstars San Diego Powered by SDSU Opens Applications For Its Fall 2025 Accelerator Program | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to newsroom Good Things Come in Threes: Techstars San Diego Powered by SDSU Opens Applications For Its Fall 2025 Accelerator Program April 7, 2025 By Misti Cain, Managing Director, Techstars San Diego powered by SDSU There’s a Latin phrase, Omne Trium Perfectum which means everything that comes in threes is perfect - or more loosely translated - good things come in threes . That’s the energy we’re kicking off the third year of Techstars San Diego powered by San Diego State. Applications for our Fall 2025 program are open April 8th - June 11th - click here to apply . But wait, there’s more! Techstars has also updated their investment terms which means the Fall 2025 founders will benefit from the, now, $220k investment. Three of the most common questions we get at Techstars San Diego powered by SDSU are: FAQs Since Techstars San Diego is powered by SDSU, does that mean only students can apply? No. Anyone can apply to Techstars San Diego powered by SDSU. You don’t need to be affiliated with SDSU in any way. You also don’t have to live in San Diego to apply to the program. However, if accepted into the Techstars San Diego powered by SDSU accelerator you’ll need to relocate"
-    },
-    {
-      "id": "check-page-a8093556ae",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "page": "application",
-      "excerpt": "However, if accepted into the Techstars San Diego powered by SDSU accelerator you’ll need to relocate to San Diego in order to participate."
-    },
-    {
-      "id": "check-page-86766e16c0",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "page": "application",
-      "excerpt": "It also means the ability to connect with creative, bright, and aspiring talent eager to learn about business or help you build; access to academic resources and cutting-edge research; as well as credibility and the opportunity for greater brand awareness with a built in community of students, faculty, and staff."
-    },
-    {
-      "id": "check-page-d126901ba4",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "page": "application",
-      "excerpt": "Check out our Techstars San Diego powered by SDSU accelerator page here."
-    },
-    {
-      "id": "check-page-3ef3ecc837",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "page": "application",
-      "excerpt": "Tags San Diego State University Accelerator North America Investment More from the newsroom Newsroom Introducing the Techstars Healthtech Pre-Accelerator Techstars is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech founders alongside a consortium of healthcare industry leaders."
-    },
-    {
-      "id": "check-page-1e6d3097f2",
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "page": "application",
-      "excerpt": "October 14, 2026 Newsroom Introducing the First Techstars x EIT Urban Mobility Founder Catalyst Cohort Meet the 14 startups from 11 countries joining the first Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people and goods move through Europe’s cities."
-    },
-    {
-      "id": "check-page-a4d7a5e3a8",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "page": "application",
-      "excerpt": "Log in to your Techstars account Techstars Log in to your Techstars account Email Password Keep me signed in for 30 days Forgot Password? or Log in with Google Log in with LinkedIn Don't have an account yet? Sign up Join the 10,000+ founders who built their businesses with Techstars Thank you for your interest in applying to Techstars. You can begin an application year-round, and can continue to update it at any time. Completing this application should take you 30–60 minutes. We encourage you to complete this with any co-founders. Application deadline Please visit this page to find upcoming application deadlines. Applications close at 11:59pm PST on the listed date. If you complete your application after the deadline, your application will be added to a general pool for consideration, but we can't promise when you'll hear back from us. Hearing back Given the velocity of our investments, you may hear back from us immediately, but typically within 60–90 days of applying, or 4 weeks after applications close. Look out for an email from Techstars Apply. About Techstars Techstars is the worldwide network that helps entrepreneurs succeed. As one of the largest pre-seed investors in the world, we’ve funded over 3,200 companies that have gone on to have a market cap of $79B+. Techstars portfolio companies include more than 100 companies with valuations of over $100M, and 19 of them"
-    },
-    {
-      "id": "check-page-88c65ae879",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "page": "application",
-      "excerpt": "About the accelerator Each company receives funding, access to the worldwide network of investors, hands-on mentorship, and over $4M of perks."
-    },
-    {
-      "id": "check-page-398f54af8d",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "page": "application",
-      "excerpt": "About the programming You can expect to learn about perfecting your pitch, fundraising, working with mentors, product-market fit, hiring/firing, building, marketing, and much more as needed to help you #DoMoreFaster."
-    },
-    {
-      "id": "check-page-1775ce9ffb",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "page": "application",
-      "excerpt": "Attend the monthly Techstars Virtual Meet and Greet webinar, read the Accelerator Hub , or open the FAQs below."
-    },
-    {
-      "id": "check-page-924c9a4cfd",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "page": "application",
-      "excerpt": "Log in to your Techstars account Techstars Log in to your Techstars account Email Password Keep me signed in for 30 days Forgot Password? or Log in with Google Log in with LinkedIn Don't have an account yet? Sign up Join the 10,000+ founders who built their businesses with Techstars Thank you for your interest in applying to Techstars. You can begin an application year-round, and can continue to update it at any time. Completing this application should take you 30–60 minutes. We encourage you to complete this with any co-founders. Application deadline Please visit this page to find upcoming application deadlines. Applications close at 11:59pm PST on the listed date. If you complete your application after the deadline, your application will be added to a general pool for consideration, but we can't promise when you'll hear back from us. Hearing back Given the velocity of our investments, you may hear back from us immediately, but typically within 60–90 days of applying, or 4 weeks after applications close. Look out for an email from Techstars Apply. About Techstars Techstars is the worldwide network that helps entrepreneurs succeed. As one of the largest pre-seed investors in the world, we’ve funded over 3,200 companies that have gone on to have a market cap of $79B+. Techstars portfolio companies include more than 100 companies with valuations of over $100M, and 19 of them"
-    },
-    {
-      "id": "check-page-e2e003c62e",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "page": "application",
-      "excerpt": "About the accelerator Each company receives funding, access to the worldwide network of investors, hands-on mentorship, and over $4M of perks."
-    },
-    {
-      "id": "check-page-99a0fb39da",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "page": "application",
-      "excerpt": "About the programming You can expect to learn about perfecting your pitch, fundraising, working with mentors, product-market fit, hiring/firing, building, marketing, and much more as needed to help you #DoMoreFaster."
-    },
-    {
-      "id": "check-page-b6048c9e11",
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "page": "application",
-      "excerpt": "Attend the monthly Techstars Virtual Meet and Greet webinar, read the Accelerator Hub , or open the FAQs below."
-    },
-    {
-      "id": "check-page-48facec9d4",
-      "url": "https://www.techstars.com/accelerators/web3",
-      "page": "application",
-      "excerpt": "Startup Accelerator Programs & Funding | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today ACCELERATORS Techstars Accelerators Whether you're building in a specialized industry or a thriving startup city, Techstars Accelerators connect you with the network, mentorship, and capital you need to grow. Verticals The sectors where we are doubling down and can offer founders the deepest access to capital, domain expertise, and partnerships. Health Finance Space & Defense Critical Infrastructure Accelerators Launch in a leading startup hub and connect with the investors, mentors, and networks that help startups scale. ABN AMRO + Techstars Future of Finance Accelerator Northwestern Medicine & Techstars Healthcare Accelerator Techstars AI Health Baltimore Techstars Alabama EnergyTech Accelerator Techstars Anywhere Accelerator Techstars Boston Accelerator Techstars Boulder Techstars Chicago Techstars Columbus Powered by The Ohio State University Techstars Future of Food Powered by Ecolab Techstars Healthcare Accelerator powered by Permanente Medicine Mid-Atlantic States Techstars London Accelerator Techstars New York City Accelerator Techstars Space Accelerator Techstars Tokyo Accelerator USC and Techstars Accelerator Ready to Apply to Techstars? Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support,"
-    },
-    {
-      "id": "check-page-6f7ac529d5",
-      "url": "https://www.techstars.com/accelerators/web3",
-      "page": "application",
-      "excerpt": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster."
     },
     {
       "id": "check-page-15e65beda7",
@@ -1994,82 +1301,436 @@
       "excerpt": "Techstars Mentor Intake"
     },
     {
-      "id": "check-page-19a44c1797",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-a532762d13",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "Techstars Investment Terms Update | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to newsroom Techstars Investment Terms Update April 17, 2025 Techstars is introducing an improved accelerator investment offer for companies accepted into our future accelerator programs. A note from Techstars Founder and CEO David Cohen Today, Techstars is introducing an improved accelerator investment offer for companies accepted into our future accelerator programs. This improved offer of a $220,000* investment comes with all the benefits of our 3-month mentorship-driven accelerator program, valuable perks from our partners, and access to our world-class network of investors, partners, mentors, and alumni. The $220,000 offer is made up of two components, including $200,000 through an uncapped MFN Safe and $20,000 through a Post-Money Convertible Equity Agreement (CEA). The total equity Techstars receives will be 5% of the company in common stock plus the future value of the $200,000 uncapped MFN Safe. For example, if your next round is valued at $20M pre-money, the $200,000 MFN Safe would then convert into 1% additional ownership at that time. Our new offer gives founders more capital, better alignment, and a simpler and more easily comparable structure, enabling them to arrive at their next funding round with greater momentum. Demand for our"
+      "excerpt": "Techstars Startup Community Partnership Terms & Conditions | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today LEGAL Techstars Startup Community Partnership Online Terms and Conditions Last Updated: June 3, 2025 1. Agreements. These Techstars Startup Community Partnership Online Terms and Conditions, which include and incorporate the Techstars Data Protection Terms attached hereto as Annex 1 (“ Terms and Conditions ”) apply to the provision of all products and services (the “ Programs ”) provided to you (“ Partner ”) by Techstars Startup Communities LLC (together with its Affiliates, “ Techstars ”) pursuant to any agreement, order, schedule, or other document that expressly references or incorporates these Terms and Conditions (each a “ Schedule ”, and collectively with these Terms and Conditions, the “ Agreement ”). All capitalized terms not defined in these Terms and Conditions shall have the meaning given to them in the applicable Schedule. For purposes of this Agreement, the term “ Affiliate ” means, any other person or entity who, directly or indirectly, controls, is controlled by, or is under common control with the party. 2. Payment of Fees; Direct Expenses. a. Fees. Partner will pay any fees stated in a Schedule within thirty (30) days of the date of the applicable invoice. Unless otherwise stated in the Schedule, all fees will be"
     },
     {
-      "id": "check-page-5a6a77fcab",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-deb4e47841",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "Demand for our accelerator programs has never been higher."
+      "excerpt": "Partner shall not grant or attempt to grant a security interest in, or otherwise encumber the Marks or record any such security interest or encumbrance against any application or registration regarding the mark in the United States Patent and Trademark Office or elsewhere."
     },
     {
-      "id": "check-page-3872b3dd60",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-51e827e5bb",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "Our applications have tripled since 2021 because the advantages of our accelerators are evident to founders."
+      "excerpt": "Confidential Information includes, but is not limited to, the terms of this Agreement and all Schedules and, in the case of Techstars, the names of mentors in its network."
     },
     {
-      "id": "check-page-1ec3b2fc9c",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-846218ef1f",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "Through mentorship, capital, and lifetime access to our global network, Techstars enables the next generation of founders to succeed."
+      "excerpt": "Reports; Insurance; Indemnification. a."
     },
     {
-      "id": "check-page-1874b56993",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-c12c13adfe",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "If you’re interested in applying, you can see the full list of accelerators we operate worldwide here ."
+      "excerpt": "Additional insurance requirements may be set forth in the Operations Manual."
     },
     {
-      "id": "check-page-8a7df88075",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-fb7ddf5c1a",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "David The Details of Techstars’ Accelerator Investment Offer Techstars invests $220,000* in companies accepted into its accelerator programs."
+      "excerpt": "The policies must contain a waiver by the insurance carrier of all subrogation rights against Techstars. c."
     },
     {
-      "id": "check-page-534217a24f",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-4b39deca25",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "There is no fee (i.e., monetary cost) to join a Techstars accelerator program."
+      "excerpt": "Each party represents and warrants that it, and its officers, directors, employees, and Affiliates, is not subject to sanctions administered by the U.S. government or otherwise designated on any list of prohibited or restricted parties, including but not limited to the lists maintained by the United Nations Security Council, the U.S."
     },
     {
-      "id": "check-page-96f1292766",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-d07cb8246b",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "Accordingly, the company needs to (i) give Techstars the ability to invest in new financings, like a seed round, (ii) regularly send Techstars information on its key operating metrics, burn, and more, and (iii) fulfill specific obligations at the time of certain events (such as a priced round or an exit)."
+      "excerpt": "Government (e.g., the Specially Designated Nationals List and Foreign Sanctions Evaders List of the U.S."
     },
     {
-      "id": "check-page-5ac2531218",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-1f8c92c111",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "The uncapped MFN Safe is inherently founder-friendly and does not signal or pre-establish any valuation limit. *The only exception is that Techstars accelerator programs in Asia-Pacific offer a $100,000 uncapped MFN Safe."
+      "excerpt": "Department of Commerce), the European Union or its Member States, or other applicable government authority."
     },
     {
-      "id": "check-page-154213484a",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-9882598524",
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
       "page": "terms",
-      "excerpt": "Incorporating Techstars invests in US corporations or foreign equivalents (or holding companies)."
+      "excerpt": "This Agreement will be governed by and construed in accordance with the laws of the United States, the State of Colorado without regard to its conflicts of law provisions."
     },
     {
-      "id": "check-page-585fb2946e",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-5b8978e6f2",
+      "url": "http://techstars.com/faq",
       "page": "terms",
-      "excerpt": "For example, if a company is incorporated in India, it will need to complete a flip before Techstars can invest in it."
+      "excerpt": "Techstars FAQ: Accelerators, Investment and Programs | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today FAQ Frequently Asked Questions Last Updated: November 11, 2026 About Techstars What is Techstars? Techstars is a venture capital firm that invests early in founders. Since 2006, we have accelerated founder success with capital, customers and talent, delivered through hands-on programs and a global network of more than 11,171 founders, and the mentors, investors and partners around them. Techstars is No. 1 on TIME and Statista’s America’s Best Incubators & Accelerators of 2026 . When and where was Techstars founded? Techstars was founded in 2006 by David Cohen, David Brown, Brad Feld, and Jared Polis, and ran its first accelerator program in Boulder, Colorado. Techstars pioneered the mentorship-driven accelerator. Through every wave of technology since, from cloud to blockchain to AI, we have backed founders early. What does #GiveFirst mean at Techstars? #GiveFirst is our core value: helping others without expecting anything in return. It’s how the Techstars network works. Founders invest in each other, buy each other’s products and open doors for the next class, and mentors share what they learned solving similar problems. Every founder we back makes the next one stronger. How is Techstars different from other accelerators? The network does"
     },
     {
-      "id": "check-page-bad0206020",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-e68420a884",
+      "url": "http://techstars.com/faq",
       "page": "terms",
-      "excerpt": "Tags Accelerators Startups More from the newsroom Newsroom Introducing the Techstars Healthtech Pre-Accelerator Techstars is launching the Healthtech Pre-Accelerator, a six-week virtual program that supports a class of 40 early-stage healthtech founders alongside a consortium of healthcare industry leaders."
+      "excerpt": "More than 11,171 founders, active mentors, and our investors and corporate partners open doors for each other, from first check to exit."
     },
     {
-      "id": "check-page-6617992d68",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "id": "check-page-43272568bd",
+      "url": "http://techstars.com/faq",
       "page": "terms",
-      "excerpt": "October 14, 2026 Newsroom Introducing the First Techstars x EIT Urban Mobility Founder Catalyst Cohort Meet the 14 startups from 11 countries joining the first Techstars x EIT Urban Mobility Founder Catalyst, a 10-week hybrid accelerator for early-stage founders changing how people and goods move through Europe’s cities."
+      "excerpt": "That record includes 24 $1B+ accelerator companies, including SendGrid, the first company from any Techstars accelerator to go public."
+    },
+    {
+      "id": "check-page-ae68f6e553",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "Is Techstars an accelerator or a venture capital firm?"
+    },
+    {
+      "id": "check-page-d9107a8b6d",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "Our accelerator programs are how we find, back and support them."
+    },
+    {
+      "id": "check-page-50db4e80a3",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "We invest in every company accepted into a Techstars accelerator and stay with it for the life of the company."
+    },
+    {
+      "id": "check-page-963f226b4f",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "Techstars also supports fundraising for companies across its network, from Seed through Series B and beyond."
+    },
+    {
+      "id": "check-page-af5ffeb48d",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "Current accelerator programs are listed on the accelerators page ."
+    },
+    {
+      "id": "check-page-a5d34ade37",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "The Accelerator What is a Techstars accelerator program?"
+    },
+    {
+      "id": "check-page-3a47065b6e",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "A Techstars accelerator is a hands-on, 13-week program for a small class of companies, built around a city or a vertical."
+    },
+    {
+      "id": "check-page-e43cc84a5f",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "Founders get investment, guidance from mentors who have solved similar problems, and introductions to investors and corporate partners who know their market."
+    },
+    {
+      "id": "check-page-ec76ec134c",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "The program ends with Demo Day, but the network doesn’t: it stays with your company from first check to exit."
+    },
+    {
+      "id": "check-page-705db849be",
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "excerpt": "Techstars accelerator programs last 13 weeks."
+    },
+    {
+      "id": "check-page-1ef866e66e",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "Our Mission, Values & History Since 2006 | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today ABOUT US About Techstars Since 2006, Techstars has been investing in the world’s most ambitious founders. We find great founders early, through a global network two decades in the making, and back them with capital, mentorship, and the connections they need to grow. Explore the Portfolio Apply Today 2006 Founded 10,900+ Founders accelerated 29 Unicorns in portfolio 150+ Countries reached TECHSTARS' VALUES #GiveFirst At Techstars, we believe in helping without expecting something in return. Whether you're a founder, mentor, or partner, our first question is always: \"How can we support you?\" We lead with generosity, not transactions, because great communities are built on trust and collaboration. Techstars Network Since 2006, our mission has been rooted in a single core value: Give First. We provide early-stage teams with the capital, institutional credibility, and localized support needed to navigate fundraising and accelerate growth. Founders Mentors Partners Investors TECHSTARS NETWORK Founders From first-time entrepreneurs to early-stage teams, Techstars gives startups the funding, mentorship, and connections they need to build fast and grow smart. Techstars founders also have access to perks valued at more than $4M. Learn more TECHSTARS NETWORK"
+    },
+    {
+      "id": "check-page-4f077e357d",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "Learn more TECHSTARS NETWORK Mentors Mentorship is the heart of Techstars."
+    },
+    {
+      "id": "check-page-8f93836512",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "Learn more TECHSTARS NETWORK Investors Techstars is a leading pre-seed and early-stage venture capital firm."
+    },
+    {
+      "id": "check-page-2b684c97a6",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "We have delivered strong, consistent returns across our portfolio since our first accelerator in 2007."
+    },
+    {
+      "id": "check-page-6029916049",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "Learn more What We Do Accelerators Our accelerator programs are the foundation of Techstars, offering mentorship-driven investment to startups that are ready to grow fast."
+    },
+    {
+      "id": "check-page-4954bba0dc",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "Read More Founder Catalyst A pre-accelerator program helping founders gain the tools, mentorship, and support to launch successful startups."
+    },
+    {
+      "id": "check-page-674276cab9",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "Summer 2007 The First Accelerator Class Begins Techstars hosts its first accelerator program in Boulder, Colorado."
+    },
+    {
+      "id": "check-page-4364cd445f",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "2009 Techstars Ventures Techstars launches its first venture fund, Techstars Ventures 2009 ($5M)."
+    },
+    {
+      "id": "check-page-5f28a8c7f6",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "2009 Second Accelerator Location Launches Techstars launches an accelerator program in Boston."
+    },
+    {
+      "id": "check-page-56cd259eb9",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "2010 Third Accelerator Program Launches Techstars launches an accelerator program in Seattle."
+    },
+    {
+      "id": "check-page-c04af12b52",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "2011 Expansion Continues Techstars launches a fourth accelerator program location in New York City."
+    },
+    {
+      "id": "check-page-97bcda4d30",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "2013 Techstars Acquires Chicago Accelerator Techstars acquires Excelerate Labs to create the Techstars Chicago Accelerator."
+    },
+    {
+      "id": "check-page-c6e1df7ab5",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "excerpt": "2013 Global Expansion into London Techstars launches its first international accelerator by acquiring Springboard in London."
+    },
+    {
+      "id": "check-page-053a591111",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "page": "details",
+      "excerpt": "Inside a Techstars Accelerator: How It Works | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today ACCELERATORS Inside a Techstars Accelerator Go behind the scenes of the Techstars Accelerator experience, from what we look for in applicants to what happens once you're accepted. Explore Accelerators Scale with Confidence Over the course of three months, we surround each startup with: A $220K investment World-class mentors A global network of corporate partners, investors, and alumni Funding and fundraising support Curated workshops and resources Opportunities to learn, iterate, and grow with your cohort Access to perks valued at more than $4M It's a proven model that's helped build thousands of successful companies across the globe. Ready to Apply? Select an accelerator to get started. Each year, we choose hundreds of early-stage companies to join one of our 3-month, mentorship-driven accelerators, investing capital and providing hands-on mentorship and access to the Techstars network. Key Information All our best tips, insights, and resources to help you understand what a Techstars accelerator is and how to apply: Get a week-by-week look inside an accelerator program What to expect from the three months of the accelerator The application and interview process How to choose the right accelerator for you What are we looking for? Before you apply,"
+    },
+    {
+      "id": "check-page-07e681e7e3",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "page": "details",
+      "excerpt": "How to Apply to Techstars Interested in applying to an accelerator program, but not sure how to get started?"
+    },
+    {
+      "id": "check-page-7aefc7f3b7",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "page": "details",
+      "excerpt": "Preview the application , then select an accelerator to begin."
+    },
+    {
+      "id": "check-page-2d48a7ef0d",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "page": "details",
+      "excerpt": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster."
+    },
+    {
+      "id": "check-page-d713935d60",
+      "url": "https://www.techstars.com/accelerators",
+      "page": "details",
+      "excerpt": "Startup Accelerator Programs & Funding | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today ACCELERATORS Techstars Accelerators Whether you're building in a specialized industry or a thriving startup city, Techstars Accelerators connect you with the network, mentorship, and capital you need to grow. Verticals The sectors where we are doubling down and can offer founders the deepest access to capital, domain expertise, and partnerships. Health Finance Space & Defense Critical Infrastructure Accelerators Launch in a leading startup hub and connect with the investors, mentors, and networks that help startups scale. ABN AMRO + Techstars Future of Finance Accelerator Northwestern Medicine & Techstars Healthcare Accelerator Techstars AI Health Baltimore Techstars Alabama EnergyTech Accelerator Techstars Anywhere Accelerator Techstars Boston Accelerator Techstars Boulder Techstars Chicago Techstars Columbus Powered by The Ohio State University Techstars Future of Food Powered by Ecolab Techstars Healthcare Accelerator powered by Permanente Medicine Mid-Atlantic States Techstars London Accelerator Techstars New York City Accelerator Techstars Space Accelerator Techstars Tokyo Accelerator USC and Techstars Accelerator Ready to Apply to Techstars? Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support,"
+    },
+    {
+      "id": "check-page-7cd48864ab",
+      "url": "https://www.techstars.com/accelerators",
+      "page": "details",
+      "excerpt": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster."
+    },
+    {
+      "id": "check-page-ceb6d748c6",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "page": "details",
+      "excerpt": "ABN AMRO + Techstars Future of Finance Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Home / Techstars Accelerators / ABN AMRO + Techstars Future of Finance Accelerator ACCELERATORS ABN AMRO + Techstars Future of Finance Accelerator We back unstoppable fintech founders in Europe building the infrastructure for the new financial system — the infrastructure, platforms, and guardrails that make AI-native finance possible at scale. Builders and enablers, we want to hear from you. Get in Touch ABOUT THIS PROGRAM Powering the Future of Finance This Techstars program focuses on exceptional entrepreneurs across all areas of fintech. Why ABN AMRO? Why Techstars? ABN AMRO is extremely committed to disruptive innovation and fintech, and is already running a €100m venture fund to invest in the sector. The accelerator’s proximity to ABN AMRO’s headquarters in Amsterdam will provide founders access to industry experts, technologists, data scientists and business sponsors across the bank that can offer startups highly personalized feedback and business development opportunities internally and across its vast client network. Time is money for a startup, and the Group Innovation Team at ABN AMRO has the capability to work with startups in a productive environment dedicated to innovation where startups’ products or services can be deployed"
+    },
+    {
+      "id": "check-page-700defdcb2",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "page": "details",
+      "excerpt": "Inside an Accelerator Mar 02 2026 Applications Open Jun 10 2026 Final Deadline Sep 08 2026 Accelerator Starts Dec 08 2026 Demo Day The ABN AMRO + Techstars Future of Finance Accelerator Community The partners, current founders, and alumni powering ABN AMRO + Techstars Future of Finance Accelerator."
+    },
+    {
+      "id": "check-page-1a3a47f65e",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "page": "details",
+      "excerpt": "Team Partners Latest Class Past Companies Allard Luchsinger Managing Director Eoghan O'Flaherty Investment Associate Laurens Hamerlinck Head of Fintech Venturing at ABN AMRO Jolenthe Janssen Fintech Venturing at ABN AMRO Recent News High-conviction founders making global headlines."
+    },
+    {
+      "id": "check-page-4bff74ca2a",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "page": "details",
+      "excerpt": "View All News Newsroom 18 September 2026 The 2026 Class of the ABN AMRO + Techstars Future of Finance Accelerator Read More Newsroom 8 September 2026 Introducing Techstars' Fall 2026 Accelerator Class Read More Program News 9 April 2026 Applications Open: The 6th Edition of the ABN AMRO + Techstars Future of Finance Accelerator Read More Ready to Apply to Techstars?"
+    },
+    {
+      "id": "check-page-b820338609",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "page": "details",
+      "excerpt": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster."
+    },
+    {
+      "id": "check-page-f9aebdc05d",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "page": "details",
+      "excerpt": "Techstars Anywhere Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Home / Techstars Accelerators / Techstars Anywhere Accelerator ACCELERATORS Techstars Anywhere Accelerator Techstars’ remote-first Anywhere program was launched in 2017 and supports companies innovating across any industry. The Anywhere model delivers the value of a top-tier Techstars accelerator remotely, to companies in American time zones. Anywhere provides the flexibility to participate in an accelerator program without relocating, and meets for three in-person offsites in startup hubs during the program. Get in Touch ABOUT THIS PROGRAM Powering founders from Anywhere Techstars Anywhere is a remote-first Techstars accelerator with no relocation necessary. Founders follow the proven Techstars approach to accelerate their business and #domorefaster. We are looking for founders who are domain experts building value-generating technologies across industries, with a strong emphasis on robotics, energy, applied and physical AI, materials science, and beyond. The Techstars Anywhere program provides companies in North American timezones the flexibility to participate in an accelerator program without relocating, while still connecting in person through three offsites in VC hubs during the program. Inside an Accelerator Aug 24 2026 Applications Open Nov 18 2026 Final"
+    },
+    {
+      "id": "check-page-8af5a0ccd4",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "page": "details",
+      "excerpt": "Inside an Accelerator Aug 24 2026 Applications Open Nov 18 2026 Final Deadline Mar 08 2027 Accelerator Starts Jun 03 2027 Demo Day The Techstars Anywhere Accelerator Community The partners, current founders, and alumni powering Techstars Anywhere Accelerator."
+    },
+    {
+      "id": "check-page-4220a99942",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "page": "details",
+      "excerpt": "View All News Newsroom 9 March 2026 Meet the Startups Joining Techstars' Spring 2026 Accelerator Programs Read More Newsroom 10 March 2025 Announcing Techstars Anywhere 2025 Spring Class!"
+    },
+    {
+      "id": "check-page-53feb8896a",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "page": "details",
+      "excerpt": "Read More Program News 9 September 2024 Meet the Techstars Anywhere Fall 2024 Startups: Supply Chain, FinTech, AI Innovation and More Read More Ready to Apply to Techstars?"
+    },
+    {
+      "id": "check-page-c819799fbe",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "page": "details",
+      "excerpt": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster."
+    },
+    {
+      "id": "check-page-3d52d34214",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "page": "details",
+      "excerpt": "Techstars AI Health Baltimore Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Home / Techstars Accelerators / Techstars AI Health Baltimore ACCELERATORS Techstars AI Health Baltimore Techstars AI Health Baltimore is Techstars’ flagship healthcare accelerator, investing $220,000 per company into AI-driven health startups building solutions that improve healthcare economics and patient outcomes. Powered by our region's top payor, provider, and academic institutions, we focus relentlessly on helping companies demonstrate measurable commercial traction, because in healthcare, ROI drives adoption. Get in Touch ABOUT THIS PROGRAM About AI Health Baltimore Healthcare organizations are adopting commercial AI applications at more than twice the rate of the broader U.S. economy. Hospitals, clinics, and payers are integrating AI into workflows, revenue cycle, clinical decision support, and operations at unprecedented speed. The shift is clear: healthcare is moving from AI curiosity to AI dependency. For the first time, Baltimore's leading payer, health systems, and academic institutions have come together in a single accelerator collaboration to power that transformation. Our anchor collaborators include Johns Hopkins, CareFirst BlueCross BlueShield, MedStar Health, the University of Maryland Baltimore, and the University of Maryland"
+    },
+    {
+      "id": "check-page-13078d3a84",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "page": "details",
+      "excerpt": "Our anchor collaborators include Johns Hopkins, CareFirst BlueCross BlueShield, MedStar Health, the University of Maryland Baltimore, and the University of Maryland Medical System."
+    },
+    {
+      "id": "check-page-bc0002231d",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "page": "details",
+      "excerpt": "Founders participating in this program gain access to real clinical environments, diverse operational models, payer and reimbursement insight, policy and regulatory expertise, scalable commercialization pathways, and real-world entrepreneurial mentorship and expertise."
+    },
+    {
+      "id": "check-page-80519cb882",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "page": "details",
+      "excerpt": "This diversity of access is a meaningful advantage for startups building in healthcare."
+    },
+    {
+      "id": "check-page-f00d9fb518",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "page": "details",
+      "excerpt": "Inside an Accelerator Aug 24 2026 Applications Open Nov 18 2026 Final Deadline Mar 08 2027 Accelerator Starts Jun 03 2027 Demo Day The Techstars AI Health Baltimore Community The partners, current founders, and alumni powering Techstars AI Health Baltimore."
+    },
+    {
+      "id": "check-page-7f5dc58964",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "page": "details",
+      "excerpt": "View All News Startup Spotlight 15 October 2026 TechNovaTime Raises $3.4M Pre-Seed Round to Take On Healthcare's Administrative Burden Read More Newsroom 8 September 2026 Introducing Techstars' Fall 2026 Accelerator Class Read More Program News 4 August 2026 5 Questions with Smitha Gopal, Managing Director of Techstars AI Health Baltimore Read More Ready to Apply to Techstars?"
+    },
+    {
+      "id": "check-page-b3ebcf237e",
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "page": "details",
+      "excerpt": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster."
+    },
+    {
+      "id": "check-page-4883de8390",
+      "url": "https://www.techstars.com/accelerators/belfast",
+      "page": "details",
+      "excerpt": "Techstars Belfast Startup Community Partnership | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Techstars Locations / Techstars Belfast Techstars Locations Techstars Belfast Say hello to Techstars Belfast — a new partnership between Ormeau Labs, Queen’s University, and Techstars. Get in Touch Techstars Belfast A Startup Community Partnership By opening the door to Techstars’ worldwide network, we’re giving Belfast startups the mentors, investors, and support they need to start global and scale internationally. Together, we’re strengthening the community and giving Belfast an even bigger voice in UK and European innovation. Startup Community Programs Startup Community Partnerships bring Techstars programming to founders where they are. Founder Catalyst A pre-accelerator program that educates early-stage founders on how to build and pitch their businesses and become investment-ready. Learn More Startup Weekend A three-day program where aspiring entrepreneurs can experience startup life by learning the ins and outs of launching their own startup. Learn More Startup Week A week-long summit that invites, celebrates, and connects your entire startup community. Learn More Community Development Lab A summit for stakeholders in the community to network, learn, and work together on strengthening the efforts to support founders. Learn More Startup"
+    },
+    {
+      "id": "check-page-8865ea7426",
+      "url": "https://www.techstars.com/accelerators/belfast",
+      "page": "details",
+      "excerpt": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster."
+    },
+    {
+      "id": "check-page-20895c6722",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "page": "details",
+      "excerpt": "Techstars Alabama EnergyTech Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Home / Techstars Accelerators / Techstars Alabama EnergyTech Accelerator ACCELERATORS Techstars Alabama EnergyTech Accelerator We are focused on supporting startups working within Climate Tech, Clean Tech, and Energy Efficiency, such as; energy distribution, smart grids, and wind energy. While we hold an EnergyTech scope if you have a startup in similar areas or with a connection to customer experience, we're the accelerator for you. Get in Touch ABOUT THIS PROGRAM About Alabama EnergyTech Welcome to our EnergyTech Accelerator, powered by Alabama Power and located in the heart of Birmingham, Alabama. As part of the Techstars network, our program offers access to the full desired Techstars experience, a diverse support system, as well as proximity to one of America's largest energy producers. This program's investing thesis spans the entire length of the energy vertical, meaning; Renewable energy, Clean energy, Solar power, Wind power, Hydropower, Geothermal energy, Biomass energy, Energy efficiency, Energy storage, Carbon capture, Sustainability, Electric vehicles, Smart grids, and the list continues. With the believe that diversity and inclusivity are essential for innovation, the program welcomes founders of all backgrounds. With a track record of"
+    },
+    {
+      "id": "check-page-0e6edfca57",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "page": "details",
+      "excerpt": "With a track record of hosting founders from all across the world, the accelerator's aim is to facilitate an environment where culture is welcomed."
+    },
+    {
+      "id": "check-page-1c08efebc6",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "page": "details",
+      "excerpt": "We're looking to invest in startups developing innovative solutions to today's most pressing energy challenges."
+    },
+    {
+      "id": "check-page-046f11c5e3",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "page": "details",
+      "excerpt": "Join us and let's build the future of energy together."
+    },
+    {
+      "id": "check-page-57ec020060",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "page": "details",
+      "excerpt": "Inside an Accelerator Mar 02 2026 Applications Open Jul 27 2026 Final Deadline Sep 08 2026 Accelerator Starts Dec 07 2026 Demo Day The Techstars Alabama EnergyTech Accelerator Community The partners, current founders, and alumni powering Techstars Alabama EnergyTech Accelerator."
+    },
+    {
+      "id": "check-page-871e414efd",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "page": "details",
+      "excerpt": "Team Partners Latest Class Past Companies Matthew Jaeh Managing Director Leticia Calvillo Program Manager IN THE NEWS AL.com: Techstars, Alabama Power create EnergyTech Accelerator Birmingham Business Journal: Techstars to team with Alabama Power on new EnergyTech Accelerator Recent News High-conviction founders making global headlines."
+    },
+    {
+      "id": "check-page-52a6dd6329",
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "page": "details",
+      "excerpt": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster."
+    },
+    {
+      "id": "check-page-69d485b136",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "page": "details",
+      "excerpt": "Techstars Boston Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Home / Techstars Accelerators / Techstars Boston Accelerator ACCELERATORS Techstars Boston Accelerator With over a decade in the books, our program leverages the vast expertise of the Boston ecosystem to accelerate the growth of transformative innovations across AI/ML, robotics, healthtech, tech bio, critical infrastructure and more by providing founders with unparalleled access to top mentors, investors and experts in our community. Get in Touch ABOUT THIS PROGRAM Accelerating Companies that Change the World Techstars Boston focuses on supporting the most promising startups within one of the world's leading innovation ecosystems. The program is for founders who are tackling meaningful challenges and building companies that have the potential to improve how we live, work, and interact with the world. The program is industry agnostic, welcoming ambitious founders across all sectors, but are particularly focused on startups focused on AI/ML, robotics, healthtech, tech bio, critical infrastructure, and other transformative technologies. Through hands-on mentorship, access to experienced investors and operators, and the broader Techstars global network, founders gain the connections and support needed to accelerate their growth. Inside an Accelerator Aug 24 2026"
+    },
+    {
+      "id": "check-page-ee691354a9",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "page": "details",
+      "excerpt": "Inside an Accelerator Aug 24 2026 Applications Open Nov 18 2026 Final Deadline Mar 08 2027 Accelerator Starts Jun 03 2027 Demo Day The Techstars Boston Accelerator Community The partners, current founders, and alumni powering Techstars Boston Accelerator."
+    },
+    {
+      "id": "check-page-6c741d15e3",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "page": "details",
+      "excerpt": "View All News Newsroom 20 July 2026 Why Techstars Global Fall Kick-Off Belongs in Boston Read More Founder Advice 6 January 2026 Techstars Mentor Anuj Adhiya on the Learning Loop Every Startup Needs but Most Lack Read More Newsroom 8 September 2025 Meet the Techstars Boston Fall 2025 Class Read More Ready to Apply to Techstars?"
+    },
+    {
+      "id": "check-page-e5dcc166b6",
+      "url": "https://www.techstars.com/accelerators/boston",
+      "page": "details",
+      "excerpt": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster."
     }
   ],
   "findings": {
@@ -2093,12 +1754,12 @@
         "evidenceId": "check-route-6e2c9149eb"
       },
       {
-        "value": "https://apply.techstars.com/?source=nav&accelerator=northwestern-medicine-healthcare",
-        "evidenceId": "check-route-7ac8622b86"
+        "value": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+        "evidenceId": "check-route-3c263c76fa"
       },
       {
-        "value": "https://www.techstars.com/accelerators/transformative-world-torino",
-        "evidenceId": "check-route-677d6cdbaa"
+        "value": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+        "evidenceId": "check-route-e55f7b114b"
       }
     ],
     "applicationUrl": [
@@ -2107,12 +1768,7 @@
         "evidenceId": "check-route-3425d902c0"
       }
     ],
-    "applicationsOpen": [
-      {
-        "value": true,
-        "evidenceId": "check-status-c348ff14f1"
-      }
-    ],
+    "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [
       {
@@ -2121,29 +1777,16 @@
       }
     ],
     "rolling": [],
-    "announcedIntake": [
-      {
-        "value": "November",
-        "evidenceId": "check-announced-c993c5b0d9"
-      }
-    ],
+    "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [
       {
-        "value": "10",
-        "evidenceId": "check-duration-791b91fbfd"
+        "value": "12 months",
+        "evidenceId": "check-duration-23b71f888f"
       },
       {
         "value": "13",
-        "evidenceId": "check-duration-83896c3e95"
-      },
-      {
-        "value": "4",
-        "evidenceId": "check-duration-eb59fed24b"
-      },
-      {
-        "value": "12 months",
-        "evidenceId": "check-duration-23b71f888f"
+        "evidenceId": "check-duration-9c07839159"
       },
       {
         "value": "3 months",
@@ -2152,49 +1795,40 @@
     ],
     "format": [
       {
-        "value": "in-person",
-        "evidenceId": "check-format-8d3acb4999"
-      },
-      {
         "value": "remote",
-        "evidenceId": "check-format-16920e7cf4"
+        "evidenceId": "check-format-df615fa0e7"
       },
       {
-        "value": "hybrid",
-        "evidenceId": "check-format-246e30ff54"
+        "value": "in-person",
+        "evidenceId": "check-format-a0a25021e1"
       }
     ],
-    "location": [
-      {
-        "value": "Abu Dhabi",
-        "evidenceId": "check-location-86115c412a"
-      }
-    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "this cohort, Techstars is offering an enhanced investment package of $220,000 . This includes $20,000 in exchange for 5% common equity under a",
-        "evidenceId": "check-deal-5ded15eb26"
+        "value": "Does Techstars take equity in startups? Yes. Techstars invests $220K in every company accepted into an accelerator program ($120K in",
+        "evidenceId": "check-deal-2a5f437c2c"
       },
       {
-        "value": "offering an enhanced investment package of $220,000 . This includes $20,000 in exchange for 5% common equity under a Post-Money Convertible",
-        "evidenceId": "check-deal-f01405017f"
+        "value": "invests $220K in every company accepted into an accelerator program ($120K in Asia-Pacific programs), in exchange for equity. There is no fee",
+        "evidenceId": "check-deal-098084204f"
       },
       {
-        "value": "equity under a Post-Money Convertible Equity Agreement (CEA), plus $200,000 via an uncapped SAFE with Most Favored Nation (MFN) terms. Techstars",
-        "evidenceId": "check-deal-f1598d9e17"
+        "value": "New $220,000 Accelerator Investment Terms | Techstars Join Us Portfolio Locations",
+        "evidenceId": "check-deal-d8a2ec9468"
       },
       {
-        "value": "February 2025. Apply by November 20th for a chance to receive up to $120K in investment and gain lifelong support. Follow us on LinkedIn for",
-        "evidenceId": "check-deal-597603cfcf"
+        "value": "Terms A note from Techstars Founder and CEO David Cohen. A $220,000 day-one investment Techstars is introducing an improved accelerator",
+        "evidenceId": "check-deal-eec73802aa"
       },
       {
-        "value": "until May 22. Each participating startup receives an investment of $20,000, along with an optional $100,000 convertible note. In exchange, the",
-        "evidenceId": "check-deal-cc29edf7ea"
+        "value": "3-month mentorship-driven accelerator, perks, and global network. $220K Day-one capital $200K MFN Safe $20K CEA for 5% common $1M Min",
+        "evidenceId": "check-deal-c3e86c8f4e"
       },
       {
-        "value": "startup receives an investment of $20,000, along with an optional $100,000 convertible note. In exchange, the accelerator acquires 6% ordinary",
-        "evidenceId": "check-deal-bef0409497"
+        "value": "accelerator, perks, and global network. $220K Day-one capital $200K MFN Safe $20K CEA for 5% common $1M Min priced-round trigger How the",
+        "evidenceId": "check-deal-583d9ee8e8"
       }
     ],
     "dealComponents": [
@@ -2203,72 +1837,72 @@
           "kind": "equity",
           "amount": "220000",
           "currency": "USD",
-          "equity": "5%",
+          "equity": null,
           "label": "Equity",
           "contingent": false,
           "condition": null
         },
-        "evidenceId": "check-deal-5ded15eb26"
+        "evidenceId": "check-deal-2a5f437c2c"
       },
       {
         "value": {
           "kind": "equity",
-          "amount": "20000",
+          "amount": "120000",
           "currency": "USD",
-          "equity": "5%",
+          "equity": null,
           "label": "Equity",
           "contingent": false,
           "condition": null
         },
-        "evidenceId": "check-deal-f01405017f"
-      },
-      {
-        "value": {
-          "kind": "equity",
-          "amount": "200000",
-          "currency": "USD",
-          "equity": "5%",
-          "label": "Equity",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-f1598d9e17"
+        "evidenceId": "check-deal-098084204f"
       },
       {
         "value": {
           "kind": "cash",
-          "amount": "120000",
+          "amount": "220000",
           "currency": "USD",
           "equity": null,
           "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
+          "contingent": false,
+          "condition": null
         },
-        "evidenceId": "check-deal-597603cfcf"
+        "evidenceId": "check-deal-d8a2ec9468"
       },
       {
         "value": {
-          "kind": "convertible",
+          "kind": "cash",
+          "amount": "220000",
+          "currency": "USD",
+          "equity": "5%",
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-c3e86c8f4e"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "200000",
+          "currency": "USD",
+          "equity": "5%",
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-583d9ee8e8"
+      },
+      {
+        "value": {
+          "kind": "cash",
           "amount": "20000",
           "currency": "USD",
-          "equity": null,
-          "label": "Convertible note",
+          "equity": "5%",
+          "label": "Cash",
           "contingent": false,
           "condition": null
         },
-        "evidenceId": "check-deal-cc29edf7ea"
-      },
-      {
-        "value": {
-          "kind": "convertible",
-          "amount": "100000",
-          "currency": "USD",
-          "equity": "6%",
-          "label": "Convertible note",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-bef0409497"
+        "evidenceId": "check-deal-4ca3330aa6"
       }
     ],
     "portfolioPages": [
@@ -2285,8 +1919,16 @@
         "evidenceId": "check-portfolio-9ba8865baa"
       },
       {
-        "value": "https://www.techstars.com/blog/tags/startups",
-        "evidenceId": "check-portfolio-f20fee04ad"
+        "value": "https://www.techstars.com/portfolio?program=ABN%20AMRO%20%26%20Techstars%20Future%20of%20Finance%20Accelerator#search-portfolio",
+        "evidenceId": "check-portfolio-44688118b5"
+      },
+      {
+        "value": "https://www.techstars.com/portfolio?program=Techstars%20Anywhere%20Accelerator#search-portfolio",
+        "evidenceId": "check-portfolio-65eacca8f3"
+      },
+      {
+        "value": "https://www.techstars.com/portfolio?program=Techstars%20AI%20Health%20Baltimore#search-portfolio",
+        "evidenceId": "check-portfolio-8202b49321"
       }
     ],
     "name": [

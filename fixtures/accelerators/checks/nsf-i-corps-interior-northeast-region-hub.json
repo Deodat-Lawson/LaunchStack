@@ -1,6 +1,6 @@
 {
   "programId": "nsf-i-corps-interior-northeast-region-hub",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.in-icorps.org/",
     "https://www.in-icorps.org/i-corps-alumni-give-consumers-more-control-over-energy-use/",
@@ -10,55 +10,6 @@
     "https://www.in-icorps.org/category/i-corps-alumni/"
   ],
   "evidence": [
-    {
-      "id": "check-format-10e4e1f713",
-      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
-      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
-      "excerpt": "Innovation Summit in Dallas, Texas, as members of a ‘hybrid’ National Science Foundation (NSF) I-Corps regional course",
-      "page": "details"
-    },
-    {
-      "id": "check-format-3418cffabb",
-      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
-      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
-      "excerpt": "Industry: Exploring Market Potential with the Battery Show Hybrid Course From Ideas to Industry: Exploring Market Potential",
-      "page": "details"
-    },
-    {
-      "id": "check-format-457eaf5b09",
-      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/page/2/",
-      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
-      "excerpt": "energy researchers in March 2023 that involved tailored virtual entrepreneurship training, followed by sponsored travel to",
-      "page": "details"
-    },
-    {
-      "id": "check-format-4c6bb01738",
-      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
-      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
-      "excerpt": "Industry: Exploring Market Potential with the Battery Show Hybrid Course",
-      "page": "details"
-    },
-    {
-      "id": "check-format-89df0788ac",
-      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
-      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
-      "excerpt": "Northeast I-Corps Hub. The course began with two weeks of virtual entrepreneurship training, then moved to an in-person",
-      "page": "details"
-    },
-    {
-      "id": "check-format-bfd0fd520c",
-      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
-      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
-      "excerpt": "the Interior Northeast I-Corps Hub (IN I-Corps) led a hybrid I-Corps regional course that included a funded customer",
-      "page": "details"
-    },
-    {
-      "id": "check-format-f7a89ccee7",
-      "url": "https://www.in-icorps.org/category/regional-i-corps-programming/",
-      "title": "NSF I-Corps Interior Northeast Region Hub — program page",
-      "excerpt": "of virtual entrepreneurship training, then moved to an in-person format at the Battery Show conference in Detroit, MI. read",
-      "page": "details"
-    },
     {
       "id": "check-route-c42592a0d0",
       "url": "https://www.in-icorps.org/",
@@ -164,20 +115,7 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [
-      {
-        "value": "hybrid",
-        "evidenceId": "check-format-bfd0fd520c"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-89df0788ac"
-      },
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-f7a89ccee7"
-      }
-    ],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [],

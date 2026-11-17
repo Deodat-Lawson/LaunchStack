@@ -1,6 +1,6 @@
 {
   "programId": "startup-autobahn",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://startup-autobahn.com/",
     "https://startup-autobahn.com/about/",
@@ -30,24 +30,10 @@
       "page": "details"
     },
     {
-      "id": "check-duration-2de76b0652",
-      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
-      "title": "STARTUP AUTOBAHN — portfolio page",
-      "excerpt": "their Automated Video Interview tool free for 1 month, 1 position. Market Dojo 🇬🇧 UK Program 7 With",
-      "page": "portfolio"
-    },
-    {
       "id": "check-duration-4543b4c35a",
       "url": "https://startup-autobahn.com/allgemein/guardknox-startup-autobahn-is-about-real-life-pilots-together-with-the-largest-automotive-companies/",
       "title": "STARTUP AUTOBAHN — portfolio page",
       "excerpt": "We like that the program is in a constrained in 3 month time frame after which you must deliver results.",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-duration-6a2819454e",
-      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
-      "title": "STARTUP AUTOBAHN — portfolio page",
-      "excerpt": "access to their Conflict Resolution Module for 6-weeks during these challenging times. Indivizo 🇭🇺",
       "page": "portfolio"
     },
     {
@@ -83,13 +69,6 @@
       "url": "https://startup-autobahn.com/our-program/",
       "title": "STARTUP AUTOBAHN — program page",
       "excerpt": "high level of robustness and data accuracy. Experience how virtual environments and synthetic data accelerate the maturity of",
-      "page": "details"
-    },
-    {
-      "id": "check-format-08fe848b94",
-      "url": "https://startup-autobahn.com/news/press-release/porsche-additional-press-information-about-pilot-projects/",
-      "title": "STARTUP AUTOBAHN — program page",
-      "excerpt": "augmented reality features for head-up displays and virtual cockpits possible and enhances the driving experience. The",
       "page": "details"
     },
     {
@@ -401,13 +380,6 @@
       "page": "details"
     },
     {
-      "id": "check-format-6463677d3e",
-      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
-      "title": "STARTUP AUTOBAHN — portfolio page",
-      "excerpt": "now offering a free trial of Augmented Reality Support & Remote Assist with ten free licenses. They are also offering the",
-      "page": "portfolio"
-    },
-    {
       "id": "check-format-65c13a7dd2",
       "url": "https://startup-autobahn.com/our-program/",
       "title": "STARTUP AUTOBAHN — program page",
@@ -576,13 +548,6 @@
       "page": "details"
     },
     {
-      "id": "check-format-b030b5fcf9",
-      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
-      "title": "STARTUP AUTOBAHN — portfolio page",
-      "excerpt": "🇸🇪 Sweden Program 7 The company is now offering free remote guidance for companies affected by COVID-19 for 60 days to",
-      "page": "portfolio"
-    },
-    {
       "id": "check-format-b30efb7793",
       "url": "https://startup-autobahn.com/our-program/",
       "title": "STARTUP AUTOBAHN — program page",
@@ -637,13 +602,6 @@
       "title": "STARTUP AUTOBAHN — program page",
       "excerpt": "human-machine interface involving displays, XR/MR/AR/VR, remote monitoring & control, and metaverse. View Website Do it,",
       "page": "details"
-    },
-    {
-      "id": "check-format-d11f0537ff",
-      "url": "https://startup-autobahn.com/news/community-initiatives-against-covid-19-startup-autobahn-program-alumni-what-is-our-ecosystem-doing-in-response-to-covid-19/",
-      "title": "STARTUP AUTOBAHN — portfolio page",
-      "excerpt": "of the cleancode movement. evoach ug 🇩🇪 Germany Read “Why remote arguing is crucial for your team-performance!” and gain",
-      "page": "portfolio"
     },
     {
       "id": "check-format-d433913134",
@@ -1554,10 +1512,6 @@
       {
         "value": "3 months",
         "evidenceId": "check-duration-4543b4c35a"
-      },
-      {
-        "value": "1 month",
-        "evidenceId": "check-duration-2de76b0652"
       }
     ],
     "format": [

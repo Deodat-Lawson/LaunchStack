@@ -1,6 +1,6 @@
 {
   "programId": "balderton",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.balderton.com/",
     "https://www.balderton.com/about-balderton/",
@@ -23,20 +23,6 @@
       "title": "Balderton — program page",
       "excerpt": "of 8-10 CEOs from within the portfolio who meet regularly, in person to discuss the business issues and overall life challenges",
       "page": "details"
-    },
-    {
-      "id": "check-format-64b2fcc130",
-      "url": "https://www.balderton.com/news/category/portfolio-news/",
-      "title": "Balderton — portfolio page",
-      "excerpt": "11 May, 2026 Grand Games raises $70M Series B to scale hybrid casual gaming Portfolio News 06 May, 2026 Davis raises",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-7e79a24e38",
-      "url": "https://careers.balderton.com/jobs?__hsfp=4048727588&__hssc=51647990.23.1634215967246&__hstc=51647990.a84059ed3fe8efa2b63fe9e02c4327e1.1634027149833.1634027149833.1634027149833.1",
-      "title": "Balderton — portfolio page",
-      "excerpt": "Select... Industry Search industries Internships only Remote options All jobs Posted Anytime Post and Manage jobs",
-      "page": "portfolio"
     },
     {
       "id": "check-location-b0f1026776",
@@ -320,10 +306,6 @@
       {
         "value": "remote",
         "evidenceId": "check-format-38ba52b36d"
-      },
-      {
-        "value": "hybrid",
-        "evidenceId": "check-format-64b2fcc130"
       }
     ],
     "location": [

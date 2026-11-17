@@ -1,6 +1,6 @@
 {
   "programId": "fishburners",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://fishburners.org/",
     "https://fishburners.org/founders-hub-terms",
@@ -10,27 +10,6 @@
     "https://fishburners.org/blog/sip-ventures-partnership-program"
   ],
   "evidence": [
-    {
-      "id": "check-deal-7b7d78fc4a",
-      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
-      "title": "Fishburners — program page",
-      "excerpt": "logistics, or supply chain tools) What You’ll Gain Up to $150,000 in equity-free funding per selected business Direct access to Asahi",
-      "page": "details"
-    },
-    {
-      "id": "check-deal-bea59a5402",
-      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
-      "title": "Fishburners — program page",
-      "excerpt": "12–20 week commercial pilot with Asahi Beverages, supported by up to $150,000 in non-dilutive funding (a mix of cash and in-kind support). Each",
-      "page": "details"
-    },
-    {
-      "id": "check-deal-f92d8e3649",
-      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
-      "title": "Fishburners — program page",
-      "excerpt": "scaleups across Australia and New Zealand. The program offers up to $150,000 in equity-free funding and the opportunity to pilot your solution",
-      "page": "details"
-    },
     {
       "id": "check-duration-58bd940493",
       "url": "https://fishburners.org/terms",
@@ -44,13 +23,6 @@
       "title": "Fishburners — terms page",
       "excerpt": "ceased to be employed or engaged by us more than 6 months before being employed or engaged by you; or we",
       "page": "terms"
-    },
-    {
-      "id": "check-duration-ddf8e39c0e",
-      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
-      "title": "Fishburners — program page",
-      "excerpt": "digitally. Successful applicants will enter a 12–20 week commercial pilot with Asahi Beverages, supported",
-      "page": "details"
     },
     {
       "id": "check-email-ba6552a3f7",
@@ -495,10 +467,6 @@
       {
         "value": "6 months",
         "evidenceId": "check-duration-58bd940493"
-      },
-      {
-        "value": "20",
-        "evidenceId": "check-duration-ddf8e39c0e"
       }
     ],
     "format": [
@@ -509,34 +477,8 @@
     ],
     "location": [],
     "selectivity": [],
-    "dealText": [
-      {
-        "value": "scaleups across Australia and New Zealand. The program offers up to $150,000 in equity-free funding and the opportunity to pilot your solution",
-        "evidenceId": "check-deal-f92d8e3649"
-      },
-      {
-        "value": "12–20 week commercial pilot with Asahi Beverages, supported by up to $150,000 in non-dilutive funding (a mix of cash and in-kind support). Each",
-        "evidenceId": "check-deal-bea59a5402"
-      },
-      {
-        "value": "logistics, or supply chain tools) What You’ll Gain Up to $150,000 in equity-free funding per selected business Direct access to Asahi",
-        "evidenceId": "check-deal-7b7d78fc4a"
-      }
-    ],
-    "dealComponents": [
-      {
-        "value": {
-          "kind": "grant",
-          "amount": "150000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Grant",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-f92d8e3649"
-      }
-    ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

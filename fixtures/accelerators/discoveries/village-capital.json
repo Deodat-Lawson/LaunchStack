@@ -1,23 +1,7 @@
 {
   "programId": "village-capital",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
-    {
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://vilcap.com/about-us",
       "page": "details",
@@ -164,6 +148,22 @@
     },
     {
       "url": "https://vilcap.com/programs/climate-justice-for-migrants-and-communities-of-color-2023",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/programs/culturally-competent-care",
       "page": "details",
       "anchor": "",
       "fetched": true,

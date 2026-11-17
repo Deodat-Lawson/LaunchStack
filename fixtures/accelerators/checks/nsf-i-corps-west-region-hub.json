@@ -1,6 +1,6 @@
 {
   "programId": "nsf-i-corps-west-region-hub",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.icorpshubwest.org/",
     "https://www.icorpshubwest.org/program",
@@ -11,13 +11,6 @@
     "https://www.icorpshubwest.org/post/unlock-the-power-of-innovation-with-the-i-corps-hub-west-program"
   ],
   "evidence": [
-    {
-      "id": "check-deal-17f1209442",
-      "url": "https://www.icorpshubwest.org/post/unlock-the-power-of-innovation-with-the-i-corps-hub-west-program",
-      "title": "NSF I-Corps West Region Hub — program page",
-      "excerpt": "benefits of the I-Corps program is the potential to receive up to $50,000 in NSF funding . After completing ZAP and BOOM, teams that",
-      "page": "details"
-    },
     {
       "id": "check-email-1231febaeb",
       "url": "https://www.icorpshubwest.org/",
@@ -313,26 +306,8 @@
     ],
     "location": [],
     "selectivity": [],
-    "dealText": [
-      {
-        "value": "benefits of the I-Corps program is the potential to receive up to $50,000 in NSF funding . After completing ZAP and BOOM, teams that",
-        "evidenceId": "check-deal-17f1209442"
-      }
-    ],
-    "dealComponents": [
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "50000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-17f1209442"
-      }
-    ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

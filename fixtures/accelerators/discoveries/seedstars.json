@@ -1,6 +1,6 @@
 {
   "programId": "seedstars",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "http://seedstars.com/about/",
@@ -148,6 +148,38 @@
     },
     {
       "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/powerlive-zimbabwe/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/routemasters/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/rural-farmers-hub/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solar-e-cycles-kenya-ltd/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solaristique-nigeria/",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -347,42 +379,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.seedstars.com/content-hub/newsroom/africa-investment-forum-2024-market-days-seedstars-africa-ventures-i-announces-42m-first-close/",
       "page": "terms",
       "anchor": "GLOBAL • Africa Investment Forum 2024 Market Days: Seedstars Africa Ventures I announces $42m first close Seedstars Africa Ventures I, a venture capital fund making early-stage inv",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

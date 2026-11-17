@@ -1,6 +1,6 @@
 {
   "programId": "general-catalyst",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://www.generalcatalyst.com/companies/anthropic",
@@ -22,140 +22,12 @@
       "url": "https://www.generalcatalyst.com/stories/announcing-chief-investment",
       "page": "terms",
       "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
+      "fetched": true,
+      "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/focusing-on-europe-a-conversation-with-gcs-london-based-investment-team",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/global-resilience-in-india-announcing-our-investment-in-jeh-aerospace",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-fivetran-making-data-flow",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-accrual",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-adept-empowering-knowledge-workers-with-ai",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-alpha-9-oncology",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-apiiro-expanding-visibility-in-application-security",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-applied-intuition",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-arca",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-argmax",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-armis",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-arrivent-globally-developing-top-biopharmaceutical-innovation",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-autone",
-      "page": "terms",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-awardco",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-ayr-energy",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-birches-health",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -166,8 +38,8 @@
       "url": "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
       "page": "application",
       "anchor": "",
-      "fetched": false,
-      "blocked": "fetch_failed",
+      "fetched": true,
+      "blocked": null,
       "origin": "official"
     },
     {

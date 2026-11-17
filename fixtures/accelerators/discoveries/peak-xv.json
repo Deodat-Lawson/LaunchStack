@@ -1,6 +1,6 @@
 {
   "programId": "peak-xv",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://www.peakxv.com/about-us",
@@ -28,22 +28,6 @@
     },
     {
       "url": "https://www.peakxv.com/companies/10-minute-school",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.peakxv.com/companies/1mg",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.peakxv.com/companies/aampe",
       "page": "portfolio",
       "anchor": "",
       "fetched": true,

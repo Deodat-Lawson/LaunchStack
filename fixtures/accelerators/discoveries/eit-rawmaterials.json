@@ -1,6 +1,6 @@
 {
   "programId": "eit-rawmaterials",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://alumni.eitrawmaterials.eu/",
@@ -30,7 +30,7 @@
       "url": "https://eitrawmaterials.eu/about-us/contact-us",
       "page": "details",
       "anchor": "Contact Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,7 +38,7 @@
       "url": "https://eitrawmaterials.eu/about-us/governance",
       "page": "details",
       "anchor": "Governance",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -46,7 +46,7 @@
       "url": "https://eitrawmaterials.eu/about-us/our-mission",
       "page": "details",
       "anchor": "Our Mission",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -54,7 +54,15 @@
       "url": "https://eitrawmaterials.eu/about-us/our-organization",
       "page": "details",
       "anchor": "Our Organization",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/about-us/our-organization/all-team-members",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -62,7 +70,7 @@
       "url": "https://eitrawmaterials.eu/about-us/our-organization/executive-board",
       "page": "details",
       "anchor": "Executive Board",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -70,7 +78,7 @@
       "url": "https://eitrawmaterials.eu/about-us/our-organization/our-people",
       "page": "details",
       "anchor": "Management Board",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -78,7 +86,15 @@
       "url": "https://eitrawmaterials.eu/about-us/procurement",
       "page": "details",
       "anchor": "Procurement",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/about-us/procurement/rfp-evaluators-experts-raw-materials-business-startups",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -86,7 +102,7 @@
       "url": "https://eitrawmaterials.eu/about-us/publications",
       "page": "details",
       "anchor": "Publications",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -94,7 +110,23 @@
       "url": "https://eitrawmaterials.eu/academy/custom-programmes",
       "page": "details",
       "anchor": "Customized Services",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/call-for-offers/skills-tomorrow-training-programmes-raw-advanced-materials",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/call-proposals-develop-raw-and-circular-economy-expedition-race-executives-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -119,14 +151,6 @@
       "page": "details",
       "anchor": "About the Academy",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/erma-booster-call",
-      "page": "other",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -171,114 +195,10 @@
       "origin": "official"
     },
     {
-      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/newsroom/success-stories/over-500-organisations-apply-eit-hei-initiatives-third-call-proposals",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/node/2142",
-      "page": "other",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://eitrawmaterials.eu/our-portfolio",
       "page": "portfolio",
       "anchor": "View our startup portfolio",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/press-releases/weeefiner-investment-2025",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/search?fulltext=&search_page%5B1%5D=topic%3A320&sort_bef_combine=search_api_relevance_DESC",
-      "page": "other",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -295,6 +215,14 @@
       "page": "details",
       "anchor": "Master Programmes",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seedbook.eitrawmaterials.eu/Login.aspx?Action=SignUp",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

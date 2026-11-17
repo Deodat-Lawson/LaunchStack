@@ -1,6 +1,6 @@
 {
   "programId": "stellaris-vp",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.stellarisvp.com/",
     "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
@@ -8,20 +8,6 @@
     "https://www.stellarisvp.com/blog/accelerating-ai-adoption-in-radiology-our-investment-in-carpl"
   ],
   "evidence": [
-    {
-      "id": "check-duration-8623fb8d11",
-      "url": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
-      "title": "Stellaris Venture Partners — application page",
-      "excerpt": "Salesforce have increased by 25% over the last 12 months. These pre-built software solutions offer high",
-      "page": "application"
-    },
-    {
-      "id": "check-format-2f05c98d43",
-      "url": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
-      "title": "Stellaris Venture Partners — application page",
-      "excerpt": "these players as “legacy”, “not user friendly”, they are virtual monopolies. Market caps of Oracle, SAP and Salesforce have",
-      "page": "application"
-    },
     {
       "id": "check-name-41879eaab4",
       "url": "https://www.stellarisvp.com/",
@@ -172,18 +158,8 @@
     "rolling": [],
     "announcedIntake": [],
     "cohortStarts": [],
-    "durationWeeks": [
-      {
-        "value": "12 months",
-        "evidenceId": "check-duration-8623fb8d11"
-      }
-    ],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-2f05c98d43"
-      }
-    ],
+    "durationWeeks": [],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [],

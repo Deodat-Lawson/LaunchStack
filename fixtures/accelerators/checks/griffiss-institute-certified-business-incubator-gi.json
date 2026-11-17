@@ -1,6 +1,6 @@
 {
   "programId": "griffiss-institute-certified-business-incubator-gi",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.griffissinstitute.org/",
     "https://www.griffissinstitute.org/internship-opportunities/",
@@ -13,27 +13,6 @@
     "https://www.griffissinstitute.org/who-we-work-with/afrl/summer-internship"
   ],
   "evidence": [
-    {
-      "id": "check-duration-f570d5a988",
-      "url": "https://www.griffissinstitute.org/news/commercialization-academy-idea-ny-apply-online-tuesday-september-11/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
-      "excerpt": "to reside in the Mohawk Valley region for a 12-month period after Demo Day. Interested? Have",
-      "page": "application"
-    },
-    {
-      "id": "check-format-793f4d1129",
-      "url": "https://www.griffissinstitute.org/news/2022-afrl-challenge-competition-application-now-open-for-school-team-signups/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
-      "excerpt": "may sign up. This year’s competition will be held in-person at the Innovare Advancement Center located at 592 Hangar",
-      "page": "application"
-    },
-    {
-      "id": "check-format-acb6748e77",
-      "url": "https://www.griffissinstitute.org/news/gi-now-accepting-applications-for-2021-summer-internship-program-at-afrl-information-directorate/",
-      "title": "Griffiss Institute Certified Business Incubator (GI) — application page",
-      "excerpt": "internships and the opportunity to be involved, through virtual means, with the most valuable, challenging, and",
-      "page": "application"
-    },
     {
       "id": "check-portfolio-12c2eb5e0b",
       "url": "https://www.griffissinstitute.org/news/gi-now-accepting-applications-for-2021-summer-internship-program-at-afrl-information-directorate/",
@@ -533,22 +512,8 @@
     "rolling": [],
     "announcedIntake": [],
     "cohortStarts": [],
-    "durationWeeks": [
-      {
-        "value": "12 months",
-        "evidenceId": "check-duration-f570d5a988"
-      }
-    ],
-    "format": [
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-793f4d1129"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-acb6748e77"
-      }
-    ],
+    "durationWeeks": [],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [],

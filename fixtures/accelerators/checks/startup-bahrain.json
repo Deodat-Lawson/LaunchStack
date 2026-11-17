@@ -1,6 +1,6 @@
 {
   "programId": "startup-bahrain",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://startupbahrain.com/",
     "https://startupbahrain.com/ecosystem",
@@ -13,39 +13,11 @@
   ],
   "evidence": [
     {
-      "id": "check-deal-da402289d4",
-      "url": "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
-      "title": "Startup Bahrain — application page",
-      "excerpt": "fields. The shortlisted candidates will be charged BHD 2,500 (approx $6,630) as the program fee for the six-month-long program. So if you have",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-2d8ab99f52",
-      "url": "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
-      "title": "Startup Bahrain — application page",
-      "excerpt": "to over 30 potential employees in one roof. 6- month internship: The internship, starting in October,",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-e1d9cb8035",
-      "url": "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
-      "title": "Startup Bahrain — application page",
-      "excerpt": "GCC residents, including Lebanon and Jordan. The 12-week-long program by the Georgetown University ’s",
-      "page": "application"
-    },
-    {
       "id": "check-duration-f2bbe29beb",
       "url": "https://startupbahrain.com/pitch",
       "title": "Startup Bahrain — program page",
       "excerpt": "chats with one-on-one office hours. Duration : 2-Weeks, 4-Hour Evening Classes APPLY Applications are",
       "page": "details"
-    },
-    {
-      "id": "check-duration-fd2cf94081",
-      "url": "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
-      "title": "Startup Bahrain — application page",
-      "excerpt": "with a leading business school, spread across 12 weeks with two live sessions in Bahrain. The course",
-      "page": "application"
     },
     {
       "id": "check-email-0d3af469fe",
@@ -609,14 +581,6 @@
       {
         "value": "2",
         "evidenceId": "check-duration-f2bbe29beb"
-      },
-      {
-        "value": "6 months",
-        "evidenceId": "check-duration-2d8ab99f52"
-      },
-      {
-        "value": "12",
-        "evidenceId": "check-duration-fd2cf94081"
       }
     ],
     "format": [
@@ -632,26 +596,8 @@
       }
     ],
     "selectivity": [],
-    "dealText": [
-      {
-        "value": "fields. The shortlisted candidates will be charged BHD 2,500 (approx $6,630) as the program fee for the six-month-long program. So if you have",
-        "evidenceId": "check-deal-da402289d4"
-      }
-    ],
-    "dealComponents": [
-      {
-        "value": {
-          "kind": "fee",
-          "amount": "6630",
-          "currency": "USD",
-          "equity": null,
-          "label": "Fee",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-da402289d4"
-      }
-    ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

@@ -1,6 +1,6 @@
 {
   "programId": "cyclotron-road",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://cyclotronroad.lbl.gov/",
     "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
@@ -35,20 +35,6 @@
       "title": "Cyclotron Road — program page",
       "excerpt": "media@lbl.gov",
       "page": "details"
-    },
-    {
-      "id": "check-format-83b4fb2e4b",
-      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
-      "title": "Cyclotron Road — application page",
-      "excerpt": "in January 2024, and finalists were invited to a virtual pitch during Finalist Week in late February or early March",
-      "page": "application"
-    },
-    {
-      "id": "check-format-ea6f41ad60",
-      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
-      "title": "Cyclotron Road — application page",
-      "excerpt": "of fellows were invited to begin their fellowship with an in-person retreat in mid-June 2025. The DOE’s Advanced Materials and",
-      "page": "application"
     },
     {
       "id": "check-name-62a5fec3bd",
@@ -460,16 +446,7 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-83b4fb2e4b"
-      },
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-ea6f41ad60"
-      }
-    ],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [

@@ -1,6 +1,6 @@
 {
   "programId": "wayra",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://wayra.com/",
     "https://wayra.com/investment",
@@ -21,13 +21,6 @@
       "title": "Wayra — terms page",
       "excerpt": "startups. More info Our portfolio With tickets ranging from €150K to €5M, we invest in qualified rounds alongside leading venture",
       "page": "terms"
-    },
-    {
-      "id": "check-location-0bdf923a05",
-      "url": "https://wayra.com/news/sycai-medical-to-develop-the-hospital-pilot-of-the-accion-programme-by-astrazeneca-wayra-and-kunsen",
-      "title": "Wayra — program page",
-      "excerpt": "well as respiratory conditions. It is headquartered in Cambridge (United Kingdom) and operates in more",
-      "page": "details"
     },
     {
       "id": "check-name-e810a277ab",
@@ -148,12 +141,7 @@
     "cohortStarts": [],
     "durationWeeks": [],
     "format": [],
-    "location": [
-      {
-        "value": "Cambridge",
-        "evidenceId": "check-location-0bdf923a05"
-      }
-    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {

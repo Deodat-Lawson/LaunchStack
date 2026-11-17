@@ -1,9 +1,8 @@
 {
   "programId": "ucl-business",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.uclventures.com/",
-    "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
     "http://www.uclventures.com/new-information-about-ucl-ventures",
     "https://www.uclventures.com/who-we-are",
     "https://www.uclventures.com/what-we-do",
@@ -21,16 +20,10 @@
     "http://www.uclventures.com/spinout-portfolio/biotalife-healthcare",
     "http://www.uclventures.com/spinout-portfolio/cascader",
     "http://www.uclventures.com/spinout-portfolio/cogstack",
-    "http://www.uclventures.com/spinout-portfolio/collaborative-community-against-coronovirus-cic-ccc-cic"
+    "http://www.uclventures.com/spinout-portfolio/collaborative-community-against-coronovirus-cic-ccc-cic",
+    "http://www.uclventures.com/spinout-portfolio/deepcolor-imaging"
   ],
   "evidence": [
-    {
-      "id": "check-duration-86e1550429",
-      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
-      "title": "UCL Business — program page",
-      "excerpt": "response, with median event-free survival of 11.9 months. Autolus is now progressing additional CAR T",
-      "page": "details"
-    },
     {
       "id": "check-format-07f63d833e",
       "url": "http://www.uclventures.com/spinout-portfolio/3d-repo",
@@ -138,54 +131,6 @@
       "url": "https://www.uclventures.com/",
       "page": "details",
       "excerpt": "Find your Business Manager UCL Ventures footer About UCL Ventures Our people What we do Who we are Our culture Forms & Resources Publications and downloads Accreditations Cyber essentials Living wage UCL Ventures Limited (Company Registration No: 02776963) is a wholly-owned subsidiary of University College London."
-    },
-    {
-      "id": "check-page-c25d8ac64a",
-      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
-      "page": "details",
-      "excerpt": "Autolus Therapeutics: reprogramming patients' cells to kill cancer | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Current page: Inspiring stories Real-world impact and"
-    },
-    {
-      "id": "check-page-70e8efac1c",
-      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
-      "page": "details",
-      "excerpt": "Speak to the team Choose your enquiry type to reach the right team Find your Business Manager Autolus Therapeutics: reprogramming patients' cells to kill cancer A new personalised appraoch for leuakaemia."
-    },
-    {
-      "id": "check-page-2d9230dc5e",
-      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
-      "page": "details",
-      "excerpt": "Breadcrumb trail Home Inspiring stories Autolus Therapeutics: reprogramming patients' cells to kill cancer Problem to be solved Many patients with aggressive blood cancers relapse or do not respond to standard treatments."
-    },
-    {
-      "id": "check-page-ad31454511",
-      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
-      "page": "details",
-      "excerpt": "I’m delighted about the approval of AUCATZYL in the UK which represents a huge milestone in Autolus’ success story."
-    },
-    {
-      "id": "check-page-c2c41bd9a2",
-      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
-      "page": "details",
-      "excerpt": "In June 2026, meanwhile, it was reported that CAR T-cell therapy developed by Autolus Therapeutics showed early promise as a new treatment option for people living with severe, treatment-resistant lupus."
-    },
-    {
-      "id": "check-page-9f2653ffe7",
-      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
-      "page": "details",
-      "excerpt": "The early findings, presented at the EULAR European Congress of Rheumatology, come from the ongoing Phase I CARLYSLE study led by UCL and UCLH."
-    },
-    {
-      "id": "check-page-30acaa3de4",
-      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
-      "page": "details",
-      "excerpt": "UCL Ventures footer About UCL Ventures Our people What we do Who we are Our culture Forms & Resources Publications and downloads Accreditations Cyber essentials Living wage UCL Ventures Limited (Company Registration No: 02776963) is a wholly-owned subsidiary of University College London."
-    },
-    {
-      "id": "check-page-9eab362034",
-      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
-      "page": "details",
-      "excerpt": "Registered office: University College London Gower Street London WC1E 6BT UCL social media menu Link to Linkedin Back to top Legal Cookie policy Freedom of information Privacy policy Rules of website use © 2026 UCL Ventures Limited"
     },
     {
       "id": "check-page-09cbb57a61",
@@ -408,6 +353,12 @@
       "url": "http://www.uclventures.com/spinout-portfolio/collaborative-community-against-coronovirus-cic-ccc-cic",
       "page": "portfolio",
       "excerpt": "Collaborative Community against Coronovirus CIC (CCC CIC) | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes,"
+    },
+    {
+      "id": "check-page-66b346bf42",
+      "url": "http://www.uclventures.com/spinout-portfolio/deepcolor-imaging",
+      "page": "portfolio",
+      "excerpt": "DeepColor Imaging | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager Main navigation Your route to market Your route to market We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market Protect your idea Create a company Licensing your invention Routes to social impact Funding & support The financial and practical help that we can offer Help managing your project Training & tools Common questions Explore innovations Explore innovations Our portfolio and technologies span AI and quantum, to gene therapies to consumer products. Current page: Spinout portfolio Browse our portfolio of spinout companies, based on UCL research Our expertise & pipeline The sectors we span and therapeutics in development Social Ventures Ventures driving impact in communities License a technology Opportunities & collaborations with UCL's world-class research Global impact Global impact How UCL research is changing the way the world lives, works and thrives. Inspiring stories Real-world impact and successes, supported by UCL Ventures Impact Report Our"
     }
   ],
   "findings": {
@@ -426,12 +377,7 @@
     "rolling": [],
     "announcedIntake": [],
     "cohortStarts": [],
-    "durationWeeks": [
-      {
-        "value": "9 months",
-        "evidenceId": "check-duration-86e1550429"
-      }
-    ],
+    "durationWeeks": [],
     "format": [
       {
         "value": "remote",

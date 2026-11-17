@@ -1,12 +1,12 @@
 {
   "programId": "general-catalyst",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.generalcatalyst.com/",
     "https://www.generalcatalyst.com/terms-and-conditions",
-    "https://www.generalcatalyst.com/stories/our-investment-in-awardco",
-    "https://www.generalcatalyst.com/stories/our-investment-in-ayr-energy",
-    "https://www.generalcatalyst.com/stories/our-investment-in-birches-health"
+    "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
+    "https://www.generalcatalyst.com/stories/announcing-chief-investment",
+    "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health"
   ],
   "evidence": [
     {
@@ -38,27 +38,6 @@
       "page": "details"
     },
     {
-      "id": "check-format-00226fd3f5",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-awardco",
-      "title": "General Catalyst — terms page",
-      "excerpt": "higher employee engagement, compounded by the shift to hybrid/remote work. Now that employees will be spending less time",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-487fbfc440",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-birches-health",
-      "title": "General Catalyst — terms page",
-      "excerpt": "for those who need it most. As one of the first national virtual clinics purpose-built for gambling addiction, it delivers",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-fc4d53cad7",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-awardco",
-      "title": "General Catalyst — terms page",
-      "excerpt": "employee engagement, compounded by the shift to hybrid/remote work. Now that employees will be spending less time in the",
-      "page": "terms"
-    },
-    {
       "id": "check-name-84679d2a5e",
       "url": "https://www.generalcatalyst.com/",
       "title": "General Catalyst — homepage",
@@ -80,8 +59,15 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-1a9722e57f",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-birches-health",
+      "id": "check-portfolio-2b28d4d379",
+      "url": "https://www.generalcatalyst.com/stories/announcing-chief-investment",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3002598609",
+      "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
       "title": "General Catalyst — terms page",
       "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
       "page": "terms"
@@ -94,18 +80,18 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-658a0dd5df",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-awardco",
+      "id": "check-portfolio-4049925888",
+      "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
       "title": "General Catalyst — terms page",
       "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-8c7de73375",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-ayr-energy",
-      "title": "General Catalyst — terms page",
-      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
-      "page": "terms"
+      "id": "check-portfolio-9910ba8d50",
+      "url": "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
+      "title": "General Catalyst — application page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "application"
     },
     {
       "id": "check-portfolio-b01f7f9e13",
@@ -115,22 +101,15 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-baede85c81",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-birches-health",
-      "title": "General Catalyst — terms page",
-      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-bfba9f3722",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-awardco",
-      "title": "General Catalyst — terms page",
+      "id": "check-portfolio-c548acae3b",
+      "url": "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
+      "title": "General Catalyst — application page",
       "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
-      "page": "terms"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-dc2945cdc9",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-ayr-energy",
+      "id": "check-portfolio-d7ff438a77",
+      "url": "https://www.generalcatalyst.com/stories/announcing-chief-investment",
       "title": "General Catalyst — terms page",
       "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
       "page": "terms"
@@ -266,22 +245,22 @@
       "excerpt": "The award of the arbitrator is final and binding upon you and the General Catalyst."
     },
     {
-      "id": "check-page-2be1ee1fac",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-awardco",
-      "page": "terms",
-      "excerpt": "Our Investment In Awardco Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment In Awardco October 28, 2021 Example H2 Example H3 The war for talent has never been fiercer. At a time when employees have more opportunity, more choices and more power, companies need new tools to inspire, motivate, reward and acculturate their workforce. Every organization wants to create a strong culture through consistent behaviors that lead to better performance. This focus is often bucketed into the blanket term of “employee engagement”. But in the race for better engagement there are few categories as untouched by technology as the employee rewards and recognition space. Traditional programs and offerings often feel like relics from another era. Because they are. Awardco is on a mission to change all that. The company has created a software platform for employee engagement and rewards that leverages the speed, choice and personalization of Amazon for the modern workforce. They have developed a comprehensive and extensible solution to recognize, engage and reward employees at a time when companies are struggling to create community and culture"
+      "id": "check-page-a9c4251481",
+      "url": "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
+      "page": "application",
+      "excerpt": "Our Investment in Prosimo Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Prosimo April 6, 2021 Example H2 Example H3 Responsive, secure, and universally available software is critical to the digital transformation so many companies are going through today. Furthermore, companies are going cloud first to scale these applications and to quickly develop and deliver them to their employees and customers. While there has been a lot of focus on application modernization techniques (e.g. microservices and open-source technologies), there has been less on operationalizing them at a truly global scale. And while newer, born-in-the-cloud companies have fully adopted cloud-native capabilities, most enterprises do not have that luxury. They have one leg in the legacy world and one leg in the modern world, struggling to satisfy the demands of each. Throw in a desire to make these applications portable across clouds, and you have quite a big challenge to confront. COVID has made this even more of a challenge. We have seen companies from all verticals struggling to meet the application scale and security challenges of work-at-home"
     },
     {
-      "id": "check-page-3377760f54",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-ayr-energy",
+      "id": "check-page-c8ef6b0a0f",
+      "url": "https://www.generalcatalyst.com/stories/announcing-chief-investment",
       "page": "terms",
-      "excerpt": "Our Investment in Ayr Energy Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Ayr Energy Neeraj Arora Akarsh Shrivastava Siddhi Kasliwal September 3, 2025 Example H2 Example H3 Demand for electricity around the world is surging. By 2030, electricity’s share of global energy consumption is expected to rise from 20% to 30% , driven by explosive growth in artificial intelligence, data centers, electric vehicles, reindustrialization, and more. And while advancements in energy generation will likely be able to supply the raw power needed, current power grids are not equipped to handle this increasing demand. To support increased demand and newer forms of energy usage, products and systems like transformers, switch gears, circuit breakers, advanced battery energy storage systems (BESS), and more are needed at scale. But the supply chain for power grid infrastructure has become a serious bottleneck. In the U.S. alone, nearly half of the 60 million transformers (essential for safely and reliably delivering power at the right voltage levels) need to be replaced. An estimated additional 120 million transformers will be required to"
+      "excerpt": "Our Investment in Chief Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Chief Ken Chenault June 25, 2019 Example H2 Example H3 Throughout my career, I’ve felt a deep sense of responsibility to develop teams and cultures that focus on integrity and embrace diversity and inclusion. This commitment is rooted in a core belief that opportunity and advancement should be available to everyone, and that representation at senior levels of companies today needs to undergo dramatic transformation. Chief is changing the fabric of leadership today by empowering women and accelerating and elevating the trajectories of their careers. A January 2019 study published by the National Academy of Sciences shows that women with a large, female centric inner circle have expected job placement levels that are 2.5x greater than those who don’t have such networks. Chief is a private network designed specifically for senior female leaders — VP-level through CEO — to strengthen their journey into the C-suite and keep them there. For organizations committed to gender parity, Chief can play an important role in helping these companies attract,"
     },
     {
-      "id": "check-page-f3e990c6d0",
-      "url": "https://www.generalcatalyst.com/stories/our-investment-in-birches-health",
+      "id": "check-page-f9c1e23004",
+      "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
       "page": "terms",
-      "excerpt": "Our Investment in Birches Health Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Birches Health Chris Bischoff Reva Nohria September 16, 2025 Example H2 Example H3 Gambling addiction is surging, and the systems to support affected individuals are lagging. Legal sports betting has exploded across the U.S., with Americans expected to have placed nearly $1.5 billion in legal bets on this year’s Super Bowl. The ripple effects are already visible: in Arizona, regulators report sharp increases in calls to problem-gambling hotlines since legalization, as monthly betting volumes hit record highs. Public health experts now warn that online gambling is an imminent public health emergency that demands urgent, systemic solutions. Yet for most people who need help, the choices remain limited: a hotline, a peer group, or an unspecialized therapy platform that isn’t designed for the compulsive and high-acuity nature of gambling addiction. That is why we led the seed round for Birches Health and are now reaffirming our belief in their $10M Series A. Birches Health is building a health assurance model for gambling addiction: proactive,"
+      "excerpt": "Our Investment in Eleanor Health Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Eleanor Health April 8, 2022 Example H2 Example H3 It’s hard to ignore the harrowing statistics on the deteriorating state of mental health across the country. With over 40M Americans from all walks of life struggling from addiction and serious mental illness and only 1 in 10 people seeking treatment, this crisis is more than numbers in a headline – it touches us all (1). At General Catalyst we believe there is a tremendous opportunity to humanize these illnesses and show that recovery is possible with compassionate, evidence-based care. For this reason, we are pleased to announce our Series C investment in Eleanor Health, a provider specializing in addressing the unique complexities of individuals and populations with addiction and severe mental illness. Eleanor delivers in-person and virtual care in a deeply personalized and humane manner, rooted in harm-reduction . By meeting people where they are, Eleanor’s approach opens the door for people to receive care who otherwise wouldn’t seek help or respond well to traditional methods of"
     }
   ],
   "findings": {
@@ -320,16 +299,7 @@
         "evidenceId": "check-duration-6ada13cefe"
       }
     ],
-    "format": [
-      {
-        "value": "hybrid",
-        "evidenceId": "check-format-00226fd3f5"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-fc4d53cad7"
-      }
-    ],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [],

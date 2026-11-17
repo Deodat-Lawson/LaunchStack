@@ -1,6 +1,6 @@
 {
   "programId": "clean-energy-trust",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://evergreeninno.org/",
     "https://evergreeninno.org/apply",
@@ -39,24 +39,10 @@
       "page": "details"
     },
     {
-      "id": "check-deal-eb1caed3f6",
-      "url": "https://evergreeninno.org/explore/article/2017-cet-challenge-application-launch",
-      "title": "Clean Energy Trust — application page",
-      "excerpt": "that Evergreen Climate Innovations is committing to invest up to $1M in early stage cleantech companies. Entrepreneurs and researchers",
-      "page": "application"
-    },
-    {
       "id": "check-format-2a50a4080c",
       "url": "https://evergreeninno.org/senior-investment-analyst",
       "title": "Clean Energy Trust — terms page",
       "excerpt": "Chicago office and work takes place in an office and remote environment Some travel will be required FLSA Exempt To",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-2c8cd4762d",
-      "url": "https://evergreeninno.org/events/november-18-spring-investment-cycle-information-session",
-      "title": "Clean Energy Trust — terms page",
-      "excerpt": "Thursday, November 18, 3:00 pm - November 18, 4:00 pm | Virtual Watch a recording of this past event here Learn about",
       "page": "terms"
     },
     {
@@ -65,13 +51,6 @@
       "title": "Clean Energy Trust — program page",
       "excerpt": "and small businesses via tailored accelerator programs, virtual and in-person events, sector-specific curriculum,",
       "page": "details"
-    },
-    {
-      "id": "check-format-c7ab4856ac",
-      "url": "https://evergreeninno.org/events/fall-2026-investment-cycle-info-session",
-      "title": "Clean Energy Trust — terms page",
-      "excerpt": "Session Thursday, July 30, 1:00 pm - July 30, 2:00 pm | Virtual Join Us Evergreen Climate Innovations is accepting",
-      "page": "terms"
     },
     {
       "id": "check-name-0525fbb2c0",
@@ -875,10 +854,6 @@
       {
         "value": "Climate Innovation’s 501vc® Investment Fund invests $200k – $300k in early-stage climate tech startups in the Greater Midwest region",
         "evidenceId": "check-deal-cd170ccaf7"
-      },
-      {
-        "value": "that Evergreen Climate Innovations is committing to invest up to $1M in early stage cleantech companies. Entrepreneurs and researchers",
-        "evidenceId": "check-deal-eb1caed3f6"
       }
     ],
     "dealComponents": [
@@ -905,18 +880,6 @@
           "condition": null
         },
         "evidenceId": "check-deal-cd170ccaf7"
-      },
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "1000000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-eb1caed3f6"
       }
     ],
     "portfolioPages": [

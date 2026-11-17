@@ -1,12 +1,8 @@
 {
   "programId": "seedstars",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.seedstars.com/",
-    "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-    "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-    "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-    "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
     "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/",
     "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/agrovine-engineering/",
     "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/aquafarms-africa/",
@@ -21,23 +17,13 @@
     "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/moja-ride/",
     "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/pickmeup-technologies-inc/",
     "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/plugngrow/",
-    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/powerlive-zimbabwe/"
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/powerlive-zimbabwe/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/routemasters/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/rural-farmers-hub/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solar-e-cycles-kenya-ltd/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solaristique-nigeria/"
   ],
   "evidence": [
-    {
-      "id": "check-announced-ac71e8fb26",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "title": "Seedstars — application page",
-      "excerpt": "service to evaluate the applications submitted. Important dates The deadline for submitting projects will be from August 28 to October 13, 2023 at 23:59 hours Colombia time. The review of",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-f1f478f278",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "title": "Seedstars — application page",
-      "excerpt": "the name of the best startup from emerging markets who will get USD 500,000 in investment and the title of the Global Winner 2020/21. « As the",
-      "page": "application"
-    },
     {
       "id": "check-duration-6ff9635e60",
       "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/",
@@ -46,25 +32,11 @@
       "page": "terms"
     },
     {
-      "id": "check-duration-7554494657",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "title": "Seedstars — application page",
-      "excerpt": "in January 2023 and will last between 3 and 6 months. The first winning proposal will receive a",
-      "page": "application"
-    },
-    {
       "id": "check-format-1e8cc3e667",
       "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/kitovu-technology-company/",
       "title": "Seedstars — terms page",
       "excerpt": "through our own developed digital platform that applies remote sensing and data science. Check our website or Get in",
       "page": "terms"
-    },
-    {
-      "id": "check-format-67b04d6e32",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "title": "Seedstars — application page",
-      "excerpt": "proposals will have the opportunity to participate in a virtual workshop on how to develop gender-sensitive fintech",
-      "page": "application"
     },
     {
       "id": "check-format-b3ee96fc1f",
@@ -100,20 +72,6 @@
       "title": "Seedstars — homepage",
       "excerpt": "https://www.seedstars.com/",
       "page": "details"
-    },
-    {
-      "id": "check-status-071265b156",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "title": "Seedstars — application page",
-      "excerpt": "Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Seedstars | Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Skip to main content",
-      "page": "application"
-    },
-    {
-      "id": "check-status-fe488ff130",
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "title": "Seedstars — application page",
-      "excerpt": "The 2020 Migration Challenge Call for Applications is Now Open Seedstars | The 2020 Migration Challenge Call for Applications is Now Open Skip to main content x About",
-      "page": "application"
     }
   ],
   "pageQuotes": [
@@ -194,288 +152,6 @@
       "url": "https://www.seedstars.com/",
       "page": "details",
       "excerpt": "20, 2021 CENTRAL AND EASTERN EUROPE • INVESTMENT How to support impact investment in CEE and what chess to do with it | Olena Boytsun Olena leads Luminate's funding activities in Central and Eastern Europe, including Ukraine, Georgia, and the Baltics."
-    },
-    {
-      "id": "check-page-88a4582d3a",
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "page": "application",
-      "excerpt": "The 2020 Migration Challenge Call for Applications is Now Open Seedstars | The 2020 Migration Challenge Call for Applications is Now Open Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME RESOURCES NEWSROOM THE 2020 MIGRATION CHALLENGE CALL FOR APPLICATIONS IS NOW OPEN GLOBAL • ECOSYSTEM ENABLER & INVESTMENT The 2020 Migration Challenge Call for Applications is Now Open Seedstars Global JULY 13, 2020 Seedstars , in partnership with the International Organisation of Employers (IOE) and the Business Advisory Group on Migration , is to"
-    },
-    {
-      "id": "check-page-c3a852e3cb",
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "page": "application",
-      "excerpt": "That’s why we partnered with IOE and the Business Advisory Group on Migration to give impact-driven start-ups opportunities for more innovation to arise."
-    },
-    {
-      "id": "check-page-86f3dee44a",
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "page": "application",
-      "excerpt": "This year, the Migration Challenge is set to bring select and bring 20 start-ups to the 13th GFMD Summit and Tech Garden (Dubai) happening in January 2021, where the grand winner will participate in the global Seedstars Summit 2021 and will have access to the three-month Seedstars Investment Readiness Mentorship."
-    },
-    {
-      "id": "check-page-f16c1dc722",
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "page": "application",
-      "excerpt": "Qualified participants must offer solutions in any of the following fields: FinTech HR Tech CivicTech EdTech AgriTech Remittance other migration-related services."
-    },
-    {
-      "id": "check-page-6d34b92328",
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "page": "application",
-      "excerpt": "NEWS / BLOGPOST GLOBAL SWITZERLAND ECOSYSTEM ENABLER INVESTMENT AGRITECH CIVICTECH EDTECH FINTECH More like this GLOBAL • FINANCIAL SERVICES How to Raise $1.2m in Funding (Mesfix Case) As Mesfix raised its latest round of $1.2million, Seedstars wanted to get back in touch with Felipe Tascon, co-founder and CEO of Mesfix, and get the inside scoop!"
-    },
-    {
-      "id": "check-page-755d12d626",
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "page": "application",
-      "excerpt": "26, 2020 GLOBAL • EDUCATION & CONSULTING The Eight Startups That Made it to the Seedstars Growth Program Batch #6 At Seedstars, we believe in the power of entrepreneurship to address the most critical global issues and help build a sustainable future, especially during such turbulent times the world today is currently experiencing."
-    },
-    {
-      "id": "check-page-fa7cd80e6e",
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "page": "application",
-      "excerpt": "14, 2020 AFRICA • FINANCIAL SERVICES Fintech Nala wins Seedstars Dar es Salaam, confirms Y-Combinator selection Tanzanian fintech Nala was yesterday selected as the winner of this year’s Seedstars Dar es Salaam, at a pitching event in Tanzania’s capital."
-    },
-    {
-      "id": "check-page-bc6481a24a",
-      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
-      "page": "application",
-      "excerpt": "09, 2019 LATIN AMERICA • FINANCIAL SERVICES RedCapital: Fostering Growth of Small Businesses in Latam Through Crowdlending RedCapital is a leading crowdlending platform for small business loans in Chile and Peru."
-    },
-    {
-      "id": "check-page-790a534037",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Call for applications for the Financial Inclusion Lab 2022 powered by the Development Bank of Latin America (CAF) Seedstars | Call for applications for the Financial Inclusion Lab 2022 powered by the Development Bank of Latin America (CAF) Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME RESOURCES NEWSROOM CALL FOR APPLICATIONS FOR THE FINANCIAL INCLUSION LAB 2022 POWERED BY THE DEVELOPMENT BANK OF LATIN AMERICA (CAF) LATAM • FINANCIAL Call for applications for the Financial Inclusion Lab 2022 powered by the Development Bank of Latin"
-    },
-    {
-      "id": "check-page-238d9041a3",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Solutions with a govtech approach that have as part of the proposal a clear collaboration between the public sector, startups and digital MSMEs."
-    },
-    {
-      "id": "check-page-574a1afe2c",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Funding and acceleration The initiatives presented at LIF 2022 (apply here ) will have a wide variety of funding and acceleration possibilities, among which the following stand out: Prizes for the 10 winners of LIF 2022: The 10 winning proposals will participate in Endeavor or Seedstars accelerator programs, which will start in January 2023 and will last between 3 and 6 months."
-    },
-    {
-      "id": "check-page-4122f263ac",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "The two highest scoring proposals from Panama will receive seed capital from AMPYME - Panama according to the conditions of the institution."
-    },
-    {
-      "id": "check-page-bbc2931d72",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Prizes for LIF 2022 finalists: All finalist proposals will have the opportunity to participate in a virtual workshop on how to develop gender-sensitive fintech organized by the Financial Alliance for Women."
-    },
-    {
-      "id": "check-page-321463fc9c",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "The Seedstars Mentoring Hub will offer the option to access of 2 hours of consulting, which will allow them to connect with mentors in the region."
-    },
-    {
-      "id": "check-page-736b597ae4",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Important dates The deadline for submission of projects will be from July 25 to September 9, 2022 at 23:59 hours Colombia time."
-    },
-    {
-      "id": "check-page-2b8ada389e",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Partners Accelerators: Endeavor and Seedstars ."
-    },
-    {
-      "id": "check-page-cb0967aa16",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Regional partners: UNDP, FinEquityALC, UN Women, Financial Alliance for Women, Felaban, Red Iberoamericana de Mujeres en Fintech (WeFintech), FintechU."
-    },
-    {
-      "id": "check-page-8dfd36dc0d",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Partners by country: Argentina: Banco Ciudad, Banco Central de Argentina, Cámara Argentina de Fintech, Fundación Flor, Resiliencia SGR, Coordinadora de la Mujer."
-    },
-    {
-      "id": "check-page-efc9d3c626",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Brazil: Central Bank of Brazil Chile: Banco Estado, Fintech Association, BCI Chile."
-    },
-    {
-      "id": "check-page-c97368e9de",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Colombia: Colombian Banking Association, Bogota Chamber of Commerce, Colombia Fintech."
-    },
-    {
-      "id": "check-page-8e06836f7c",
-      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
-      "page": "application",
-      "excerpt": "Mexico: National Banking and Securities Commission of Mexico, Inmujeres, Ministry of Finance of Mexico."
-    },
-    {
-      "id": "check-page-da21323881",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "Open Applications for: CAF's Financial Inclusion Lab 2023 Seedstars | Open Applications for: CAF's Financial Inclusion Lab 2023 Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME RESOURCES NEWSROOM OPEN APPLICATIONS FOR: CAF'S FINANCIAL INCLUSION LAB 2023 LATAM • FINANCIAL SERVICES Open Applications for: CAF's Financial Inclusion Lab 2023 Seedstars Global AUGUST 29, 2023 This year's edition is aimed at startups from all member countries of CAF -development bank of Latin America- with innovative technological solutions that contribute to"
-    },
-    {
-      "id": "check-page-de7c31e205",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "CAF is organizing the fourth edition of the Financial Inclusion Lab (LIF 2023), an initiative that seeks to support and promote the Fintech ecosystem and this year is looking for technological solutions that are contributing to the inclusion and strengthening of financial capabilities of migrant populations in Latin America and the Caribbean."
-    },
-    {
-      "id": "check-page-22213204fa",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "LIF 2023 has the following three categories: Solutions to improve the financial and digital education and capabilities of migrants."
-    },
-    {
-      "id": "check-page-836aac1fc7",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "Important dates The deadline for submitting projects will be from August 28 to October 13, 2023 at 23:59 hours Colombia time."
-    },
-    {
-      "id": "check-page-8295adcb27",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "Aceleradoras: Endeavor y Seedstars."
-    },
-    {
-      "id": "check-page-9ae9ab2c30",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "República Dominicana : Banco Central de República Dominicana, Ministerio De Industria, Comercio Y MiPymes de República Dominicana, Nader Enterprises y Pa'Lante Dominicana, Venture.do, Agrega Partners, Adofintech - Asociación Dominicana de Fintech Trinidad y Tobago : TTIFC Uruguay : Banco Central del Uruguay, Centro Ithaka de Emprendimientos e Innovación, Banco República Uruguay."
-    },
-    {
-      "id": "check-page-bcf2ead030",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "NEWS / BLOGPOST LATIN AMERICA FINANCIAL SERVICES More like this MIDDLE EAST AND NORTH AFRICA • Turkey's founders move from phones to factories Aug."
-    },
-    {
-      "id": "check-page-c7751e3b7c",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "03, 2026 MIDDLE EAST AND NORTH AFRICA • Building a Resilient Tech Ecosystem in the West Bank and Gaza Jun."
-    },
-    {
-      "id": "check-page-dfa97647ab",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "09, 2026 CENTRAL AND EASTERN EUROPE • Why Moldova’s best startups look global from day one Some Moldovan startups register a company in Estonia before they ever talk to an investor."
-    },
-    {
-      "id": "check-page-23257c2d06",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "23, 2026 CENTRAL AND EASTERN EUROPE • Building under pressure: how Palestine’s startup ecosystem is learning to scale Founders in the West Bank and Gaza build in fragments."
-    },
-    {
-      "id": "check-page-40958374a7",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "12, 2025 CENTRAL AND EASTERN EUROPE • How Morocco is turning steady signals into a real startup story Morocco’s startup ecosystem is finding its rhythm."
-    },
-    {
-      "id": "check-page-1af87ed572",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "Startups in the country raised around 70 million USD across 40 deals in 2024 - almost double the previous year, according to Africa: The Oct."
-    },
-    {
-      "id": "check-page-37841007ab",
-      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
-      "page": "application",
-      "excerpt": "12, 2025 CENTRAL AND EASTERN EUROPE • These 12 Jordanian startups are solving problems across the Arab world Jordan has positioned itself as one of the Middle East's most efficient startup ecosystems."
-    },
-    {
-      "id": "check-page-6f43752d45",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Seedstars | Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME RESOURCES NEWSROOM SEEDSTARS BRINGS ITS STARTUP COMPETITION ONLINE: 2020 APPLICATIONS ARE OPEN GLOBAL • INVESTMENT Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Seedstars Global JUNE 25, 2020 We are happy to announce that Seedstars World Competition 2020/21 will be held exclusively online and the"
-    },
-    {
-      "id": "check-page-d96e07011d",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "Seedstars is often defined as an investor, an accelerator, an entrepreneur and a startup competition."
-    },
-    {
-      "id": "check-page-58512226b7",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "Our goal is to identify and empower the most innovative startups around the world, by providing the means to share entrepreneurial education and investment."
-    },
-    {
-      "id": "check-page-cf92368f8f",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "NEWS / BLOGPOST SEEDSTARS WORLD 2019/20 GLOBAL SWITZERLAND INVESTMENT ACCELERATORS & INCUBATORS EVENTS TECH INVESTMENT TECH More like this MIDDLE EAST AND NORTH AFRICA • INVESTMENT How Kenza Traveled the World to Find Her Calling and Started an African VC Fund | Kenza Lahlou Kenza was born in Morocco, but has quite a rich international experience: from France and Singapore, all the way to the USA."
-    },
-    {
-      "id": "check-page-05539be7f3",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "15, 2020 CENTRAL AND EASTERN EUROPE • INVESTMENT Winning Marathons and Advising Billionaire Impact Investors | Tenke Zoltani From a Hungarian refugee family who emigrated to the United States, Tenke Zoltani is running fast as part of the Hungarian national running team."
-    },
-    {
-      "id": "check-page-2d0373dedb",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "03, 2020 MIDDLE EAST AND NORTH AFRICA • ECOSYSTEM ENABLER 7 Early-Stage startups from MENA Won Their Tickets to the global Seedstars Summit 2020 The Seedstars World Competition 2019 in MENA has come to an end during the latest edition of Seedstars Summit MENA 2019 in Morocco that took place from December 10 to 12."
-    },
-    {
-      "id": "check-page-3b28bb65ea",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "20, 2019 AFRICA • ECOSYSTEM ENABLER 10 Startups from Africa to Compete for 500,000 USD During Seedstars Summit Africa 2019 in Johannesburg, South Africa, Seedstars selected 10 the most promising startups from the continent that proved their ideas to be innovative and scalable."
-    },
-    {
-      "id": "check-page-1da5f90bc0",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "15, 2019 CENTRAL AND EASTERN EUROPE • INVESTMENT From Latvia to Mongolia: Seedstars Summit CEE United 25 Countries in the Region What did the Seedstars Summit CEE 2019 in Kazakhstan, Nur-Sultan bring to the community this year?"
-    },
-    {
-      "id": "check-page-d58a2307d9",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "03, 2019 CENTRAL AND EASTERN EUROPE • ECOSYSTEM ENABLER Seedstars Summit CEE Will Gather 100+ Founders From 20 Countries Under One Roof Kazakhstan, November 22."
-    },
-    {
-      "id": "check-page-21d6071567",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "30, 2019 LATIN AMERICA • ECOSYSTEM ENABLER Seedstars World Is Coming Back to Latam for Its 7th Edition with 18 Cities on the Map The 7th edition of the Seedstars World Tour , the largest early-stage startup competition for emerging markets, will be launched on the 27th of June in Lima, Peru."
-    },
-    {
-      "id": "check-page-6070d76f44",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "06, 2019 LATIN AMERICA • INVESTMENT Seedstars Latam Summit 2018: Sum Up of What You've Missed 3 days, 350 attendees, 34 investors, 20 startups from 12countries; 200 1:1 meetings between investors and entrepreneurs; plus thousands of interactions and new connections!"
-    },
-    {
-      "id": "check-page-139a2592c5",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "17, 2018 MIDDLE EAST AND NORTH AFRICA • INVESTMENT Highlights of Seedstars MENA Summit 2018 3 days, 351 attendees, 45 investors, 119 startup founders, 21 countries represented, 303 one-on-one meetings, thousands of ground-breaking ideas — the Seedstars MENA Summit numbers are impressive, but it goes beyond the numbers."
-    },
-    {
-      "id": "check-page-97abfc2404",
-      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
-      "page": "application",
-      "excerpt": "12, 2018 ASIA • INVESTMENT Korea: Asia’s upcoming startup capital opens doors to global startups Korea can stake a legitimate claim to be one of Asia’s most promising startup hubs."
     },
     {
       "id": "check-page-1a7640d2df",
@@ -812,6 +488,84 @@
       "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/powerlive-zimbabwe/",
       "page": "terms",
       "excerpt": "We are providing accessible and affordable clean solar energy for both domestic and productive use."
+    },
+    {
+      "id": "check-page-42daf90c70",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/routemasters/",
+      "page": "terms",
+      "excerpt": "Routemasters Seedstars | Routemasters Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM ROUTEMASTERS Routemasters Problem we are solving Public transport in emerging African cities is undergoing acute pressure due to a growing population, which is set to double to 2 billion by the year 2050, and rapid urbanization that is constraining mobility. At present, public transport systems are largely chaotic, unorganized and commuters are"
+    },
+    {
+      "id": "check-page-c69568c4fc",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/routemasters/",
+      "page": "terms",
+      "excerpt": "At present, public transport systems are largely chaotic, unorganized and commuters are in need of mobility solutions to navigate their cities."
+    },
+    {
+      "id": "check-page-5912e1dae9",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/routemasters/",
+      "page": "terms",
+      "excerpt": "Solution Using unique algorithms to help users plan and navigate public transport journeys in emerging cities, Routemasters is mapping and optimizing transportation systems for the public good; creating applications designed to help commuters navigate their public transport systems while supporting businesses and decision makers with insights to grow their economy."
+    },
+    {
+      "id": "check-page-d835ec10c2",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/rural-farmers-hub/",
+      "page": "terms",
+      "excerpt": "Rural Farmers Hub Seedstars | Rural Farmers Hub Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM RURAL FARMERS HUB Rural Farmers Hub Problem we are solving Farmers in Africa today are producing less food than they did 3 decades ago! This is shocking, especially when you consider that they have steadily expanded the size of their farms. Reasons for this include over-cultivation of land without rotation that may have led to severe"
+    },
+    {
+      "id": "check-page-07fcee6486",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/rural-farmers-hub/",
+      "page": "terms",
+      "excerpt": "This is further compounded by farmer’s lack of resilience to climate change."
+    },
+    {
+      "id": "check-page-c06088d6e8",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/rural-farmers-hub/",
+      "page": "terms",
+      "excerpt": "Capture™ process satellite data using a proprietary algorithm to auto-generate personalized recommendations for improving soil/crop health."
+    },
+    {
+      "id": "check-page-f8f2ad785d",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solar-e-cycles-kenya-ltd/",
+      "page": "terms",
+      "excerpt": "Solar e-Cycles Kenya Ltd Seedstars | Solar e-Cycles Kenya Ltd Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM SOLAR E-CYCLES KENYA LTD Solar e-Cycles Kenya Ltd Problem we are solving 30 million motorcycles are imported to the continent yearly adding 4 tons of CO2 each per year in Africa. In addition, 36% of food is wasted between farm and fork; 20% of which happens due to of lack of cold chain. Further exacerbating this problem,"
+    },
+    {
+      "id": "check-page-7749973c9a",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solar-e-cycles-kenya-ltd/",
+      "page": "terms",
+      "excerpt": "Solution We bring together solar power, e-mobility and the internet to deliver solutions that create jobs, and increase productivity while at the same time protecting the environment."
+    },
+    {
+      "id": "check-page-182f2a13a7",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solar-e-cycles-kenya-ltd/",
+      "page": "terms",
+      "excerpt": "Our solar powered e-mobility targets high value transportation segments maximizing productivity and lowering costs."
+    },
+    {
+      "id": "check-page-29125cf30e",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solar-e-cycles-kenya-ltd/",
+      "page": "terms",
+      "excerpt": "We are currently replicating the business model across Africa using technology: IoT, GPS, GSM, and mobile money on a solar powered electric cargo tricycle."
+    },
+    {
+      "id": "check-page-91e94bfaa4",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solaristique-nigeria/",
+      "page": "terms",
+      "excerpt": "Solaristique Nigeria Seedstars | Solaristique Nigeria Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM SOLARISTIQUE NIGERIA Solaristique Nigeria Problem we are solving In Sub-Saharan Africa, not only individual homes, but also pharmacies, hotels, restaurants, bars, etc. lack access to cold storage. This leads to a large amount of food and beverage waste, and makes it difficult for pharmacies to maintain critical drugs and samples"
+    },
+    {
+      "id": "check-page-9684277502",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solaristique-nigeria/",
+      "page": "terms",
+      "excerpt": "Solution Solaristique recycles old refrigerators into solar refrigerators with IoT and MIS for SMEs, households, and farmers."
+    },
+    {
+      "id": "check-page-9acff3a1a4",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/solaristique-nigeria/",
+      "page": "terms",
+      "excerpt": "Our solar refrigerators are made for off-grid application, are 90% cheaper in operating costs, and provide refrigeration services 24/7."
     }
   ],
   "findings": {
@@ -829,27 +583,13 @@
         "evidenceId": "check-route-5ae1450820"
       }
     ],
-    "applicationsOpen": [
-      {
-        "value": true,
-        "evidenceId": "check-status-fe488ff130"
-      }
-    ],
+    "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
     "rolling": [],
-    "announcedIntake": [
-      {
-        "value": "August",
-        "evidenceId": "check-announced-ac71e8fb26"
-      }
-    ],
+    "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [
-      {
-        "value": "6 months",
-        "evidenceId": "check-duration-7554494657"
-      },
       {
         "value": "3 months",
         "evidenceId": "check-duration-6ff9635e60"
@@ -858,31 +598,13 @@
     "format": [
       {
         "value": "remote",
-        "evidenceId": "check-format-67b04d6e32"
+        "evidenceId": "check-format-f46bcad0dd"
       }
     ],
     "location": [],
     "selectivity": [],
-    "dealText": [
-      {
-        "value": "the name of the best startup from emerging markets who will get USD 500,000 in investment and the title of the Global Winner 2020/21. « As the",
-        "evidenceId": "check-deal-f1f478f278"
-      }
-    ],
-    "dealComponents": [
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "500000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-f1f478f278"
-      }
-    ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

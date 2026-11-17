@@ -1,6 +1,6 @@
 {
   "programId": "connect-ventures",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.connectventures.co/",
     "https://www.connectventures.co/opinions/investment-decisions-at-connect",
@@ -58,13 +58,6 @@
       "title": "Connect Ventures — terms page",
       "excerpt": "fundraising process) this can take anything from 1 week to 1 month. Once this high conviction threshold",
       "page": "terms"
-    },
-    {
-      "id": "check-format-820b0724dc",
-      "url": "https://www.connectventures.co/companies",
-      "title": "Connect Ventures — portfolio page",
-      "excerpt": "Retired Geo Belgium Croatia Denmark Finland France Fully Remote Germany Ireland Italy Latvia Netherlands Northern Ireland",
-      "page": "portfolio"
     },
     {
       "id": "check-format-ce856b8ccd",
@@ -511,10 +504,6 @@
       {
         "value": "in-person",
         "evidenceId": "check-format-ce856b8ccd"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-820b0724dc"
       }
     ],
     "location": [],

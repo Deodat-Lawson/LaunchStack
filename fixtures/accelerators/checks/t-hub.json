@@ -1,6 +1,6 @@
 {
   "programId": "t-hub",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.t-hub.co/",
     "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
@@ -16,12 +16,12 @@
     "https://www.t-hub.co/aws-space-accelerator-india",
     "https://www.t-hub.co/blogs/unleashing-innovation-t--hubs-semiconductor-incubation-program",
     "https://www.t-hub.co/care-social-business-accelerator-program",
-    "https://www.t-hub.co/case-studies/aws-space-accelerator-case-study",
-    "https://www.t-hub.co/case-studies/kotak-bizlabs-accelerator",
-    "https://www.t-hub.co/case-studies/mercedes-benz-climate-tech-incubator-launchpad-program",
-    "https://www.t-hub.co/case-studies/startup-catalyst-program-t-hub-hexagon",
     "https://www.t-hub.co/corporate",
-    "https://www.t-hub.co/digital-india-scale-up-program"
+    "https://www.t-hub.co/digital-india-scale-up-program",
+    "https://www.t-hub.co/fintech-innovation-accelerator",
+    "https://www.t-hub.co/global-springboard-programme",
+    "https://www.t-hub.co/india-innovation-accelerator",
+    "https://www.t-hub.co/india-market-access-program"
   ],
   "evidence": [
     {
@@ -86,13 +86,6 @@
       "title": "T-Hub — application page",
       "excerpt": "the MBRDI team and industry experts across the 12-week program. Maker lab access: 3D printing,",
       "page": "application"
-    },
-    {
-      "id": "check-duration-c75bed8ae9",
-      "url": "https://www.t-hub.co/case-studies/aws-space-accelerator-case-study",
-      "title": "T-Hub — program page",
-      "excerpt": "Contact AWS space accelerator Case study A 14-week program designed for startups to enable their",
-      "page": "details"
     },
     {
       "id": "check-format-3f1c9c4711",
@@ -200,13 +193,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-4d0962d33c",
-      "url": "https://www.t-hub.co/case-studies/kotak-bizlabs-accelerator",
-      "title": "T-Hub — program page",
-      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
-      "page": "details"
-    },
-    {
       "id": "check-portfolio-4f94d3f016",
       "url": "https://www.t-hub.co/blogs/unleashing-innovation-t--hubs-semiconductor-incubation-program",
       "title": "T-Hub — program page",
@@ -218,27 +204,6 @@
       "url": "https://www.t-hub.co/blogs/unleashing-innovation-t--hubs-semiconductor-incubation-program",
       "title": "T-Hub — program page",
       "excerpt": "Startups → https://www.t-hub.co/startups",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-64e9d3e645",
-      "url": "https://www.t-hub.co/case-studies/aws-space-accelerator-case-study",
-      "title": "T-Hub — program page",
-      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-6c989cdf14",
-      "url": "https://www.t-hub.co/case-studies/mercedes-benz-climate-tech-incubator-launchpad-program",
-      "title": "T-Hub — program page",
-      "excerpt": "Startups → https://www.t-hub.co/startups",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-731f66f099",
-      "url": "https://www.t-hub.co/case-studies/startup-catalyst-program-t-hub-hexagon",
-      "title": "T-Hub — program page",
-      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
       "page": "details"
     },
     {
@@ -270,27 +235,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-b78ee821d0",
-      "url": "https://www.t-hub.co/case-studies/startup-catalyst-program-t-hub-hexagon",
-      "title": "T-Hub — program page",
-      "excerpt": "Startups → https://www.t-hub.co/startups",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-c560732e0c",
-      "url": "https://www.t-hub.co/case-studies/mercedes-benz-climate-tech-incubator-launchpad-program",
-      "title": "T-Hub — program page",
-      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-d954cb4f9d",
-      "url": "https://www.t-hub.co/case-studies/aws-space-accelerator-case-study",
-      "title": "T-Hub — program page",
-      "excerpt": "Startups → https://www.t-hub.co/startups",
-      "page": "details"
-    },
-    {
       "id": "check-portfolio-d968408f20",
       "url": "https://www.t-hub.co/about-us",
       "title": "T-Hub — program page",
@@ -302,13 +246,6 @@
       "url": "https://www.t-hub.co/corporate",
       "title": "T-Hub — program page",
       "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-deba3983e4",
-      "url": "https://www.t-hub.co/case-studies/kotak-bizlabs-accelerator",
-      "title": "T-Hub — program page",
-      "excerpt": "Startups → https://www.t-hub.co/startups",
       "page": "details"
     },
     {
@@ -907,30 +844,6 @@
       "excerpt": "CARE Social Business Accelerator | Impact Startups – T-Hub"
     },
     {
-      "id": "check-page-e1e6c83eee",
-      "url": "https://www.t-hub.co/case-studies/aws-space-accelerator-case-study",
-      "page": "details",
-      "excerpt": "AWS Space Accelerator Case Study | T-Hub About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact AWS space accelerator Case study A 14-week program"
-    },
-    {
-      "id": "check-page-f4892698af",
-      "url": "https://www.t-hub.co/case-studies/kotak-bizlabs-accelerator",
-      "page": "details",
-      "excerpt": "Kotak Biz Labs Accelerator Case Study | T-Hub About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact Kotak Bizlabs Accelerator Enable startups to"
-    },
-    {
-      "id": "check-page-d0d69c2516",
-      "url": "https://www.t-hub.co/case-studies/mercedes-benz-climate-tech-incubator-launchpad-program",
-      "page": "details",
-      "excerpt": "Mercedes-Benz Climate Tech Incubator Launchpad | T-Hub About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact Mercedes Benz – Climate Tech"
-    },
-    {
-      "id": "check-page-59b89678d9",
-      "url": "https://www.t-hub.co/case-studies/startup-catalyst-program-t-hub-hexagon",
-      "page": "details",
-      "excerpt": "Startup Catalyst Program: T-Hub and Hexagon About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact Startup Catalyst Program T-Hub & Hexagon A"
-    },
-    {
       "id": "check-page-d21bb6be8c",
       "url": "https://www.t-hub.co/corporate",
       "page": "details",
@@ -1013,6 +926,30 @@
       "url": "https://www.t-hub.co/digital-india-scale-up-program",
       "page": "details",
       "excerpt": "Digital India Scale Up Program | T-Hub"
+    },
+    {
+      "id": "check-page-f75f90f6e2",
+      "url": "https://www.t-hub.co/fintech-innovation-accelerator",
+      "page": "details",
+      "excerpt": "Fintech Innovation Accelerator | T-Hub"
+    },
+    {
+      "id": "check-page-e7733e5a50",
+      "url": "https://www.t-hub.co/global-springboard-programme",
+      "page": "details",
+      "excerpt": "Global Springboard Programme | Startup Program – T-Hub"
+    },
+    {
+      "id": "check-page-906be3737d",
+      "url": "https://www.t-hub.co/india-innovation-accelerator",
+      "page": "details",
+      "excerpt": "India Innovation Accelerator | T-Hub"
+    },
+    {
+      "id": "check-page-e16c758a88",
+      "url": "https://www.t-hub.co/india-market-access-program",
+      "page": "details",
+      "excerpt": "India Market Access Program | T-Hub"
     }
   ],
   "findings": {
@@ -1072,10 +1009,6 @@
       {
         "value": "15",
         "evidenceId": "check-duration-14307be878"
-      },
-      {
-        "value": "14",
-        "evidenceId": "check-duration-c75bed8ae9"
       }
     ],
     "format": [

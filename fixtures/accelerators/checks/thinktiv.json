@@ -1,19 +1,12 @@
 {
   "programId": "thinktiv",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "http://thinktiv.com",
     "https://www.thinktiv.com/about",
     "https://www.thinktiv.com/blog/coming-to-terms-with-your-ai-competitive-readiness"
   ],
   "evidence": [
-    {
-      "id": "check-duration-2d165b1e0b",
-      "url": "https://www.thinktiv.com/blog/coming-to-terms-with-your-ai-competitive-readiness",
-      "title": "Thinktiv — terms page",
-      "excerpt": "of AI is still relatively early - we’re only 18 months into it. AI software companies are projected to",
-      "page": "terms"
-    },
     {
       "id": "check-duration-fcd05d92ce",
       "url": "http://thinktiv.com",
@@ -107,10 +100,6 @@
       {
         "value": "3 months",
         "evidenceId": "check-duration-fcd05d92ce"
-      },
-      {
-        "value": "18 months",
-        "evidenceId": "check-duration-2d165b1e0b"
       }
     ],
     "format": [],

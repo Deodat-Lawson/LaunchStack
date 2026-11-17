@@ -1,6 +1,6 @@
 {
   "programId": "hub-for-innovation-and-entrepreneurship-nycrin",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.nycinnovationhotspot.org",
     "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
@@ -8,13 +8,6 @@
     "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp"
   ],
   "evidence": [
-    {
-      "id": "check-email-527c4cbdf5",
-      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
-      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
-      "excerpt": "Commercialization For any general inquiries, please email info@nycinnovationhotspot.org Follow us on LinkedIn ! © NYC Innovation Hot Spot, 2026",
-      "page": "portfolio"
-    },
     {
       "id": "check-email-6cdbc0c999",
       "url": "https://www.nycinnovationhotspot.org/post/march-innovation-hot-spot-meeting-showcases-ny-resources-new-companies",
@@ -44,13 +37,6 @@
       "page": "portfolio"
     },
     {
-      "id": "check-email-cfef4c4fa7",
-      "url": "https://www.nycinnovationhotspot.org/post/march-innovation-hot-spot-meeting-showcases-ny-resources-new-companies",
-      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
-      "excerpt": "Commercialization For any general inquiries, please email info@nycinnovationhotspot.org Follow us on LinkedIn ! © NYC Innovation Hot Spot, 2026",
-      "page": "portfolio"
-    },
-    {
       "id": "check-email-facf081637",
       "url": "https://www.nycinnovationhotspot.org/frequently-asked-questions-faq",
       "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — terms page",
@@ -63,27 +49,6 @@
       "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage",
       "excerpt": "info@nycinnovationhotspot.org",
       "page": "details"
-    },
-    {
-      "id": "check-format-aca5b242c3",
-      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
-      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
-      "excerpt": "and coaching on site during the conference, and a final virtual session where each company presented key insights and",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-d4710005a2",
-      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
-      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
-      "excerpt": "take part in the Bootcamp, which included a pre-conference virtual prep session, support and coaching on site during the",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-d757c1b5a0",
-      "url": "https://www.nycinnovationhotspot.org/post/ny-i-corps-alumni-companies-boost-opportunities-with-techconnect-bootcamp",
-      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — portfolio page",
-      "excerpt": "itself were well worth the time and effort. The final virtual Bootcamp session closed with advice and counsel from the",
-      "page": "portfolio"
     },
     {
       "id": "check-location-407672dc0e",
@@ -208,12 +173,7 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-d4710005a2"
-      }
-    ],
+    "format": [],
     "location": [
       {
         "value": "Harlem",

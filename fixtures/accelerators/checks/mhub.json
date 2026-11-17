@@ -1,6 +1,6 @@
 {
   "programId": "mhub",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://mhub.org/",
     "https://mhub.org/apply-to-be-a-member",
@@ -191,13 +191,6 @@
       "page": "details"
     },
     {
-      "id": "check-duration-277ed0de0b",
-      "url": "https://mhub.org/blog/mhub-opens-applications-for-its-2023-medtech-accelerator",
-      "title": "mHUB — application page",
-      "excerpt": "the hardtech innovation center in Chicago. The 6-month accelerator advances demand-driven, novel",
-      "page": "application"
-    },
-    {
       "id": "check-duration-31c5fa9279",
       "url": "https://mhub.org/accelerator",
       "title": "mHUB — program page",
@@ -261,13 +254,6 @@
       "page": "details"
     },
     {
-      "id": "check-duration-88dbf1a8b0",
-      "url": "https://mhub.org/blog/mhub-opens-applications-for-its-2023-medtech-accelerator",
-      "title": "mHUB — application page",
-      "excerpt": "Demand-Driven Medical Device Solutions The next 6-month MedTech accelerator program opens applications",
-      "page": "application"
-    },
-    {
       "id": "check-duration-907b7c4db6",
       "url": "https://mhub.org/sustainable-manufacturing-iiot-accelerator",
       "title": "mHUB — program page",
@@ -287,13 +273,6 @@
       "title": "mHUB — program page",
       "excerpt": "continue to receive support for an additional 18 months of continued mHUB membership and access post",
       "page": "details"
-    },
-    {
-      "id": "check-duration-ae514998dc",
-      "url": "https://mhub.org/blog/mhub-opens-applications-for-its-energytech-accelerator",
-      "title": "mHUB — application page",
-      "excerpt": "May 15 to July 12, with teams inducted into the 6-month accelerator program in September 2023. Invenergy",
-      "page": "application"
     },
     {
       "id": "check-duration-b77c7aed9e",
@@ -338,13 +317,6 @@
       "page": "details"
     },
     {
-      "id": "check-duration-f9e5809642",
-      "url": "https://mhub.org/blog/mhub-opens-applications-for-its-energytech-accelerator",
-      "title": "mHUB — application page",
-      "excerpt": "will be selected to participate in the intensive 6-month acceleration program that includes rapid product",
-      "page": "application"
-    },
-    {
       "id": "check-duration-fe5c0a6590",
       "url": "https://mhub.org/startup-accelerator-faq",
       "title": "mHUB — terms page",
@@ -357,13 +329,6 @@
       "title": "mHUB — program page",
       "excerpt": "as predictive tools, home-based diagnostics, noninvasive remote monitoring and wearables. Connected therapeutic devices",
       "page": "details"
-    },
-    {
-      "id": "check-format-29c20eeaf9",
-      "url": "https://mhub.org/blog/top-industrial-iot-applications",
-      "title": "mHUB — application page",
-      "excerpt": "IoT applications cost effective. The whole space of remote workers requiring instrumentation and toolsets is being",
-      "page": "application"
     },
     {
       "id": "check-format-40a05be7f1",
@@ -427,20 +392,6 @@
       "title": "mHUB — program page",
       "excerpt": "startups developing solutions in medicine delivery, remote patient monitoring, wearables, SmartHub solutions, chronic",
       "page": "details"
-    },
-    {
-      "id": "check-location-43f0386098",
-      "url": "https://mhub.org/blog/top-industrial-iot-applications",
-      "title": "mHUB — application page",
-      "excerpt": "mHUB, the hardtech innovation center based in Chicago. Big Ideas , mHUB Accelerator Share",
-      "page": "application"
-    },
-    {
-      "id": "check-location-83cb583c4e",
-      "url": "https://mhub.org/blog/mhub-opens-applications-for-its-energytech-accelerator",
-      "title": "mHUB — application page",
-      "excerpt": "and Asia. Invenergy's home office is located in Chicago, and it has regional development",
-      "page": "application"
     },
     {
       "id": "check-name-f610ce4fe6",
@@ -1515,12 +1466,7 @@
         "evidenceId": "check-format-9bc016544a"
       }
     ],
-    "location": [
-      {
-        "value": "Chicago",
-        "evidenceId": "check-location-83cb583c4e"
-      }
-    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {

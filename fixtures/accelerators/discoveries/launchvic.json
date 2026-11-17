@@ -1,6 +1,6 @@
 {
   "programId": "launchvic",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://launchvic.org/about-the-ecosystem/",
@@ -60,30 +60,6 @@
     },
     {
       "url": "https://launchvic.org/alice-anderson-fund/big-name-investors-join-new-alice-investment-committee/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://launchvic.org/announcements/applications-open-for-basecamp-2026/",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://launchvic.org/announcements/investment-in-artificial-intelligence-is-real-deal-for-victoria/",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://launchvic.org/announcements/snapshot-of-victorian-startup-investment-released/",
       "page": "terms",
       "anchor": "",
       "fetched": true,
@@ -219,10 +195,26 @@
       "origin": "official"
     },
     {
+      "url": "https://launchvic.org/grants/grant-faqs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://launchvic.org/insights/record-investment-fuels-victorias-startup-surge/",
       "page": "terms",
       "anchor": "Read More",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://launchvic.org/investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -270,7 +262,7 @@
       "url": "https://launchvic.org/our-funds/",
       "page": "terms",
       "anchor": "Co-Investment Opportunities",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

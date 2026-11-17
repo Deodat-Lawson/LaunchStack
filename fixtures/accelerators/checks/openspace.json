@@ -1,6 +1,6 @@
 {
   "programId": "openspace",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.openspacecapital.com/",
     "https://www.openspacecapital.com/insights/accelerating-venture-climate-investment-in-southeast-asia",
@@ -8,27 +8,6 @@
     "https://www.openspacecapital.com/insights/openspace-portfolio-companies-on-forbes-asia-100-to-watch-list"
   ],
   "evidence": [
-    {
-      "id": "check-duration-fa1efa0d9e",
-      "url": "https://www.openspacecapital.com/insights/accelerating-venture-climate-investment-in-southeast-asia",
-      "title": "Openspace Ventures — terms page",
-      "excerpt": "Bain & Company. [16] See footnote 1. First 11 months of 2023. [17] European Commission - Emissions",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-9abff9035a",
-      "url": "https://www.openspacecapital.com/companies",
-      "title": "Openspace Ventures — portfolio page",
-      "excerpt": "enabling provider partners to deliver immediate access to virtual cognitive care. READ MORE Nurturing Indonesian agriculture",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-ad14841502",
-      "url": "https://www.openspacecapital.com/companies",
-      "title": "Openspace Ventures — portfolio page",
-      "excerpt": "enabling provider partners to deliver immediate access to virtual cognitive care. READ MORE Largest consumer app in",
-      "page": "portfolio"
-    },
     {
       "id": "check-name-2ca97f5ec3",
       "url": "https://www.openspacecapital.com/",
@@ -126,18 +105,8 @@
     "rolling": [],
     "announcedIntake": [],
     "cohortStarts": [],
-    "durationWeeks": [
-      {
-        "value": "11 months",
-        "evidenceId": "check-duration-fa1efa0d9e"
-      }
-    ],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-9abff9035a"
-      }
-    ],
+    "durationWeeks": [],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [],

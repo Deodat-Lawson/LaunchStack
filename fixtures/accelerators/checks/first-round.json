@@ -1,6 +1,6 @@
 {
   "programId": "first-round",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.firstround.com/",
     "https://firstround.com/at-investment",
@@ -59,13 +59,6 @@
       "title": "First Round — terms page",
       "excerpt": "bring Angel Track cohort members together in an immersive, in-person retreat, so you'll need to be able to attend that. It’s",
       "page": "terms"
-    },
-    {
-      "id": "check-format-405b21acf9",
-      "url": "https://firstround.com/companies/alma",
-      "title": "First Round — portfolio page",
-      "excerpt": "pivot from physical co-practicing spaces to a fully virtual platform: Read Alma's Path to PMF As the VP of Care",
-      "page": "portfolio"
     },
     {
       "id": "check-format-783463cc99",
@@ -678,10 +671,6 @@
       {
         "value": "in-person",
         "evidenceId": "check-format-297fc6d6d5"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-405b21acf9"
       }
     ],
     "location": [],

@@ -1,53 +1,11 @@
 {
   "programId": "lifeline-ventures",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.lifelineventures.com/",
     "https://www.lifelineventures.com/companies/"
   ],
   "evidence": [
-    {
-      "id": "check-format-21b4887263",
-      "url": "https://www.lifelineventures.com/companies/",
-      "title": "Lifeline Ventures — portfolio page",
-      "excerpt": "building tech connectivity is done. Clouder is building virtual cabling technology for commercial real estate to reduce",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-737bebfd2f",
-      "url": "https://www.lifelineventures.com/companies/",
-      "title": "Lifeline Ventures — portfolio page",
-      "excerpt": "Games was an independent Finnish developer that focused on virtual reality games. The company was founded in 2013 by avid",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-b6a972ab47",
-      "url": "https://www.lifelineventures.com/companies/",
-      "title": "Lifeline Ventures — portfolio page",
-      "excerpt": "long time industry experts. Mindfield Games released its virtual reality game P.O.L.L.E.N. in 2016. CEO: Ville Kivistö",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-c7ac852cb2",
-      "url": "https://www.lifelineventures.com/companies/",
-      "title": "Lifeline Ventures — portfolio page",
-      "excerpt": "of experience and a vision of seamlessly merging the virtual and real worlds. The Bionic Display™ in Varjo’s VR devices",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-e5f61c4edd",
-      "url": "https://www.lifelineventures.com/companies/",
-      "title": "Lifeline Ventures — portfolio page",
-      "excerpt": "Founded 2021 Series A Huuva Huuva is the next-generation virtual food court for commercial restaurants looking to optimize",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-location-72086fdde5",
-      "url": "https://www.lifelineventures.com/companies/",
-      "title": "Lifeline Ventures — portfolio page",
-      "excerpt": "is a Finnish quantum hardware company based in Espoo, originating from research at Aalto",
-      "page": "portfolio"
-    },
     {
       "id": "check-name-45efea62d8",
       "url": "https://www.lifelineventures.com/",
@@ -137,18 +95,8 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-21b4887263"
-      }
-    ],
-    "location": [
-      {
-        "value": "Espoo",
-        "evidenceId": "check-location-72086fdde5"
-      }
-    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
     "dealComponents": [],

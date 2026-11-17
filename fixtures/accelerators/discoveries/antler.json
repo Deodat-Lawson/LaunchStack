@@ -1,6 +1,6 @@
 {
   "programId": "antler",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://careers.antler.co/jobs",
@@ -199,14 +199,6 @@
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.antler.co/press-releases/antler-leads-5-1m-pre-seed-funding-for-37-startups-in-sea-targets-investments-in-verticalized-ai-and-industry-4-0",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,6 +1,6 @@
 {
   "programId": "hustle-fund",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.hustlefund.vc/",
     "https://www.hustlefund.vc/angel-squad-investments",
@@ -146,13 +146,6 @@
       "page": "application"
     },
     {
-      "id": "check-duration-306bc78237",
-      "url": "https://www.hustlefund.vc/post/alexis-ohanian-investments-from-reddit-co-founder-to-1b-venture-capital-disruptor",
-      "title": "Hustle Fund — terms page",
-      "excerpt": "window. After co-founding Reddit and selling it 18 months later, Ohanian could have taken the traditional",
-      "page": "terms"
-    },
-    {
       "id": "check-duration-72ad2dd3cf",
       "url": "https://www.hustlefund.vc/",
       "title": "Hustle Fund — homepage",
@@ -192,13 +185,6 @@
       "url": "https://www.hustlefund.vc/squad/investments",
       "title": "Hustle Fund — terms page",
       "excerpt": "the treatment of opioid use disorder with a comprehensive, virtual-first care model. Charter Space Building the first",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-ea7c1532d1",
-      "url": "https://www.hustlefund.vc/post/alexis-ohanian-investments-from-reddit-co-founder-to-1b-venture-capital-disruptor",
-      "title": "Hustle Fund — terms page",
-      "excerpt": "sustainable businesses Future of Work : Tools that help remote and distributed teams collaborate more effectively",
       "page": "terms"
     },
     {
@@ -718,10 +704,6 @@
       {
         "value": "9 months",
         "evidenceId": "check-duration-f8aca0726e"
-      },
-      {
-        "value": "18 months",
-        "evidenceId": "check-duration-306bc78237"
       }
     ],
     "format": [

@@ -1,6 +1,6 @@
 {
   "programId": "dmz",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://dmz.torontomu.ca/about",
@@ -46,7 +46,7 @@
       "url": "https://dmz.torontomu.ca/contact",
       "page": "details",
       "anchor": "Contact us Get in touch to explore programs, partnerships, or opportunities at DMZ.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -54,7 +54,7 @@
       "url": "https://dmz.torontomu.ca/edtech",
       "page": "details",
       "anchor": "Siakam EdTech Engine 12-week accelerator to transform education in classrooms.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -62,7 +62,7 @@
       "url": "https://dmz.torontomu.ca/embark-business-academy",
       "page": "details",
       "anchor": "Embark Business Academy A free career accelerator for students and grads to gain skills and solve real business cases.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -70,7 +70,7 @@
       "url": "https://dmz.torontomu.ca/enterprise",
       "page": "details",
       "anchor": "Enterprise overview Global initiatives to build ecosystems and fuel innovation.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -86,7 +86,7 @@
       "url": "https://dmz.torontomu.ca/incubator",
       "page": "details",
       "anchor": "Incubator 18-month program to scale and become investor-ready.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -102,7 +102,7 @@
       "url": "https://dmz.torontomu.ca/our-programs",
       "page": "details",
       "anchor": "Find your program Discover the program that fits your needs.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -110,7 +110,7 @@
       "url": "https://dmz.torontomu.ca/pre-incubator",
       "page": "details",
       "anchor": "Pre-Incubator 9-month program to get your first customers and sell.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -123,74 +123,10 @@
       "origin": "official"
     },
     {
-      "url": "https://dmz.torontomu.ca/press-releases/dmz-and-ps43-launch-second-siakam-edtech-engine-cohort-expanding-into-youth-upskilling-and-ai",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/press-releases/pascal-siakams-ps43-and-dmz-celebrate-second-siakam-edtech-engine-cohort-with-50-000-awarded-to-startups-rethinking-education-and-ai-learning",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/press-releases/ryerson-university-consolidates-dmz-and-rfi-to-better-serve-and-support-start-ups",
-      "page": "batches",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://dmz.torontomu.ca/skills-academy",
       "page": "details",
       "anchor": "Find your program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

@@ -1,6 +1,6 @@
 {
   "programId": "dallas-entrepreneur-center-dec",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "http://thedec.co/",
     "https://thedec.co/",
@@ -64,13 +64,6 @@
       "page": "details"
     },
     {
-      "id": "check-email-181c0c7222",
-      "url": "https://thedec.co/about/news/",
-      "title": "The Dallas Entrepreneur Center (DEC) — program page",
-      "excerpt": "News – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
-      "page": "details"
-    },
-    {
       "id": "check-email-1a4ff582b3",
       "url": "http://thedec.co/",
       "title": "The Dallas Entrepreneur Center (DEC) — homepage",
@@ -124,20 +117,6 @@
       "url": "https://thedec.co/programs-page-8-13-2026/",
       "title": "The Dallas Entrepreneur Center (DEC) — program page",
       "excerpt": "PROGRAMS – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
-      "page": "details"
-    },
-    {
-      "id": "check-email-5ec71f9c9c",
-      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
-      "title": "The Dallas Entrepreneur Center (DEC) — program page",
-      "excerpt": "investment in the community. Chris Donnell The DEC Network media@thedec.co Women in Tech Upcoming Events Nov 16 All day FunkyTown",
-      "page": "details"
-    },
-    {
-      "id": "check-email-6d11bb3772",
-      "url": "https://thedec.co/about/blog/",
-      "title": "The Dallas Entrepreneur Center (DEC) — program page",
-      "excerpt": "BLOG – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
       "page": "details"
     },
     {
@@ -204,13 +183,6 @@
       "page": "details"
     },
     {
-      "id": "check-email-a6053184af",
-      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
-      "title": "The Dallas Entrepreneur Center (DEC) — program page",
-      "excerpt": "Programming for Women – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
-      "page": "details"
-    },
-    {
       "id": "check-email-d0468287b1",
       "url": "https://thedec.co/about/contact/",
       "title": "The Dallas Entrepreneur Center (DEC) — program page",
@@ -229,20 +201,6 @@
       "url": "https://thedec.co/about/",
       "title": "The Dallas Entrepreneur Center (DEC) — program page",
       "excerpt": "Access: Options ranging from single Day Passes and Virtual Mail Memberships to open-plan hot desking packages.",
-      "page": "details"
-    },
-    {
-      "id": "check-format-2377220379",
-      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
-      "title": "The Dallas Entrepreneur Center (DEC) — program page",
-      "excerpt": "they are confirmed. Join The DEC Network for our inaugural in-person WomenXTech Summit sponsored by Smart Business Concepts!",
-      "page": "details"
-    },
-    {
-      "id": "check-format-6af1f37865",
-      "url": "https://thedec.co/2023/01/30/the-dec-networks-womenxtech-summit-sponsored-by-smart-business-concepts-kicks-off-year-long-programming-for-women/",
-      "title": "The Dallas Entrepreneur Center (DEC) — program page",
-      "excerpt": "Concepts , The DEC Network will host this one-day, in-person summit for women at Smart Business Concepts’ headquarters",
       "page": "details"
     },
     {
@@ -642,10 +600,6 @@
       {
         "value": "hybrid",
         "evidenceId": "check-format-aed60881b9"
-      },
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-6af1f37865"
       }
     ],
     "location": [],

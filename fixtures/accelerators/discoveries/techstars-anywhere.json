@@ -1,37 +1,21 @@
 {
   "programId": "techstars-anywhere",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
+    {
+      "url": "http://techstars.com/faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://apply.techstars.com/",
       "page": "application",
       "anchor": "Apply Today",
       "fetched": false,
       "blocked": "robots",
-      "origin": "official"
-    },
-    {
-      "url": "https://apply.techstars.com/?source=nav&accelerator=northwestern-medicine-healthcare",
-      "page": "application",
-      "anchor": "",
-      "fetched": false,
-      "blocked": "robots",
-      "origin": "official"
-    },
-    {
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F%3Faccelerator%3DABN%2520AMRO%2520%2B%2520Techstars%2520Future%2520of%2520Finance%2520Accelerator%2520&state=bc415185-aeb9-45b6-8546-532279d07fc8&response_mode=fragment&response_type=code&scope=openid&nonce=42139aed-f999-4a19-be84-ca5928523d2a",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=179704cd-ed17-4718-86bc-bf2771ad970d&response_mode=fragment&response_type=code&scope=openid&nonce=6726b776-b008-4a9e-b93f-a913c6713fd7",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
       "origin": "official"
     },
     {
@@ -46,7 +30,7 @@
       "url": "https://www.techstars.com/about",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -54,7 +38,7 @@
       "url": "https://www.techstars.com/accelerator-hub",
       "page": "details",
       "anchor": "Inside an Accelerator",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -62,12 +46,52 @@
       "url": "https://www.techstars.com/accelerators",
       "page": "details",
       "anchor": "Techstars Accelerators",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.techstars.com/accelerators/web3",
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/belfast",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/boston",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/boulder",
       "page": "details",
       "anchor": "",
       "fetched": true,
@@ -147,74 +171,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.techstars.com/newsroom/applications-now-open-for-second-class-of-northwestern-medicine",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/applications-open-2025-accelerator-techstars-torino",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/applications-open-for-techstars-web3-2025",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/applications-open-for-the-2024-edition-of-the-abn-amro-techstars-future-of",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/apply-to-c05-of-the-anjal-z-techstars-founder-catalyst-program",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "page": "terms",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.techstars.com/newsroom/meet-the-startups-joining-techstars-spring-2026-accelerator-programs",
       "page": "details",
       "anchor": "Newsroom 9 March 2026 Meet the Startups Joining Techstars' Spring 2026 Accelerator Programs Read More",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/techstars-launches-applications-for-spring-2025-accelerator-programs",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/techstars-sdsu-fall-2025-application-open",
-      "page": "application",
-      "anchor": "",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -231,6 +191,14 @@
       "page": "portfolio",
       "anchor": "Past Companies",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/startup-community-partnership-terms-and-conditions",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

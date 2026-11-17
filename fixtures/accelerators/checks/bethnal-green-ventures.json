@@ -1,6 +1,6 @@
 {
   "programId": "bethnal-green-ventures",
-  "checkedAt": "2026-11-17T00:20:40.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.bethnalgreenventures.com/",
     "https://bethnalgreenventures.com/apply",
@@ -52,20 +52,6 @@
       "page": "details"
     },
     {
-      "id": "check-deal-4638e0ade4",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "and navigate the next steps in your path to grow. You’ll receive: £60,000 investment in exchange for 7% equity Six weeks of intensive learning",
-      "page": "application"
-    },
-    {
-      "id": "check-deal-69171c3d4f",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "programme for Autumn 2024 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
-      "page": "application"
-    },
-    {
       "id": "check-deal-8a81e68e28",
       "url": "https://bethnalgreenventures.com/our-offer",
       "title": "Bethnal Green Ventures — program page",
@@ -73,24 +59,10 @@
       "page": "details"
     },
     {
-      "id": "check-deal-a8d58f11bd",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "programme for Spring 2026 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
-      "page": "application"
-    },
-    {
       "id": "check-deal-d8102ac5eb",
       "url": "https://bethnalgreenventures.com/apply",
       "title": "Bethnal Green Ventures — application page",
       "excerpt": "you the best start to launching your tech for good venture. We offer £60,000 investment and six weeks of intensive learning for prototype stage",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-0f0a55313b",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "helps you launch your early-stage venture with 6 weeks of intensive learning – the start of every BGV",
       "page": "application"
     },
     {
@@ -115,13 +87,6 @@
       "page": "details"
     },
     {
-      "id": "check-duration-5fb9f3ee9b",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "helps you launch your early-stage venture with 6 weeks of intensive learning – the start of every BGV",
-      "page": "application"
-    },
-    {
       "id": "check-duration-856b3eea80",
       "url": "https://bethnalgreenventures.com/our-offer",
       "title": "Bethnal Green Ventures — program page",
@@ -143,20 +108,6 @@
       "page": "details"
     },
     {
-      "id": "check-format-137236d70f",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "hybrid, with some parts of the programme online and others in-person in central London. The programme will run from 7th October",
-      "page": "application"
-    },
-    {
-      "id": "check-format-1b9f0abfed",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "hybrid, with some parts of the programme online and others in-person in central London. The programme will run from 17th April",
-      "page": "application"
-    },
-    {
       "id": "check-format-34896bcbae",
       "url": "https://www.bethnalgreenventures.com/apply",
       "title": "Bethnal Green Ventures — application page",
@@ -168,13 +119,6 @@
       "url": "http://www.bethnalgreenventures.com/apply",
       "title": "Bethnal Green Ventures — application page",
       "excerpt": "Your team is available to take part in our six-week hybrid programme run online and from our offices in London. Your",
-      "page": "application"
-    },
-    {
-      "id": "check-format-561d309d59",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "the application form. Our Autumn 2024 programme will be hybrid, with some parts of the programme online and others",
       "page": "application"
     },
     {
@@ -220,13 +164,6 @@
       "page": "application"
     },
     {
-      "id": "check-format-d29ed08676",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "the application form. Our Spring 2026 programme will be hybrid, with some parts of the programme online and others",
-      "page": "application"
-    },
-    {
       "id": "check-format-d3bbe01dda",
       "url": "http://www.bethnalgreenventures.com/apply",
       "title": "Bethnal Green Ventures — application page",
@@ -238,13 +175,6 @@
       "url": "https://bethnalgreenventures.com/apply",
       "title": "Bethnal Green Ventures — application page",
       "excerpt": "building and peer learning Coaching from the BGV team In-person talks and social events Followed by investor mentoring ‍",
-      "page": "application"
-    },
-    {
-      "id": "check-format-f6dc381b84",
-      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
-      "title": "Bethnal Green Ventures — application page",
-      "excerpt": "we’d love to hear from you. What’s on offer Our six-week hybrid programme is designed to help founders bring impact to the",
       "page": "application"
     },
     {
@@ -1328,18 +1258,6 @@
       {
         "value": "For Good Programme Helps you launch your early-stage venture with £60,000 of investment (for 7% equity) plus 6 weeks of intensive learning",
         "evidenceId": "check-deal-36853adc2b"
-      },
-      {
-        "value": "and navigate the next steps in your path to grow. You’ll receive: £60,000 investment in exchange for 7% equity Six weeks of intensive learning",
-        "evidenceId": "check-deal-4638e0ade4"
-      },
-      {
-        "value": "programme for Autumn 2024 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
-        "evidenceId": "check-deal-69171c3d4f"
-      },
-      {
-        "value": "programme for Spring 2026 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
-        "evidenceId": "check-deal-a8d58f11bd"
       }
     ],
     "dealComponents": [

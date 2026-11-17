@@ -1,6 +1,6 @@
 {
   "programId": "industrifonden",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://industrifonden.com/",
     "https://industrifonden.com/faq-our-investment-process",
@@ -22,13 +22,6 @@
       "title": "Industrifonden — terms page",
       "excerpt": "from the initial meeting to funding takes 3-6 months. Previous progress updates facilitate the",
       "page": "terms"
-    },
-    {
-      "id": "check-email-0a457f23e2",
-      "url": "https://industrifonden.com/portfolio",
-      "title": "Industrifonden — portfolio page",
-      "excerpt": "Sweden Get directions Phone: +46 8 587 919 00 E-mail: info@industrifonden.com ⓒ 2026 Industrifonden",
-      "page": "portfolio"
     },
     {
       "id": "check-email-0ce88091da",
@@ -64,27 +57,6 @@
       "title": "Industrifonden — homepage",
       "excerpt": "MedTech, and innovative healthcare solutions. Join us in person or online! 22 Feb 2024 Tech Arena 2024 We're gearing up",
       "page": "details"
-    },
-    {
-      "id": "check-format-b2cda17fce",
-      "url": "https://industrifonden.com/portfolio",
-      "title": "Industrifonden — portfolio page",
-      "excerpt": "is a game developer and publisher, building world-class virtual reality games. Founded by game development veterans, the",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-fa7d2f7cf7",
-      "url": "https://industrifonden.com/portfolio",
-      "title": "Industrifonden — portfolio page",
-      "excerpt": "distributing sensitive data for use in the multi-cloud and hybrid-cloud environment, while at the same time reducing",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-location-5060d90946",
-      "url": "https://industrifonden.com/portfolio",
-      "title": "Industrifonden — portfolio page",
-      "excerpt": "insight platform Founded in 2022 and headquartered in Lund, Sweden, TrackPaw Scientific is on a",
-      "page": "portfolio"
     },
     {
       "id": "check-name-79ffda7be7",
@@ -410,22 +382,9 @@
       {
         "value": "in-person",
         "evidenceId": "check-format-29585556e9"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-b2cda17fce"
-      },
-      {
-        "value": "hybrid",
-        "evidenceId": "check-format-fa7d2f7cf7"
       }
     ],
-    "location": [
-      {
-        "value": "Lund",
-        "evidenceId": "check-location-5060d90946"
-      }
-    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {

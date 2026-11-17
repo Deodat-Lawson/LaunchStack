@@ -1,6 +1,6 @@
 {
   "programId": "village-capital",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://vilcap.com/",
     "https://vilcap.com/terms-of-service",
@@ -9,8 +9,6 @@
     "https://vilcap.com/about-us/our-team",
     "https://vilcap.com/eso-programs",
     "https://vilcap.com/impactinvesting",
-    "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-    "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
     "https://vilcap.com/programs",
     "https://vilcap.com/programs/adapt-innovation-for-social-resilience",
     "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
@@ -21,7 +19,9 @@
     "https://vilcap.com/programs/asap-africa-asia",
     "https://vilcap.com/programs/asap-lac",
     "https://vilcap.com/programs/backing-latams-middle-class",
-    "https://vilcap.com/programs/climate-justice-for-migrants-and-communities-of-color-2023"
+    "https://vilcap.com/programs/climate-justice-for-migrants-and-communities-of-color-2023",
+    "https://vilcap.com/programs/colombian-ecosystem-builders",
+    "https://vilcap.com/programs/culturally-competent-care"
   ],
   "evidence": [
     {
@@ -102,13 +102,6 @@
       "page": "details"
     },
     {
-      "id": "check-deal-ad1128ba36",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "title": "Village Capital — terms page",
-      "excerpt": "170K orders, and supports over 150 active vendors on its platform. A USD 150K investment, structured as a blend of a convertible note and",
-      "page": "terms"
-    },
-    {
       "id": "check-deal-c7ddfcd78f",
       "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
       "title": "Village Capital — program page",
@@ -186,6 +179,13 @@
       "page": "details"
     },
     {
+      "id": "check-format-227a1cd0f5",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "title": "Village Capital — program page",
+      "excerpt": "and better support entrepreneurs in Colombia through a hybrid program. About Entrepreneur Support Organizations (ESOs)",
+      "page": "details"
+    },
+    {
       "id": "check-format-2d12edd0dc",
       "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
       "title": "Village Capital — program page",
@@ -228,18 +228,18 @@
       "page": "details"
     },
     {
+      "id": "check-format-71ea00c8a7",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "title": "Village Capital — program page",
+      "excerpt": "Access to live and asynchronous sessions tailored to a virtual learning environment to help their companies identify",
+      "page": "details"
+    },
+    {
       "id": "check-format-8faaa63dd9",
       "url": "https://vilcap.com/programs/climate-justice-for-migrants-and-communities-of-color-2023",
       "title": "Village Capital — program page",
       "excerpt": "a total of four interactive workshops, both virtual and an in-person summit. Participate in mock board meetings with",
       "page": "details"
-    },
-    {
-      "id": "check-format-905d7059a2",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "title": "Village Capital — terms page",
-      "excerpt": "chain, strengthen our sales efforts, and deepen our virtual care capabilities,” says Isidore Kpotufe, Founder of Rivia",
-      "page": "terms"
     },
     {
       "id": "check-format-9311070b61",
@@ -263,25 +263,11 @@
       "page": "details"
     },
     {
-      "id": "check-format-a49d1c7a66",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "title": "Village Capital — terms page",
-      "excerpt": "clinics, offering seamless access to both virtual and in-person care through a single membership. By combining digital",
-      "page": "terms"
-    },
-    {
       "id": "check-format-b20587f9d5",
       "url": "https://vilcap.com/programs/adapt-social-innovation-for-a-more-resilient-future-latin-america-2024",
       "title": "Village Capital — program page",
       "excerpt": "February 9, 2024 Cohort Selection February - March, 2024 Virtual Workshops & In-Person Program Summit March - May, 2024",
       "page": "details"
-    },
-    {
-      "id": "check-format-b24c5020bc",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "title": "Village Capital — terms page",
-      "excerpt": "chain of branded clinics, offering seamless access to both virtual and in-person care through a single membership. By",
-      "page": "terms"
     },
     {
       "id": "check-format-c12f176909",
@@ -354,13 +340,6 @@
       "page": "details"
     },
     {
-      "id": "check-location-b407a3281f",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "title": "Village Capital — terms page",
-      "excerpt": "platform built for African SMEs, both based in Accra. The Facility works in partnership",
-      "page": "terms"
-    },
-    {
       "id": "check-name-ca0527c6b1",
       "url": "https://vilcap.com/",
       "title": "Village Capital — homepage",
@@ -372,6 +351,13 @@
       "url": "https://vilcap.com/",
       "title": "Village Capital — homepage",
       "excerpt": "Apply to one of our programs for startups → https://vilcap.com/programs",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3c53d60bf8",
+      "url": "https://vilcap.com/programs/culturally-competent-care",
+      "title": "Village Capital — program page",
+      "excerpt": "APPLY NOW → https://vilcap.com/programs/vilcap-innovative-capital-facility-nwa",
       "page": "details"
     },
     {
@@ -656,162 +642,6 @@
       "url": "https://vilcap.com/impactinvesting",
       "page": "details",
       "excerpt": "The Facility will invest in early-stage, scalable companies across Northwest Arkansas using financing structures aligned with their unique stage of growth."
-    },
-    {
-      "id": "check-page-43238eafef",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "Africa Ecosystem Catalysts Facility Announces Initial Investments in Ghana-Based Startups Rivia Clinics and VDL Fulfilment Open Main Menu Close Main Menu Home About Us The Village Capital Story Our Team Careers Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) News & Publications Blogs Press Releases Reports How We Support Entrepreneurs Our Tools for Startups and ESO's Peer-Selected Investment Impact Investing Our Alumni Become a Mentor Support Our Mission Results & Impact Donate Africa Ecosystem Catalysts Facility Announces Initial Investments in Ghana-Based Startups Rivia Clinics and VDL Fulfilment Village Capital, via the Africa Ecosystem Catalysts Facility, deploys USD 350K to enterprises advancing healthcare and e-commerce logistics in Ghana Share Twitter Facebook LinkedIn Accra, Ghana (May 7, 2026) – The Africa Ecosystem Catalysts Facility , a USD 4M pilot investment facility managed by Village Capital with funding from the Dutch Entrepreneurial Development Bank ( FMO ) and the Netherlands Enterprise Agency ( RVO ), has announced its first two investments in Ghana. The Facility is deploying capital into Rivia Clinics , a tech-enabled primary healthcare startup, and VDL Fulfilment , an e-commerce logistics platform built for African SMEs, both based in Accra. The Facility works in partnership with locally-led Entrepreneur Support"
-    },
-    {
-      "id": "check-page-fc30a12d6a",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "The Facility works in partnership with locally-led Entrepreneur Support Organizations (ESOs), whose proximity to founders and market insight help identify high-potential early-stage companies often overlooked by traditional investors."
-    },
-    {
-      "id": "check-page-b576595e52",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "In Ghana, Reach for Change and Innovation Spark partnered with Village Capital to shape the investment pipeline, ensuring capital is aligned with the realities on the ground."
-    },
-    {
-      "id": "check-page-0476d3c710",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "The Facility’s first investment is in Rivia Clinics, a tech-enabled clinic chain expanding access to affordable, membership-based care for underserved businesses and their employees in Ghana."
-    },
-    {
-      "id": "check-page-c01c5c949a",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "Rivia operates a platform connecting SMEs and individuals to a chain of branded clinics, offering seamless access to both virtual and in-person care through a single membership."
-    },
-    {
-      "id": "check-page-92e7f23122",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "By combining digital access with growing physical care locations, the company is making primary healthcare more accessible, predictable, and affordable."
-    },
-    {
-      "id": "check-page-e1d084e261",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "“For too long, healthcare has been built around misaligned incentives – providers, insurers, and patients operating in silos with no one truly accountable to the person who needs care."
-    },
-    {
-      "id": "check-page-92d3114f98",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "The Africa Ecosystem Catalysts Facility's investment comes at exactly the right moment – enabling us to expand our clinics chain, strengthen our sales efforts, and deepen our virtual care capabilities,” says Isidore Kpotufe, Founder of Rivia Clinics."
-    },
-    {
-      "id": "check-page-563a7687c6",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "The second investment is in VDL Fulfilment , an end-to-end e-commerce logistics platform enabling African SMEs to store, manage, and deliver products more efficiently."
-    },
-    {
-      "id": "check-page-d8d6b448b8",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "An alumna of RVO’s Orange Corners Ghana and winner of the Orange Corners Innovation Fund (OCIF) , VDL provides integrated warehousing, order management, and last-mile delivery services through a proprietary platform, helping businesses reduce operational complexity and scale without heavy upfront investment."
-    },
-    {
-      "id": "check-page-a4f1f87268",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "A USD 150K investment, structured as a blend of a convertible note and milestone-based debt financing, will enable the company to strengthen its warehouse and fulfillment infrastructure, expand its fleet, and develop distributed hubs closer to demand, all of which will increase delivery capacity and reduce costs for the SMEs they serve."
-    },
-    {
-      "id": "check-page-606d80068b",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "In a logistics environment like ours, premature scale creates inefficiencies that compound quickly,” shared Vanessa Omari, CEO at VDL Fulfilment."
-    },
-    {
-      "id": "check-page-98345545e6",
-      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
-      "page": "terms",
-      "excerpt": "Speaking on the Facility’s initial investments and pipeline in Ghana, Heather Matranga, Managing Director of Venture and Investments at Village Capital, said: “Rivia and VDL are strong examples of the businesses emerging across Ghana – founders building practical solutions to real, everyday challenges, from accessing quality healthcare to moving goods more efficiently."
-    },
-    {
-      "id": "check-page-c3a93e6c68",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "Kenyan-Based Startup Aquarech Receives USD 350K Investment From Village Capital’s Reducing Inequalities Investment Facility Open Main Menu Close Main Menu Home About Us The Village Capital Story Our Team Careers Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) News & Publications Blogs Press Releases Reports How We Support Entrepreneurs Our Tools for Startups and ESO's Peer-Selected Investment Impact Investing Our Alumni Become a Mentor Support Our Mission Results & Impact Donate Kenyan-Based Startup Aquarech Receives USD 350K Investment From Village Capital’s Reducing Inequalities Investment Facility Aquarech secures USD 350K investment to strengthen aquaculture in Kenya Share Twitter Facebook LinkedIn Village Capital has announced its latest investment in Aquarech, a Kenyan agtech startup that enables small and medium-sized fish farmers to become more productive and profitable. Nairobi, Kenya (9 July, 2024) – Village Capital has announced its latest investment in Aquarech , a Kenyan agtech startup that enables small and medium-sized fish farmers to become more productive and profitable by providing them with access to quality fish feed, credit, and buyers. This investment comes from Village Capital’s Reducing Inequalities Investment Facility, backed by FMO’s MASSIF Fund , established to support financial inclusion by supporting innovative"
-    },
-    {
-      "id": "check-page-6f43cd8ed7",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "Founded in 2019 by father-son duo David and Joseph Okech, as well as James Odede, Aquarech is a digital platform for small and medium-sized fish farmers."
-    },
-    {
-      "id": "check-page-99104d4749",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "As natives of Kisumu, home to Lake Victoria – the largest lake in Africa and the world’s second-largest freshwater lake –all three founders were exposed early on to the challenges of fish farming."
-    },
-    {
-      "id": "check-page-730ef5b01c",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "Joseph is an agricultural economist with over 40 years of experience, and James is the founder of healthtech startup MobiDawa and LakeHub (an innovation hub and entrepreneur support organization that runs an incubator and digital academy)."
-    },
-    {
-      "id": "check-page-0da636f187",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "In the regions surrounding the African Great Lakes, many residents in lakeside communities depend on fisheries for their livelihoods, either directly or indirectly."
-    },
-    {
-      "id": "check-page-55bea8e585",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "This industry sustains the livelihoods of approximately 40 million people across East Africa."
-    },
-    {
-      "id": "check-page-b22d2d93f2",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "Yet, overfishing, pollution, and climate change, combined with naturally occurring changes, have led to a significant reduction in fish quantities in the lake, disrupting the livelihoods and fishing industry in the region ."
-    },
-    {
-      "id": "check-page-a59e97f277",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "Aquarech fills many critical gaps, operating both B2B and B2C verticals."
-    },
-    {
-      "id": "check-page-8454506e2e",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "Through their B2B services, they support farmers with access to quality feeds and credit using a buy now, pay later (BNPL) model where qualifying farmers can purchase inputs from Aquarech on credit."
-    },
-    {
-      "id": "check-page-989b74a216",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "In addition to the above, Aquarech provides training and other precision agriculture tools that help fish farmers learn about best practices and improve incomes."
-    },
-    {
-      "id": "check-page-e4fd19054a",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "As part of its B2C services, the startup mitigates the market access gap by purchasing fish directly from farmers and selling directly to consumers through its Fish Delis (Aquarech-owned distribution kiosks)."
-    },
-    {
-      "id": "check-page-3342555b5b",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "“An inclusive and sustainable aquaculture food system in Africa depends on how many small and medium-sized fish farmers we can transition to profitability,” stated Dave Okech, Co-founder and CEO of Aquarech."
-    },
-    {
-      "id": "check-page-c7c71babc9",
-      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
-      "page": "terms",
-      "excerpt": "“This company, which really sits squarely at the intersection of climate resilience and economic mobility, is aligned with our mission to support emerging impact leaders tackling rural inequality."
     },
     {
       "id": "check-page-a65e77d7f5",
@@ -1172,6 +1002,72 @@
       "url": "https://vilcap.com/programs/climate-justice-for-migrants-and-communities-of-color-2023",
       "page": "details",
       "excerpt": "Problem Statement Immigrants, refugees, and communities of color are disproportionately affected by climate risk and disasters ."
+    },
+    {
+      "id": "check-page-bf35d498e4",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "page": "details",
+      "excerpt": "Colombian Ecosystem Builders • Village Capital Open Main Menu Donate Colombian Ecosystem Builders Learn more about the accelerator for accelerators, incubators, funds, universities, and service providers in Colombia ABOUT THE PROGRAM ELIGIBILITY BENEFITS TIMELINE About the Program Lee en español This program, supported by Argidius Foundation , will identify, train, and help a cohort of ten Entrepreneur Support Organizations (ESOs), such as accelerators, incubators, funds, universities, and service providers. They will work closely with industry experts, investors, and ecosystem partners to develop the networks and tools they need to scale and better support entrepreneurs in Colombia through a hybrid program. About Entrepreneur Support Organizations (ESOs) in Colombia The importance of the agriculture and food sectors in Colombia relies on the impact that both of them have on rural areas and low-income segments. The price increase on basic goods and services, specifically in food, is the main cause of accessibility challenges in the region. This situation affects all the population, but the low-income segments and rural areas are affected the most. A large number of initiatives have emerged in recent years in Colombia to promote entrepreneurship. However, even though the number of Entrepreneur Support Organizations (ESOs) operating in the country has more than doubled over the"
+    },
+    {
+      "id": "check-page-8e3300bd04",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "page": "details",
+      "excerpt": "Through this partnership, Argidius Foundation and Village Capital, will contribute to building the infrastructure needed to ensure that Colombia can benefit from a thriving startup community."
+    },
+    {
+      "id": "check-page-db2c85b26d",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "page": "details",
+      "excerpt": "Entrepreneur Support Organizations (ESOs) focusing on Agriculture and Food: We will support ESOs with proven track record and existing support for entrepreneurs working on the Agriculture and Food sectors across Colombia."
+    },
+    {
+      "id": "check-page-8b7dab4642",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "page": "details",
+      "excerpt": "Benefits Mentorship and connections Ability to meet with and receive mentorship from potential strategic partners, funders, potential customers, and other founders."
+    },
+    {
+      "id": "check-page-0d7a125ea3",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "page": "details",
+      "excerpt": "10 ESOs participarán en la aceleradora Colombian Ecosystem Builders Ciudad de México, 20 de julio de 2023; Village Capital, con el apoyo de Argidius Foundation, anuncia que diez Entrepreneur Support Organizations (ESOs) han sido seleccionadas para participar en la Aceleradora de Constructores de Ecosistemas Colombianos."
+    },
+    {
+      "id": "check-page-2cd7b6eabe",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "page": "details",
+      "excerpt": "Applications Open for Colombian Ecosystem Builders Accelerator Mexico City (March 27th, 2022) — Village Capital, with support from Argidius Foundation, announced a new accelerator program focused on Entrepreneur Support Organizations (ESOs), such as accelerators, incubators, funds, universities, and service providers."
+    },
+    {
+      "id": "check-page-9da2aa0fc8",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "page": "details",
+      "excerpt": "Abre la convocatoria para la Aceleradora de Constructores de Ecosistemas Colombianos Ciudad de México, 27 de marzo de 2023; Village Capital, con el apoyo de Argidius Foundation, anuncia un nuevo programa de aceleración enfocado en Entrepreneur Support Organizations (ESOs), como aceleradoras, incubadoras, fondos, universidades y proveedores de servicios que capacitan a emprendedores colombianos."
+    },
+    {
+      "id": "check-page-39aeb53127",
+      "url": "https://vilcap.com/programs/colombian-ecosystem-builders",
+      "page": "details",
+      "excerpt": "Learn more about mentoring with Village Capital."
+    },
+    {
+      "id": "check-page-418c605450",
+      "url": "https://vilcap.com/programs/culturally-competent-care",
+      "page": "details",
+      "excerpt": "Our Programs for Entrepreneurs • Village Capital Open Main Menu Donate Our Entrepreneur Accelerator Programs Solving big problems for people and the planet. Current Programs Past Programs Get Involved News About our Programs for Entrepreneurs We fuel the growth of sustainable and impactful businesses by unlocking capital for early-stage entrepreneurs who are building emergent solutions for social, economic, and environmental challenges around the world. We’ve run 150+ accelerators. We equip founders with unique tools to increase their efficiency, sustainability, impact, and inclusiveness. Entrepreneurs, read on for opportunities to apply to our programs. To learn more about our programs that train and support Entrepreneur Support Organizations (ESOs), click here . Open Applications VilCap Innovative Capital Facility NWA Region: United States Description Investing innovative financing instruments into early-stage, scalable businesses in Northwest Arkansas to drive mission-aligned growth and impact. APPLY NOW Current Programs Choose thematic area All Climate Innovation & Adaptation Economic Mobility Equitable Access to Essential Services Choose region All Europe Latin America Middle East & North Africa Asia Sub-Saharan Africa United States Global Choose audience All Entrepreneur Entrepreneur Support Organization Past Programs Choose a sector or region to see more. Choose"
+    },
+    {
+      "id": "check-page-37fa52c6ea",
+      "url": "https://vilcap.com/programs/culturally-competent-care",
+      "page": "details",
+      "excerpt": "READ MORE Solutions Built to Last (and Loop) In Europe, startups are using insects, land data, and satellite AI to drive circular economy solutions that can scale while restoring ecosystems."
+    },
+    {
+      "id": "check-page-7f41ad8c81",
+      "url": "https://vilcap.com/programs/culturally-competent-care",
+      "page": "details",
+      "excerpt": "READ MORE Lived Experience Drives Startup Innovation Founder-led startups rooted in personal struggle drive smarter, empathetic solutions – reshaping immigration, maternal care, and financial access with AI and heart."
     }
   ],
   "findings": {
@@ -1246,18 +1142,14 @@
       },
       {
         "value": "remote",
-        "evidenceId": "check-format-b24c5020bc"
+        "evidenceId": "check-format-9311070b61"
       },
       {
         "value": "in-person",
-        "evidenceId": "check-format-a49d1c7a66"
+        "evidenceId": "check-format-a36c5d9268"
       }
     ],
     "location": [
-      {
-        "value": "Accra",
-        "evidenceId": "check-location-b407a3281f"
-      },
       {
         "value": "Latin America",
         "evidenceId": "check-location-5039eb42c4"
@@ -1265,10 +1157,6 @@
     ],
     "selectivity": [],
     "dealText": [
-      {
-        "value": "170K orders, and supports over 150 active vendors on its platform. A USD 150K investment, structured as a blend of a convertible note and",
-        "evidenceId": "check-deal-ad1128ba36"
-      },
       {
         "value": "startups selected by their peers will receive grant capital of USD $50,000 to support their operations. All companies will also receive $3,000",
         "evidenceId": "check-deal-fec31c4f79"
@@ -1287,18 +1175,6 @@
       }
     ],
     "dealComponents": [
-      {
-        "value": {
-          "kind": "convertible",
-          "amount": "150000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Convertible note",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-ad1128ba36"
-      },
       {
         "value": {
           "kind": "grant",

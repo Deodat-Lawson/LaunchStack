@@ -1,6 +1,6 @@
 {
   "programId": "kickstart-innovation",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.kickstart-innovation.com/",
     "http://kickstart-innovation.com/apply",
@@ -32,13 +32,6 @@
       "url": "https://www.kickstart-innovation.com/join-startup",
       "title": "Kickstart Innovation — application page",
       "excerpt": "and 25 July. If you're ready, don't wait for the next window. MAY Applications open Scouting phase opens soon JULY Selection Screening and evaluation of applicants done by an",
-      "page": "application"
-    },
-    {
-      "id": "check-duration-68a04d0be8",
-      "url": "https://www.kickstart-innovation.com/post/kickstart-accelerator-invites-startups-in-educational-tech-to-apply-for-new-edtech-vertical",
-      "title": "Kickstart Innovation — application page",
-      "excerpt": "on the global map of entrepreneurship. For 11 weeks, 50 startups come to Switzerland where they are",
       "page": "application"
     },
     {
@@ -437,12 +430,7 @@
       }
     ],
     "cohortStarts": [],
-    "durationWeeks": [
-      {
-        "value": "11",
-        "evidenceId": "check-duration-68a04d0be8"
-      }
-    ],
+    "durationWeeks": [],
     "format": [
       {
         "value": "hybrid",

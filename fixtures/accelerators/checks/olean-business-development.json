@@ -1,6 +1,6 @@
 {
   "programId": "olean-business-development",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://oleanbd.com/",
     "https://www.oleanbd.com/rlf-pre-application",
@@ -16,13 +16,6 @@
       "url": "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
       "title": "Olean Business Development — batches page",
       "excerpt": "Search 8 Businesses Selected for 2026 Laine Business Accelerator Cohort Wixspace Digital Aug 17 2 min read Updated: Oct 7 By JOHN BARTIMOLE | Special to Olean",
-      "page": "batches"
-    },
-    {
-      "id": "check-deal-7918edac17",
-      "url": "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
-      "title": "Olean Business Development — batches page",
-      "excerpt": "from across the region. Each participating business will receive $5,000 in seed funding and take part in a multi-week program of education,",
       "page": "batches"
     },
     {
@@ -45,13 +38,6 @@
       "title": "Olean Business Development — program page",
       "excerpt": "info@oleanbd.com",
       "page": "details"
-    },
-    {
-      "id": "check-email-7b9869a48b",
-      "url": "https://www.oleanbd.com/post/9-businesses-selected-for-2026-laine-business-accelerator-cohort",
-      "title": "Olean Business Development — batches page",
-      "excerpt": "a PDF version, please click t Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
-      "page": "batches"
     },
     {
       "id": "check-email-a5a6fd9533",
@@ -89,13 +75,6 @@
       "page": "details"
     },
     {
-      "id": "check-email-d53b7f8089",
-      "url": "https://www.oleanbd.com/post/laine-business-accelerator-celebrates-2022-cohort",
-      "title": "Olean Business Development — batches page",
-      "excerpt": "of Olean Business Development Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
-      "page": "batches"
-    },
-    {
       "id": "check-email-d760f1373e",
       "url": "https://www.oleanbd.com/about-us",
       "title": "Olean Business Development — program page",
@@ -107,13 +86,6 @@
       "url": "https://www.oleanbd.com/post/8-businesses-selected-to-participate-in-2025-laine-business-accelerator-cohort",
       "title": "Olean Business Development — batches page",
       "excerpt": "info@oleanbd.com",
-      "page": "batches"
-    },
-    {
-      "id": "check-email-ed986acaf1",
-      "url": "https://www.oleanbd.com/post/8-businesses-selected-to-participate-in-2025-laine-business-accelerator-cohort",
-      "title": "Olean Business Development — batches page",
-      "excerpt": "of Olean Business Development Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
       "page": "batches"
     },
     {
@@ -266,26 +238,8 @@
     "format": [],
     "location": [],
     "selectivity": [],
-    "dealText": [
-      {
-        "value": "from across the region. Each participating business will receive $5,000 in seed funding and take part in a multi-week program of education,",
-        "evidenceId": "check-deal-7918edac17"
-      }
-    ],
-    "dealComponents": [
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "5000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-7918edac17"
-      }
-    ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

@@ -1,6 +1,6 @@
 {
   "programId": "greentown-labs",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://forms.greentown.org/260546409900052",
@@ -91,17 +91,9 @@
       "origin": "official"
     },
     {
-      "url": "https://greentown.org/members/agira",
-      "page": "application",
-      "anchor": "Agira Energy & Power Light management platform for advanced lighting and display applications",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://greentown.org/members/xtpl",
-      "page": "application",
-      "anchor": "XTPL Manufacturing & Processing Ultra-precise printing of nanomaterials for flexible electronics and photovoltaic applications",
+      "url": "https://greentown.org/members/priority-investor-loans",
+      "page": "details",
+      "anchor": "Priority Investor Loans Infrastructure & Construction Simplified loan programs to fund real estate investors nationwide with income-producing properties",
       "fetched": true,
       "blocked": null,
       "origin": "official"

@@ -1,9 +1,8 @@
 {
   "programId": "accel-atoms",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://atoms.accel.com/",
-    "https://apply.accel-atoms.com/",
     "https://atoms.accel.com/apply",
     "https://atoms.accel.com/apply-early",
     "https://atoms.accel.com/faqs",
@@ -36,20 +35,6 @@
       "page": "batches"
     },
     {
-      "id": "check-deal-2155926ba6",
-      "url": "https://atoms.accel.com/news/ai-cohort-2026-with-google",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "startup , with Accel and Google’s AI Futures Fund co-investing Up to $350,000 in compute credits across Google Cloud, Gemini, and DeepMind",
-      "page": "batches"
-    },
-    {
-      "id": "check-deal-247694cb7a",
-      "url": "https://atoms.accel.com/news/ai-cohort-2026-with-google",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "the Accel Atoms and AI Futures Fund will co-invest up to $2M in each selected startup. This level of early-stage commitment in",
-      "page": "batches"
-    },
-    {
       "id": "check-deal-2d965343a2",
       "url": "https://atoms.accel.com/faqs",
       "title": "Accel Atoms — terms page",
@@ -76,13 +61,6 @@
       "title": "Accel Atoms — terms page",
       "excerpt": "How much will Accel invest with Accel Atoms X? We will invest up to $1M in companies in the form of equity or convertible note. For",
       "page": "terms"
-    },
-    {
-      "id": "check-deal-8b27f13f6b",
-      "url": "https://atoms.accel.com/news/ai-cohort-2026-with-google",
-      "title": "Accel Atoms — batches page",
-      "excerpt": "from senior technical experts across Google and DeepMind. Up to $2 million in funding per startup , with Accel and Google’s AI Futures Fund",
-      "page": "batches"
     },
     {
       "id": "check-duration-ae53a89560",
@@ -359,12 +337,6 @@
       "excerpt": "Accel Atoms | Catalyst to your 0→1 journey X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog Hit Escape Velocity 0 1 Accel Atoms is a pre-seed scaling program that brings together the best of Accel’s resources and global network, for Indian & Indian-origin founders building from anywhere. Accel Atoms is a pre-seed scaling program that brings together the best of Accel’s resources and global network, for Indian & Indian-origin founders building from anywhere. Meet the startups AI Cohort 2026 Read the blog Atoms X Read the blog Sign up for our Newsletter Be the first to know about our latest cohorts, upcoming events, and updates from the portfolio Subscribe Hit Escape Velocity with Accel Atoms Accel LinkedIn Instagram X Legal Accel LinkedIn Instagram X Legal SIGN UP Stay up-to-date about future cohorts and get invited to our events Name * Email ID * WhatsApp contact number * LinkedIn * You’re a * Select one from the dropdown Founder Founder Aspiring Founder Data Scientist / ML Engineer Data Engineer Product Manager Engineer DevOps Engineer Student Investor / VC Others"
     },
     {
-      "id": "check-page-da6ef7d53a",
-      "url": "https://apply.accel-atoms.com/",
-      "page": "application",
-      "excerpt": "Accel Atoms | Apply"
-    },
-    {
       "id": "check-page-cedf221efc",
       "url": "https://atoms.accel.com/apply",
       "page": "application",
@@ -572,14 +544,6 @@
       {
         "value": "provided as a grant or equity investment? We will invest up to $1M in the form of equity. Does acceptance to Accel Atoms X imply a",
         "evidenceId": "check-deal-55833dc4ba"
-      },
-      {
-        "value": "the Accel Atoms and AI Futures Fund will co-invest up to $2M in each selected startup. This level of early-stage commitment in",
-        "evidenceId": "check-deal-247694cb7a"
-      },
-      {
-        "value": "from senior technical experts across Google and DeepMind. Up to $2 million in funding per startup , with Accel and Google’s AI Futures Fund",
-        "evidenceId": "check-deal-8b27f13f6b"
       }
     ],
     "dealComponents": [
@@ -606,30 +570,6 @@
           "condition": "up to"
         },
         "evidenceId": "check-deal-336ab1dac7"
-      },
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "2000000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-247694cb7a"
-      },
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "350000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-2155926ba6"
       }
     ],
     "portfolioPages": [

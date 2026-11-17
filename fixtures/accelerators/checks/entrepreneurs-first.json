@@ -1,6 +1,6 @@
 {
   "programId": "entrepreneurs-first",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.joinef.com/",
     "https://apply.joinef.com",
@@ -78,13 +78,6 @@
       "page": "terms"
     },
     {
-      "id": "check-deal-18a2d2d0ae",
-      "url": "https://www.joinef.com/posts/updating-our-global-pre-seed-investment-offer/",
-      "title": "Entrepreneurs First — terms page",
-      "excerpt": "to an 8% shareholding in your company on a fully diluted basis*. $125,000 optional (for the founders) investment via a SAFE with an MFN from",
-      "page": "terms"
-    },
-    {
       "id": "check-deal-23058dfa64",
       "url": "https://www.joinef.com/faqs/us/",
       "title": "Entrepreneurs First — terms page",
@@ -96,13 +89,6 @@
       "url": "https://www.joinef.com/faqs/us/",
       "title": "Entrepreneurs First — terms page",
       "excerpt": "once you’re ready to build full-time. What are the terms? For the $250K pathway – for founders ready to build now We invest up to $250K on",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-331f685c9b",
-      "url": "https://www.joinef.com/posts/updating-our-global-pre-seed-investment-offer/",
-      "title": "Entrepreneurs First — terms page",
-      "excerpt": "on founder-friendly, transparent terms. Companies will receive: $125,000 investment from EF via a SAFE, or equivalent local instrument , which",
       "page": "terms"
     },
     {
@@ -211,13 +197,6 @@
       "page": "terms"
     },
     {
-      "id": "check-duration-2dd7448aff",
-      "url": "https://www.joinef.com/about/careers/",
-      "title": "Entrepreneurs First — program page",
-      "excerpt": "We try to respond to all applicants within 1-2 weeks. If we think your profile may be a fit for the",
-      "page": "details"
-    },
-    {
       "id": "check-duration-37846f7159",
       "url": "https://apply.joinef.com",
       "title": "Entrepreneurs First — application page",
@@ -302,13 +281,6 @@
       "page": "terms"
     },
     {
-      "id": "check-duration-b957ca01f5",
-      "url": "https://www.joinef.com/posts/updating-our-global-pre-seed-investment-offer/",
-      "title": "Entrepreneurs First — terms page",
-      "excerpt": "who build a company at EF will have access to 6 months of office space in their hub location, and will:",
-      "page": "terms"
-    },
-    {
       "id": "check-duration-bb7ea9e56d",
       "url": "https://www.joinef.com/faqs/",
       "title": "Entrepreneurs First — terms page",
@@ -351,13 +323,6 @@
       "page": "terms"
     },
     {
-      "id": "check-duration-fecda1fa1a",
-      "url": "https://www.joinef.com/about/careers/",
-      "title": "Entrepreneurs First — program page",
-      "excerpt": "& at the UN Yugoslav Tribunal in the Hague. In 6 months I have worked with over 30 founders , many of",
-      "page": "details"
-    },
-    {
       "id": "check-format-141e02f6c8",
       "url": "https://www.joinef.com/faqs/",
       "title": "Entrepreneurs First — terms page",
@@ -386,13 +351,6 @@
       "page": "terms"
     },
     {
-      "id": "check-format-8ecfc857ca",
-      "url": "https://www.joinef.com/about/careers/",
-      "title": "Entrepreneurs First — program page",
-      "excerpt": "where to find the exceptionally talented, then meet them in person and draw them to the path of founding. [02] Advising —",
-      "page": "details"
-    },
-    {
       "id": "check-format-aa93130490",
       "url": "https://apply.joinef.com",
       "title": "Entrepreneurs First — application page",
@@ -412,13 +370,6 @@
       "title": "Entrepreneurs First — application page",
       "excerpt": "and commitment to founding right now. This works best in person, where ideas and relationships can be quickly forged and",
       "page": "application"
-    },
-    {
-      "id": "check-format-b1d19928d1",
-      "url": "https://www.joinef.com/about/careers/",
-      "title": "Entrepreneurs First — program page",
-      "excerpt": "next generation. This will involve a mixture of online and in person activities, mapping talent clusters from university",
-      "page": "details"
     },
     {
       "id": "check-format-b24e40ddb5",
@@ -1694,14 +1645,6 @@
       {
         "value": "14",
         "evidenceId": "check-duration-40c80af036"
-      },
-      {
-        "value": "6 months",
-        "evidenceId": "check-duration-b957ca01f5"
-      },
-      {
-        "value": "2",
-        "evidenceId": "check-duration-2dd7448aff"
       }
     ],
     "format": [

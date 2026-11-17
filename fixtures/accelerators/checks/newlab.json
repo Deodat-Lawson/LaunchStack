@@ -1,15 +1,14 @@
 {
   "programId": "newlab",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.newlab.com/",
     "https://www.newlab.com/apply",
-    "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
     "https://www.newlab.com/about",
     "https://www.newlab.com/open-calls/mining-innovation-studio-program",
+    "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
     "https://www.newlab.com/post/apply-to-use-detroits-advanced-aerial-innovation-region",
-    "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation",
-    "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2"
+    "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation"
   ],
   "evidence": [
     {
@@ -20,32 +19,11 @@
       "page": "application"
     },
     {
-      "id": "check-format-ba6616c406",
-      "url": "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation",
-      "title": "Newlab — application page",
-      "excerpt": "brings processing capabilities within devices and remote locations. This shift opens up new possibilities for",
-      "page": "application"
-    },
-    {
       "id": "check-format-c6cd3efcb5",
       "url": "https://www.newlab.com/apply",
       "title": "Newlab — application page",
       "excerpt": "NY Detroit, MI Riyadh, Saudi Arabia Montevideo, Uruguay Remote/Unsure Investment: Pre-Seed Seed Pre-Series-A Series A",
       "page": "application"
-    },
-    {
-      "id": "check-format-f63ccf4df3",
-      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
-      "title": "Newlab — terms page",
-      "excerpt": "thrive here.” Julie Roscini and Shaun Stewart will hold a virtual, live-streamed fireside chat on June 26, 2020 as part of",
-      "page": "terms"
-    },
-    {
-      "id": "check-location-14b4be0d52",
-      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
-      "title": "Newlab — terms page",
-      "excerpt": "Ford Motor Company is a global company based in Dearborn, Michigan. The company designs,",
-      "page": "terms"
     },
     {
       "id": "check-name-c9a1cf3de1",
@@ -104,13 +82,6 @@
       "page": "details"
     },
     {
-      "id": "check-route-61b86b2e59",
-      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
-      "title": "Newlab — terms page",
-      "excerpt": "join newlab → https://www.newlab.com/apply",
-      "page": "terms"
-    },
-    {
       "id": "check-route-717de13302",
       "url": "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation",
       "title": "Newlab — application page",
@@ -144,13 +115,6 @@
       "title": "Newlab — application page",
       "excerpt": "join newlab → https://www.newlab.com/apply",
       "page": "application"
-    },
-    {
-      "id": "check-route-b8fd9a883f",
-      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
-      "title": "Newlab — terms page",
-      "excerpt": "JOIN → https://www.newlab.com/apply",
-      "page": "terms"
     },
     {
       "id": "check-route-e665f21de9",
@@ -234,30 +198,6 @@
       "excerpt": "First choice Second choice Third choice Why do you want to join Newlab?* how did you hear about Newlab?* I’m interested in: Joining a Newlab ecosystem in: Brooklyn, NY Detroit, MI Riyadh, Saudi Arabia Montevideo, Uruguay Remote/Unsure Thank you!"
     },
     {
-      "id": "check-page-6b63ba7d3a",
-      "url": "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
-      "page": "application",
-      "excerpt": "Verizon and Newlab partnered to support next-generation industry applications of 5G About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN case studies Mobility Energy Industry Artificial Intelligence Brooklyn Partners Verizon and Newlab partnered to support next-generation industry applications of 5G Startups focusing on industrial automation, mobility, and energy leveraged Verizon’s 5G network and Newlab’s infrastructure to demo their products About Launched in 2020, Newlab and Verizon collaborated to create a 5G innovation program to support the next generation of applications in mobility, energy, and industrial automation. The program’s goal was to uncover high impact startups working on products that could be further enabled by 5G technology. The selected startups used Verizon’s 5G network to test a wide range of solutions in areas including industrial robotics, drone delivery, enhanced GPS, vehicle connectivity, and technology enabling Vehicle-to-X systems. Ultimately, Verizon and Newlab sought to uncover solutions that could drive clean"
-    },
-    {
-      "id": "check-page-b4b5db5437",
-      "url": "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
-      "page": "application",
-      "excerpt": "Ultimately, Verizon and Newlab sought to uncover solutions that could drive clean technology usage in everything from urban transit to drone usage, industrial manufacturing and more. the challenge Launched in 2020, Newlab and Verizon collaborated to create a 5G innovation program to support the next generation of applications in mobility, energy, and industrial automation."
-    },
-    {
-      "id": "check-page-ad61c235b5",
-      "url": "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
-      "page": "application",
-      "excerpt": "Ultimately, Verizon and Newlab sought to uncover solutions that could drive clean technology usage in everything from urban transit to drone usage, industrial manufacturing and more. the results Through three years of partnership and five cohorts of startups, Newlab and Verizon have worked together to prove the value of 5G’s effects on next-generation products and systems."
-    },
-    {
-      "id": "check-page-43c84338d3",
-      "url": "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
-      "page": "application",
-      "excerpt": "\"We are proud to collaborate with Newlab through the 5G Studio to enable leaders at the frontier of the fourth industrial revolution to leverage the extraordinary capabilities of 5G and edge computing to help create the products and ecosystems of the future.\" Elise Neel VP of New Business Incubation, Verizon Verizon join newlab ©2026 New Lab, LLC (“Newlab”)."
-    },
-    {
       "id": "check-page-b15064afb6",
       "url": "https://www.newlab.com/about",
       "page": "details",
@@ -330,6 +270,12 @@
       "excerpt": "OUR THESIS Why the Kingdom of Saudi Arabia?"
     },
     {
+      "id": "check-page-6b63ba7d3a",
+      "url": "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
+      "page": "application",
+      "excerpt": "Verizon and Newlab partnered to support next-generation industry applications of 5G About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN case studies Mobility Energy Industry Artificial Intelligence Brooklyn Partners Verizon and Newlab partnered to support next-generation industry applications of 5G Startups focusing on industrial automation, mobility, and energy leveraged Verizon’s 5G network and Newlab’s infrastructure to demo their products About Launched in 2020, Newlab and Verizon collaborated to create a 5G innovation program to support the next generation of applications in mobility, energy, and industrial automation. The program’s goal was to uncover high impact startups working on products that could be further enabled by 5G technology. The selected startups used Verizon’s 5G network to test a wide range of solutions in areas including industrial robotics, drone delivery, enhanced GPS, vehicle connectivity, and technology enabling Vehicle-to-X systems. Ultimately, Verizon and Newlab sought to uncover solutions that could drive clean"
+    },
+    {
       "id": "check-page-0bb5bfde4c",
       "url": "https://www.newlab.com/post/apply-to-use-detroits-advanced-aerial-innovation-region",
       "page": "application",
@@ -340,12 +286,6 @@
       "url": "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation",
       "page": "application",
       "excerpt": "OPEN CALL: 5G Applications for Industrial Automation About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Brooklyn Studios May 26, 2025 BY Newlab OPEN CALL: 5G Applications for Industrial Automation Newlab and Verizon’s 5G Studio invite startups to pilot 5G‐powered innovations in manufacturing and warehousing—think edge computing, autonomous robotics, industrial sensors, and AI‐driven automation—to create smarter, more energy-efficient factories and logistics systems. Apply now for grant funding, pilot design support, and access to Newlab’s global infrastructure and expert network. Now in its third cohort of startups, Newlab and Verizon’s 5G Studio continues its aim of addressing the challenges and opportunities presented by the advent of 5G technology, this time with a specific focus on manufacturing and warehouse processes. Leveraging the capabilities of 5G, the program aims to foster the development of innovative technologies that have the potential to revolutionize manufacturing processes, logistics, and operational workflows that can lead"
-    },
-    {
-      "id": "check-page-73d8052880",
-      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
-      "page": "terms",
-      "excerpt": "Ford’s Michigan Central and Newlab Collaborate to Drive Sustained Mobility Innovation Investment in Detroit About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Mobility Detroit Partners March 11, 2025 BY Newlab Ford’s Michigan Central and Newlab Collaborate to Drive Sustained Mobility Innovation Investment in Detroit Together, the companies will create an innovation ecosystem committed to helping shape the future of mobility. Launch two new studios aimed at solving tomorrow’s transportation challenges and preparing cities, regions and industries for a connected, autonomous and electrified future The studios will work together with Detroit and Michigan-based accelerators and incubators, helping to grow the local startup ecosystem and add new talent, businesses and capital Julie Roscini, Ford’s ​head of external engagement for Michigan Central, ​and Shaun Stewart, Newlab CEO, to hold fireside chat on June 26 as part of Detroit Startup Week DEARBORN, Mich., June 25, 2020 – Michigan Central, Ford Motor Company’s development in Corktown, ​and"
     }
   ],
   "findings": {
@@ -376,12 +316,7 @@
         "evidenceId": "check-format-c6cd3efcb5"
       }
     ],
-    "location": [
-      {
-        "value": "Dearborn",
-        "evidenceId": "check-location-14b4be0d52"
-      }
-    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
     "dealComponents": [],

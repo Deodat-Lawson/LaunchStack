@@ -1,6 +1,6 @@
 {
   "programId": "apx",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://apx.vc/",
     "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
@@ -8,13 +8,6 @@
     "https://apx.vc/press/porsche-and-axel-springer-increase-investment-into-early-stage-fund-apx-to-e55m"
   ],
   "evidence": [
-    {
-      "id": "check-deal-23dc8b610f",
-      "url": "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
-      "title": "APX — terms page",
-      "excerpt": "first investor. In addition to our financial investment of up to EUR 500,000, we provide startups with individual venture development support to",
-      "page": "terms"
-    },
     {
       "id": "check-email-06eaae4755",
       "url": "https://apx.vc/",
@@ -44,59 +37,10 @@
       "page": "details"
     },
     {
-      "id": "check-email-7395f8c1c0",
-      "url": "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
-      "title": "APX — terms page",
-      "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch Investment Manager (f/d/m) at APX in",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-74f10c8291",
-      "url": "https://apx.vc/press/porsche-and-axel-springer-increase-investment-into-early-stage-fund-apx-to-e55m",
-      "title": "APX — terms page",
-      "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching Techcrunch:",
-      "page": "terms"
-    },
-    {
       "id": "check-email-7b5c50d4b8",
       "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
       "title": "APX — terms page",
       "excerpt": "hello@apx.vc",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-dc7c657d81",
-      "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
-      "title": "APX — terms page",
-      "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching APX raises",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-3ded190c95",
-      "url": "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
-      "title": "APX — terms page",
-      "excerpt": "as soon as possible. About APX Based in Berlin and working remote-first, APX invests across industries in the best founding",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-82fcb3375a",
-      "url": "https://apx.vc/press/porsche-and-axel-springer-increase-investment-into-early-stage-fund-apx-to-e55m",
-      "title": "APX — terms page",
-      "excerpt": "| 1 min read Author: Søren Lund Nielsen Related Posts Virtual Pitching Tips: 14 Learnings From Our Home Offices Standing",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-b6cdddf9af",
-      "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
-      "title": "APX — terms page",
-      "excerpt": "even closer support of each founding team. Although in-person presence is no longer a requirement for investment, APX",
-      "page": "terms"
-    },
-    {
-      "id": "check-format-f84f81ecf7",
-      "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
-      "title": "APX — terms page",
-      "excerpt": "please contact Søren Nielsen, soren@apx.vc . Related Posts Virtual Pitching Tips: 14 Learnings From Our Home Offices Standing",
       "page": "terms"
     },
     {
@@ -162,38 +106,11 @@
     "announcedIntake": [],
     "cohortStarts": [],
     "durationWeeks": [],
-    "format": [
-      {
-        "value": "remote",
-        "evidenceId": "check-format-3ded190c95"
-      },
-      {
-        "value": "in-person",
-        "evidenceId": "check-format-b6cdddf9af"
-      }
-    ],
+    "format": [],
     "location": [],
     "selectivity": [],
-    "dealText": [
-      {
-        "value": "first investor. In addition to our financial investment of up to EUR 500,000, we provide startups with individual venture development support to",
-        "evidenceId": "check-deal-23dc8b610f"
-      }
-    ],
-    "dealComponents": [
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "500000",
-          "currency": "EUR",
-          "equity": null,
-          "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-23dc8b610f"
-      }
-    ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

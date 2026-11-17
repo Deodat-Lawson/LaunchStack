@@ -1,6 +1,6 @@
 {
   "programId": "contrary",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://contrary.com/",
     "https://applications.contrary.com",
@@ -25,13 +25,6 @@
       "title": "Contrary — application page",
       "excerpt": "they come in, so apply now. The sooner the better. We have a final deadline of Sunday, September 13th at 11:59pm PT. We generally prefer people with more than one",
       "page": "application"
-    },
-    {
-      "id": "check-deal-33b9271e7c",
-      "url": "https://contrary.com/blog/first-check-program",
-      "title": "Contrary — program page",
-      "excerpt": "of school. With our First Check program, 5 teams will receive up to $100k (as an uncapped note) to build companies. It doesn’t matter who you",
-      "page": "details"
     },
     {
       "id": "check-duration-376b101cfa",
@@ -81,13 +74,6 @@
       "title": "Contrary — application page",
       "excerpt": "as Chess or Go , OpenAI Five aimed to test AI agents in a virtual environment that would simulate the “messiness and",
       "page": "application"
-    },
-    {
-      "id": "check-format-e938f339d7",
-      "url": "https://contrary.com/companies",
-      "title": "Contrary — portfolio page",
-      "excerpt": "and HIPAA compliance. Sora Schools Sora Schools is a live, virtual high school designed to accelerate your student toward",
-      "page": "portfolio"
     },
     {
       "id": "check-name-b9380aabc7",
@@ -629,26 +615,8 @@
     ],
     "location": [],
     "selectivity": [],
-    "dealText": [
-      {
-        "value": "of school. With our First Check program, 5 teams will receive up to $100k (as an uncapped note) to build companies. It doesn’t matter who you",
-        "evidenceId": "check-deal-33b9271e7c"
-      }
-    ],
-    "dealComponents": [
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "100000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": true,
-          "condition": "up to"
-        },
-        "evidenceId": "check-deal-33b9271e7c"
-      }
-    ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://contrary.com/companies",

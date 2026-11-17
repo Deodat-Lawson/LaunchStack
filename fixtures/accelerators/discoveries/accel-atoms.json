@@ -1,13 +1,13 @@
 {
   "programId": "accel-atoms",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pages": [
     {
       "url": "https://apply.accel-atoms.com/",
       "page": "application",
       "anchor": "Apply Early",
-      "fetched": true,
-      "blocked": null,
+      "fetched": false,
+      "blocked": "robots",
       "origin": "official"
     },
     {

@@ -1,6 +1,6 @@
 {
   "programId": "dreamit",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://dreamit.com/",
     "https://dreamit.com/faq",
@@ -24,20 +24,6 @@
       "title": "Dreamit — program page",
       "excerpt": "industry, and investor networks during its 14-week acceleration programs. Dreamit incorporates the",
       "page": "details"
-    },
-    {
-      "id": "check-format-e21cbc19d8",
-      "url": "https://dreamit.com/portfolio",
-      "title": "Dreamit — portfolio page",
-      "excerpt": "third party and LLM egress, across cloud native and hybrid environments. Aurva deploys quickly and replaces a",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-format-fdf97e95fe",
-      "url": "https://dreamit.com/portfolio",
-      "title": "Dreamit — portfolio page",
-      "excerpt": "management efficiency and outcomes with evidence-based remote monitoring via automated text messages and phone calls.",
-      "page": "portfolio"
     },
     {
       "id": "check-name-380b2139c9",
@@ -281,16 +267,7 @@
         "evidenceId": "check-duration-a1b64e0566"
       }
     ],
-    "format": [
-      {
-        "value": "hybrid",
-        "evidenceId": "check-format-e21cbc19d8"
-      },
-      {
-        "value": "remote",
-        "evidenceId": "check-format-fdf97e95fe"
-      }
-    ],
+    "format": [],
     "location": [],
     "selectivity": [],
     "dealText": [

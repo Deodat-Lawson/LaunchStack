@@ -1,6 +1,6 @@
 {
   "programId": "ref-studio",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.betaworks.com/camp",
     "https://www.betaworks.com/camp/ai-camp-native-applications",
@@ -102,20 +102,6 @@
       "title": "Betaworks Camp — batches page",
       "excerpt": "specifics: Each participating company will receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note",
       "page": "batches"
-    },
-    {
-      "id": "check-deal-623977d2c0",
-      "url": "https://www.betaworks.com/companies",
-      "title": "Betaworks Camp — portfolio page",
-      "excerpt": "and seed stage and our typical check size ranges from $250,000 to $750,000. We also go deep into new categories through Camp , our cohort-based",
-      "page": "portfolio"
-    },
-    {
-      "id": "check-deal-8312ae2da1",
-      "url": "https://www.betaworks.com/companies",
-      "title": "Betaworks Camp — portfolio page",
-      "excerpt": "at pre-seed and seed stage and our typical check size ranges from $250,000 to $750,000. We also go deep into new categories through Camp , our",
-      "page": "portfolio"
     },
     {
       "id": "check-deal-dfe503b5bb",
@@ -1074,14 +1060,6 @@
       {
         "value": "receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note with a 25% discount, and receive a 5%",
         "evidenceId": "check-deal-dfe503b5bb"
-      },
-      {
-        "value": "at pre-seed and seed stage and our typical check size ranges from $250,000 to $750,000. We also go deep into new categories through Camp , our",
-        "evidenceId": "check-deal-8312ae2da1"
-      },
-      {
-        "value": "and seed stage and our typical check size ranges from $250,000 to $750,000. We also go deep into new categories through Camp , our cohort-based",
-        "evidenceId": "check-deal-623977d2c0"
       }
     ],
     "dealComponents": [
@@ -1132,30 +1110,6 @@
           "condition": "up to"
         },
         "evidenceId": "check-deal-dfe503b5bb"
-      },
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "250000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-8312ae2da1"
-      },
-      {
-        "value": {
-          "kind": "cash",
-          "amount": "750000",
-          "currency": "USD",
-          "equity": null,
-          "label": "Cash",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-623977d2c0"
       }
     ],
     "portfolioPages": [

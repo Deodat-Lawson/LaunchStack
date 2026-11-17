@@ -1,6 +1,6 @@
 {
   "programId": "entrepreneurs-roundtable-accelerator",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://www.eranyc.com/",
     "https://www.eranyc.com/apply/",
@@ -12,27 +12,6 @@
     "https://www.eranyc.com/press/ai-startup-ceo-pay-employee-18000-year-live-close-work-investment-worth/"
   ],
   "evidence": [
-    {
-      "id": "check-deal-115eb9f5a5",
-      "url": "https://www.eranyc.com/press/ai-startup-ceo-pay-employee-18000-year-live-close-work-investment-worth/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE As an AI startup CEO, I pay each employee $18,000",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-2e631d2d16",
-      "url": "https://www.eranyc.com/2017/02/10/biometric-theft-big-deal-behavioral-biometrics-can-help/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Biometric Theft is a Big Deal and Behavioral",
-      "page": "terms"
-    },
-    {
-      "id": "check-deal-3611f0c388",
-      "url": "https://www.eranyc.com/press/ai-startup-ceo-pay-employee-18000-year-live-close-work-investment-worth/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "$150K/6% Post-Money SAFE As an AI startup CEO, I pay each employee $18,000 a year to live close to work, and the investment is worth it Rilla",
-      "page": "terms"
-    },
     {
       "id": "check-deal-6e961cc03d",
       "url": "https://www.eranyc.com/why-era/",
@@ -88,13 +67,6 @@
       "title": "Entrepreneurs Roundtable Accelerator — program page",
       "excerpt": "in the four-month program will receive an initial investment of $150K on a 6% post-money SAFE and the potential for follow-on funding. ERA",
       "page": "details"
-    },
-    {
-      "id": "check-deal-b1e6423edf",
-      "url": "https://www.eranyc.com/2016/11/01/pittsburghs-growth-real-estate-investment-opportunities/",
-      "title": "Entrepreneurs Roundtable Accelerator — terms page",
-      "excerpt": "2026 Why ERA Team Mentors Companies FAQ W'27 Open W’27 Open $150K/6% Post-Money SAFE Pittsburgh’s Growth and Real Estate Investment",
-      "page": "terms"
     },
     {
       "id": "check-deal-ca5ffb6898",
@@ -729,18 +701,6 @@
           "condition": null
         },
         "evidenceId": "check-deal-964ce0e36a"
-      },
-      {
-        "value": {
-          "kind": "safe",
-          "amount": "18000",
-          "currency": "USD",
-          "equity": "6%",
-          "label": "SAFE",
-          "contingent": false,
-          "condition": null
-        },
-        "evidenceId": "check-deal-3611f0c388"
       }
     ],
     "portfolioPages": [

@@ -1,6 +1,6 @@
 {
   "programId": "angelpad",
-  "checkedAt": "2026-11-16T23:23:28.000Z",
+  "checkedAt": "2026-11-17T03:22:03.000Z",
   "pagesRead": [
     "https://angelpad.com/",
     "https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
@@ -104,13 +104,6 @@
       "title": "AngelPad — homepage",
       "excerpt": "AngelPad – #1 U.S Accelerator based in SF and NYC Skip to content Menu ABOUT",
       "page": "details"
-    },
-    {
-      "id": "check-location-eec97fa736",
-      "url": "https://angelpad.com/portfolio/",
-      "title": "AngelPad — portfolio page",
-      "excerpt": "very big companies. Most of them are based in San Francisco and New York, but many of them came",
-      "page": "portfolio"
     },
     {
       "id": "check-name-6a3965bf4d",
@@ -931,10 +924,6 @@
       {
         "value": "NYC",
         "evidenceId": "check-location-62d5ab396f"
-      },
-      {
-        "value": "San Francisco",
-        "evidenceId": "check-location-eec97fa736"
       }
     ],
     "selectivity": [],

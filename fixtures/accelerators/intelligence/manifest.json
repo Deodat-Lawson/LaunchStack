@@ -132,7 +132,7 @@
     },
     {
       "programId": "accel-atoms",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -156,7 +156,7 @@
         "geography.india"
       ],
       "openReviewIds": [],
-      "contentHash": "80c14fc0126dfa2c990e101ea2f5a130c81293291dfca25128a85dea123f468c"
+      "contentHash": "b6a9c0865dfd0f6e5d88656583916831babf88daad9fe9cc3825b86d0aae50a2"
     },
     {
       "programId": "accelerace",
@@ -341,7 +341,7 @@
     },
     {
       "programId": "afore-capital",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -361,7 +361,7 @@
         "geography.canada"
       ],
       "openReviewIds": [],
-      "contentHash": "1c427a86857689fde4a2137263266c1b411c5dff261c0cc609dd5ac4f8999ec8"
+      "contentHash": "a3ff05e1fd806a302283397794c1a80f33cd96e71845e8a4b7624a63e9be2b3a"
     },
     {
       "programId": "agoranov",
@@ -468,7 +468,7 @@
     },
     {
       "programId": "angelpad",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "seed-cohort"
       ],
@@ -497,11 +497,11 @@
         "geography.france"
       ],
       "openReviewIds": [],
-      "contentHash": "34f061f49aaae6be9a36926ff9f057b5a15f4dd6b27de765617d4d838aa1e4be"
+      "contentHash": "d3a905d08736e00b13018f8e3fad274f14c0f8e75bdc9ccdf884b06ff566512f"
     },
     {
       "programId": "antler",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "published-start-dates"
       ],
@@ -511,15 +511,9 @@
         "program_type.investor",
         "program_type.community",
         "sector.fintech",
-        "sector.health",
-        "sector.climate",
         "sector.insurance",
-        "sector.manufacturing",
         "sector.commerce",
         "technology.ai",
-        "business_model.b2b",
-        "business_model.saas",
-        "business_model.marketplace",
         "stage.pre-seed",
         "stage.early",
         "stage.growth",
@@ -546,7 +540,7 @@
         "antler:stale:antler-public-form",
         "antler:stale:official-logo"
       ],
-      "contentHash": "8f986a01b3016cd205b58b78256114cf9b7a3c3e274d901b6386c43e22a4f834"
+      "contentHash": "cffebcc3e769532f3393bc2a084efa0b0f6f4d248bdda231219c32228dcee246"
     },
     {
       "programId": "appworks",
@@ -589,7 +583,7 @@
     },
     {
       "programId": "apx",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -604,7 +598,7 @@
         "geography.germany"
       ],
       "openReviewIds": [],
-      "contentHash": "588a787637dd4b9c00ef81050a3196dfaf964625dcb6452baadaddd2ec81ad0a"
+      "contentHash": "84014df3f63cef8abba5cb7cf9ee2669ee0b2287a14cd3a182f44b3451cfaba4"
     },
     {
       "programId": "arch-grants",
@@ -865,7 +859,7 @@
     },
     {
       "programId": "balderton",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -900,7 +894,7 @@
         "geography.israel"
       ],
       "openReviewIds": [],
-      "contentHash": "cf0f6270b71526f9cb6ef283e22eaf845231543c418281cf96283fd3bfd9f199"
+      "contentHash": "cdf8111e4a9869b7fbbc29a855282034fd650a165be6c0f405a4eb149c5570d3"
     },
     {
       "programId": "berkeley-skydeck",
@@ -1042,7 +1036,7 @@
     },
     {
       "programId": "betaworks",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -1069,11 +1063,11 @@
         "geography.new-york"
       ],
       "openReviewIds": [],
-      "contentHash": "a1569328a3bd852a3a4c5450136f5647fb4f6009c46e804900e073c89f3cfe26"
+      "contentHash": "66a3dd139688fb499dc17baa08440b5736d6b54b99f4074ad23ea54c31170e82"
     },
     {
       "programId": "bethnal-green-ventures",
-      "checkedAt": "2026-11-17T00:20:40.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -1095,7 +1089,7 @@
         "geography.europe"
       ],
       "openReviewIds": [],
-      "contentHash": "5a485d6a98c113bddc8a8d6cee7bf7ed7e05f01b00988761045386b7eff16bee"
+      "contentHash": "21f547154e4877f66071ab6101e0c6cc9750e0abe585894a5ab3212c83e05155"
     },
     {
       "programId": "biohouston",
@@ -1113,7 +1107,7 @@
     },
     {
       "programId": "boost-vc",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "winter-fellowship"
       ],
@@ -1133,7 +1127,7 @@
         "geography.bay-area"
       ],
       "openReviewIds": [],
-      "contentHash": "e361a3340651ac394c8aba604ab13c621ec8f815423335185771c6bbbae631b2"
+      "contentHash": "e296e17450b54bd0106b3782ef81f043b864bd523b6223a6afcd9d00fd683701"
     },
     {
       "programId": "bp-ventures",
@@ -1283,7 +1277,7 @@
     },
     {
       "programId": "capital-factory",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -1318,7 +1312,7 @@
         "geography.united-states"
       ],
       "openReviewIds": [],
-      "contentHash": "e941486a4fa1f144d646887a6a60fca3592587fd0fc30258156f81f3b9b9944f"
+      "contentHash": "b357d447ebaa590c2d9b00abd06ef2bc24beb33e4c120a06edcebc7a87b8fd49"
     },
     {
       "programId": "capital-innovators",
@@ -1651,7 +1645,7 @@
     },
     {
       "programId": "clean-energy-trust",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -1686,7 +1680,7 @@
         "geography.africa"
       ],
       "openReviewIds": [],
-      "contentHash": "f93c0d64eea33af3a965268e1af48511b659fb6ca7215cb041b373d9c30cbc43"
+      "contentHash": "ab07cd10785e514613bcc60001cdd7661788455b3106f56f711bb903ec9af145"
     },
     {
       "programId": "climate-kic",
@@ -1924,7 +1918,7 @@
     },
     {
       "programId": "connect-ventures",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -1962,11 +1956,11 @@
         "geography.israel"
       ],
       "openReviewIds": [],
-      "contentHash": "30dda452ad4a49c3809231dabaacb0f08de5859a9bbbc54091f099211fb7a606"
+      "contentHash": "e02c6c57f7f49286859d4b00d5b6217200c51190f4d384d7de8c88d539fe7f30"
     },
     {
       "programId": "contrary",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -1995,7 +1989,7 @@
         "geography.latin-america"
       ],
       "openReviewIds": [],
-      "contentHash": "f47cc04b4f77a727ddba7b364d0911e54e946dd3e939cc3107cb0b88f1c3ab23"
+      "contentHash": "58cdd15d3fdcc11dcffa9287345d99cc0610687976e4cd6177c7883d0f795f9e"
     },
     {
       "programId": "copenhagen-fintech",
@@ -2157,7 +2151,7 @@
     },
     {
       "programId": "cyclotron-road",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -2179,7 +2173,7 @@
         "geography.east-asia"
       ],
       "openReviewIds": [],
-      "contentHash": "dff740be79b5fa930872b080909b0baf0afe53d0ed4b909c93793b9cb3bb1703"
+      "contentHash": "73c489c2b07f461be255421d24091efb6bb397c27bb14de70973ce30006c784b"
     },
     {
       "programId": "czechinvest",
@@ -2211,7 +2205,7 @@
     },
     {
       "programId": "dallas-entrepreneur-center-dec",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -2231,7 +2225,7 @@
       "openReviewIds": [
         "dallas-entrepreneur-center-dec:email"
       ],
-      "contentHash": "4ef16547097fa76a7c38f5a442776c702d57b3f454ac92ebeb312f53a5fa2cdc"
+      "contentHash": "f759a57038fa97e6abec3022ed68fe98f1de36d5905c008c26ef37d3fa1889f8"
     },
     {
       "programId": "darwin-startups",
@@ -2356,7 +2350,7 @@
     },
     {
       "programId": "dmz",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -2368,18 +2362,14 @@
         "program_type.competition",
         "program_type.grant",
         "sector.education",
-        "sector.defense",
-        "technology.ai",
         "customer_type.smb",
         "stage.early",
         "benefit.mentorship",
         "benefit.investor-access",
         "geography.canada"
       ],
-      "openReviewIds": [
-        "dmz:applicationsOpen"
-      ],
-      "contentHash": "07fcfaafb1346b43e8688dd591aa39e226c921b68f0607a681657a822d3a1ed1"
+      "openReviewIds": [],
+      "contentHash": "af5698c7727915de076a9268f3dd0a755b4045077fa4dd6711989ac2cc5ea8ab"
     },
     {
       "programId": "dogpatch-labs",
@@ -2464,7 +2454,7 @@
     },
     {
       "programId": "dreamit",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "pitch"
       ],
@@ -2485,7 +2475,7 @@
         "geography.chicago"
       ],
       "openReviewIds": [],
-      "contentHash": "cd5b16ae6bc5deced3fb4a7e534dcd35e02e60d255d95fc082f55cf0f4935f9c"
+      "contentHash": "03e174b00c526a987bd37de9efe91e10090ebfaac02d2998e8b8b231ea5639ec"
     },
     {
       "programId": "duncan-center-for-business-development",
@@ -2696,7 +2686,7 @@
     },
     {
       "programId": "eit-rawmaterials",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -2704,31 +2694,25 @@
       "tagIds": [
         "program_type.investor",
         "program_type.corporate-innovation",
+        "program_type.university",
+        "program_type.community",
         "program_type.competition",
         "program_type.grant",
-        "sector.climate",
-        "sector.energy",
         "sector.mobility",
-        "sector.defense",
         "sector.manufacturing",
-        "sector.logistics",
         "sector.deep-tech",
-        "technology.hardware",
+        "technology.ai",
+        "business_model.marketplace",
         "customer_type.smb",
-        "stage.pre-seed",
-        "stage.seed",
         "stage.early",
+        "stage.idea",
         "stage.growth",
         "benefit.mentorship",
         "geography.europe",
-        "geography.france",
-        "geography.germany",
-        "geography.nordics",
-        "geography.central-eastern-europe",
-        "geography.east-asia"
+        "geography.iberia"
       ],
       "openReviewIds": [],
-      "contentHash": "3a84d2572d1ded83a92846d7826d177bc463216a2a3f9bfc5342a808f29a5a58"
+      "contentHash": "e87cf0d97c9ff6751e43ba6c56694e7e0dd7b6eccbbd411f2e7c16717b6db478"
     },
     {
       "programId": "eit-urban-mobility",
@@ -2850,7 +2834,7 @@
     },
     {
       "programId": "entrepreneurs-first",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "bangalore-winter-2027",
         "bridge-winter-2027"
@@ -2940,11 +2924,11 @@
         "entrepreneurs-first:stale:ef-bridge-page",
         "entrepreneurs-first:stale:official-logo"
       ],
-      "contentHash": "548f5a4858c746a31dc62d52424e71e4a0208f89eba583703171dee517edfb07"
+      "contentHash": "2eeaac34b9ce0bc31d4a5d0700fbae840116f331d1a8d669139bddcce5c8ee34"
     },
     {
       "programId": "entrepreneurs-roundtable-accelerator",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "winter-2027"
       ],
@@ -3356,7 +3340,7 @@
         "geography.germany"
       ],
       "openReviewIds": [],
-      "contentHash": "d0ceb3403b75dc8b1821457d5d85fb1347edb97a1d5834b735232ec79aa1f256"
+      "contentHash": "9d6ecff7c95f9ab259b1b71044be3600aa04934fd816fd7bb277d38de48e8654"
     },
     {
       "programId": "epfl-innovation",
@@ -3390,7 +3374,7 @@
     },
     {
       "programId": "eqt-ventures",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -3429,12 +3413,13 @@
         "geography.germany",
         "geography.netherlands",
         "geography.nordics",
+        "geography.iberia",
         "geography.india",
         "geography.southeast-asia",
         "geography.east-asia"
       ],
       "openReviewIds": [],
-      "contentHash": "ff6317e478a382362378816427a2773f892f9b6c90c844812983042a3b3a7fb0"
+      "contentHash": "dc9b486269c555f33939c58decb9fb81934c83684513b825ad336193f84b567c"
     },
     {
       "programId": "esa-bic",
@@ -3570,11 +3555,11 @@
       "openReviewIds": [
         "falak:inaccessible:homepage"
       ],
-      "contentHash": "85584695be529a888c17ec8a759195e4147e73d4cc00251cc16ff469b486aafd"
+      "contentHash": "83245ad356fcdf728df646d96e4a28e72e259d9ddba00ae07e62df01b8d90935"
     },
     {
       "programId": "first-round",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -3603,11 +3588,11 @@
         "geography.new-york"
       ],
       "openReviewIds": [],
-      "contentHash": "1306b8282aef1fdd50bbd6d631ca67bf2019dc5a50ba25f07baae827b126f010"
+      "contentHash": "384f2e08f47f682cbf616776674ab5b4ca35a822cc9c619885611902590146d5"
     },
     {
       "programId": "fishburners",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -3630,7 +3615,7 @@
         "geography.oceania"
       ],
       "openReviewIds": [],
-      "contentHash": "13addf18a0528ec7a5eb3dcc8f3f50dd148a78c486f527a97af6650026b7bed2"
+      "contentHash": "4286e4bef1049fb50527e213dcfd1d3cfb74a76397e9a93137ab1c5771bd82d8"
     },
     {
       "programId": "fitt-iitd",
@@ -4018,7 +4003,7 @@
     },
     {
       "programId": "general-catalyst",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -4027,16 +4012,13 @@
         "program_type.competition",
         "program_type.grant",
         "sector.health",
-        "sector.energy",
         "sector.defense",
-        "sector.logistics",
         "technology.ai",
-        "stage.seed",
         "geography.united-states",
         "geography.europe"
       ],
       "openReviewIds": [],
-      "contentHash": "71500fb8d925356f8165f2f1486e83858b13b6813e5a990da0584f167f882a59"
+      "contentHash": "cd89299dffd7352d6e7906383f36a6de6783b88042b7dbf0f8aef3007ca2f3b2"
     },
     {
       "programId": "german-accelerator",
@@ -4147,7 +4129,7 @@
     },
     {
       "programId": "greentown-labs",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -4163,10 +4145,10 @@
         "program_type.grant",
         "sector.climate",
         "sector.energy",
+        "sector.property",
         "sector.manufacturing",
         "sector.social-impact",
         "technology.ai",
-        "technology.robotics",
         "technology.hardware",
         "business_model.marketplace",
         "customer_type.enterprise",
@@ -4181,11 +4163,11 @@
         "geography.india"
       ],
       "openReviewIds": [],
-      "contentHash": "9e15048c9932ba6753181e26244dc17843c9ac1323b4c6f4031a6531f6b1ddda"
+      "contentHash": "1e2052ed1bc6a10f9337d0d8072e1fcb60b5feb908ebe4b19f7e53e498581319"
     },
     {
       "programId": "greentown-labs-houston",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -4217,11 +4199,11 @@
         "geography.india"
       ],
       "openReviewIds": [],
-      "contentHash": "043dea79e0c604883186ef12e74005cd8b8faf249562a32e86f4db9fe3a51369"
+      "contentHash": "71ebf11660862db7be751993593634331f0c069e8f129a66fa1a522d54ee4195"
     },
     {
       "programId": "greylock",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -4237,11 +4219,11 @@
         "stage.early"
       ],
       "openReviewIds": [],
-      "contentHash": "340bf815a155f65697a027215c7d9280ca15518d7487892dc5e08386719382c4"
+      "contentHash": "d8a816de34a71d2d494350658a9fccab33375378032e3979b9a0e2cf058ccc9c"
     },
     {
       "programId": "griffiss-institute-certified-business-incubator-gi",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -4263,7 +4245,7 @@
         "geography.europe"
       ],
       "openReviewIds": [],
-      "contentHash": "5db9c91517683d76265670ec4e35b3d4606ad3e19817a3a123e53bcd337edc69"
+      "contentHash": "94627cd003d022b4185d60801aa12a5f979e8124104dff1abd46f62f58590638"
     },
     {
       "programId": "gsf-accelerator",
@@ -4567,7 +4549,7 @@
     },
     {
       "programId": "hub-for-innovation-and-entrepreneurship-nycrin",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -4579,7 +4561,7 @@
         "geography.new-york"
       ],
       "openReviewIds": [],
-      "contentHash": "58c7f6f2d2826ef85d8766d58b66b841d4d1e5357a857102882c38b345e50d0c"
+      "contentHash": "441d50a240ad03e111f379e36f016e8b451ddf15348bfe09fa6d23b77ad1c764"
     },
     {
       "programId": "hub-of-human-innovation",
@@ -4716,7 +4698,7 @@
     },
     {
       "programId": "hustle-fund",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -4753,7 +4735,7 @@
         "geography.southeast-asia"
       ],
       "openReviewIds": [],
-      "contentHash": "215bef24971ae2bf0c3b567e32e64abe6e662f5b9ec6dda298b87be243e9b589"
+      "contentHash": "f6f0e5fb47cb93833a89394c59cc416e30039c2c2e2f937ebae56eeb4211d7ae"
     },
     {
       "programId": "icebreaker",
@@ -5118,7 +5100,7 @@
     },
     {
       "programId": "industrifonden",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -5141,7 +5123,7 @@
         "geography.nordics"
       ],
       "openReviewIds": [],
-      "contentHash": "4f1560da9cebad72ed6baf2a8ff715b23e4962755c4f91541f922295fb1d5dc9"
+      "contentHash": "c9b44b573df992dfdc8f79a6b4549dc2c4bfe61b490b443303cf1b8cc379a3b0"
     },
     {
       "programId": "injini",
@@ -5393,7 +5375,7 @@
     },
     {
       "programId": "kickstart-innovation",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -5423,7 +5405,7 @@
         "geography.switzerland"
       ],
       "openReviewIds": [],
-      "contentHash": "1063a29b3e5ccfc5726017e5a738f75df9e0b7b5a1abe30bdccff21f18b89a71"
+      "contentHash": "ed5189c1871de5f717fcf0667bd0a914854b0a6c29d9e87dba71d592e4e627aa"
     },
     {
       "programId": "koffman-southern-tier-incubator",
@@ -5520,7 +5502,7 @@
     },
     {
       "programId": "launchvic",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -5529,6 +5511,7 @@
         "program_type.accelerator",
         "program_type.investor",
         "program_type.community",
+        "program_type.competition",
         "program_type.grant",
         "sector.health",
         "sector.life-sciences",
@@ -5536,11 +5519,14 @@
         "sector.energy",
         "sector.agrifood",
         "sector.mobility",
+        "sector.defense",
+        "sector.manufacturing",
         "sector.commerce",
         "sector.logistics",
         "sector.deep-tech",
         "technology.ai",
         "technology.hardware",
+        "technology.quantum",
         "business_model.b2b",
         "customer_type.government",
         "stage.pre-seed",
@@ -5559,7 +5545,7 @@
         "geography.oceania"
       ],
       "openReviewIds": [],
-      "contentHash": "82380cf9f69d352561915d33a59b6ee45d59261feec826e51836170feaf4415b"
+      "contentHash": "48a37ebeb636e2fcc69f00cb451b2be76dfd7117519e3c562413f7923643678d"
     },
     {
       "programId": "lawrence-berkeley",
@@ -5587,7 +5573,7 @@
     },
     {
       "programId": "lifeline-ventures",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -5608,7 +5594,7 @@
         "geography.nordics"
       ],
       "openReviewIds": [],
-      "contentHash": "ad857dbfe48f925a276e4850d8d33013a329ceaa0dd9fd25731a3d2117d47bcc"
+      "contentHash": "cc1c8880f53daa214b3f59c9e64351e561a006a488ab85d633309034f76bbb94"
     },
     {
       "programId": "lifesciky",
@@ -5974,7 +5960,7 @@
     },
     {
       "programId": "mhub",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -6009,7 +5995,7 @@
         "geography.chicago"
       ],
       "openReviewIds": [],
-      "contentHash": "30bc22f1240040fc746b1ae7d915ad77671aedc0ac2372a6f72b58541df11a95"
+      "contentHash": "0eef894c14fbe112b9f1fe45c06df53643bdf185593f04ab7ec823a628eae2dd"
     },
     {
       "programId": "microsoft-for-startups",
@@ -6324,14 +6310,12 @@
     },
     {
       "programId": "newlab",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
       "tagIds": [
-        "program_type.accelerator",
-        "program_type.incubator",
         "program_type.residency",
         "program_type.community",
         "program_type.grant",
@@ -6356,7 +6340,7 @@
         "geography.latin-america"
       ],
       "openReviewIds": [],
-      "contentHash": "65b6659ad53e63aa500b750b52befd57c4502dd631e229981780e51e593778db"
+      "contentHash": "087a687cc07d62dd6660cf7a4ca0b7c671c2225e7f68a82e26d4326f5c17fb28"
     },
     {
       "programId": "next-canada",
@@ -6589,7 +6573,7 @@
     },
     {
       "programId": "northzone",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -6613,7 +6597,7 @@
         "geography.nordics"
       ],
       "openReviewIds": [],
-      "contentHash": "c8959e432b0099fb7654e640277bbd4c1f33e9b17f9be9d636d3285f3598d2b7"
+      "contentHash": "6e7ac0f62989db05718857695aadb0acca753346db64d431ddc21a7c87f8214d"
     },
     {
       "programId": "nsf-i-corps-desert-and-pacific-region-hub",
@@ -6665,7 +6649,7 @@
     },
     {
       "programId": "nsf-i-corps-interior-northeast-region-hub",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -6682,7 +6666,7 @@
         "geography.new-york"
       ],
       "openReviewIds": [],
-      "contentHash": "4ce2c16b03e86f0042b63704bfa860ba5048ab79234b28412b49bcc131244085"
+      "contentHash": "6e5d9407a621cec44acc900a4fa1416c3577c175ae301869821da6d350486b33"
     },
     {
       "programId": "nsf-i-corps-mid-south-region-hub",
@@ -6811,7 +6795,7 @@
     },
     {
       "programId": "nsf-i-corps-west-region-hub",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -6827,7 +6811,7 @@
         "geography.latin-america"
       ],
       "openReviewIds": [],
-      "contentHash": "45b255728dd60dcd68d3b2707bcd32d70736763568bbff51ab4fa5af7fb99f24"
+      "contentHash": "d644268687e59ae619edff67570e344fc16acf09c275ce7e826e3e89ad89d37e"
     },
     {
       "programId": "nsf-icorps",
@@ -7040,7 +7024,7 @@
     },
     {
       "programId": "olean-business-development",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -7053,7 +7037,7 @@
         "benefit.workspace"
       ],
       "openReviewIds": [],
-      "contentHash": "f86d7c94a0eb452b237157c5492fbe3348a1cd3ec3dae51c5f163680e8121169"
+      "contentHash": "52b8ac475891eef0a7c0a8946cff723db8db64311169b6ab50dc22e2d30236b4"
     },
     {
       "programId": "on-deck",
@@ -7085,7 +7069,7 @@
     },
     {
       "programId": "one-eight-seven-one",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -7111,7 +7095,7 @@
         "geography.chicago"
       ],
       "openReviewIds": [],
-      "contentHash": "a0620428ab5e2c8d9f1e21508bf6a6e752aa69148a05bf89f2f86a13a33189b3"
+      "contentHash": "2b72771ac7c5a1718a194172b80e9b04ed40e46e98139505338011332e2e2a54"
     },
     {
       "programId": "one-eleven",
@@ -7164,7 +7148,7 @@
     },
     {
       "programId": "openspace",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -7183,7 +7167,7 @@
         "geography.southeast-asia"
       ],
       "openReviewIds": [],
-      "contentHash": "caaa68b2c5707550a34f9fe50a30ee32d2b1c4a53ea8db878eea765358fc1e7b"
+      "contentHash": "b19bc937a5e7669df72f0ba7b6bcffcf4b09dd50e86067b0e0eaf3443e03f9ab"
     },
     {
       "programId": "orbit-startups",
@@ -7368,7 +7352,7 @@
     },
     {
       "programId": "peak-xv",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -7404,11 +7388,10 @@
         "geography.middle-east",
         "geography.india",
         "geography.southeast-asia",
-        "geography.east-asia",
         "geography.oceania"
       ],
       "openReviewIds": [],
-      "contentHash": "d15fb40905c54f77cc4b822d9197ef631690a555d01ef0421fa0fa2e539e6247"
+      "contentHash": "7f99fa444fdec2781dd49bf2da8cc636f6c28b5044c1e6627309ecd0cfcc4a6b"
     },
     {
       "programId": "pear-vc",
@@ -7618,7 +7601,7 @@
     },
     {
       "programId": "ref-studio",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -7645,7 +7628,7 @@
         "geography.new-york"
       ],
       "openReviewIds": [],
-      "contentHash": "6ea462ef6750c569154b6009348a44d1f94153443aafc3822e1208f3b772ef04"
+      "contentHash": "bf6e478b8e7dc0510c1efbe4bb2914eed3a3eee43b0de0ca2d393477f5011f6e"
     },
     {
       "programId": "rev-ithaca-startup-works",
@@ -7851,49 +7834,40 @@
     },
     {
       "programId": "seedstars",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
       "tagIds": [
         "program_type.accelerator",
-        "program_type.incubator",
         "program_type.investor",
-        "program_type.competition",
         "sector.fintech",
         "sector.climate",
         "sector.energy",
-        "sector.education",
         "sector.agrifood",
         "sector.mobility",
-        "sector.govtech",
         "sector.commerce",
         "sector.logistics",
         "sector.social-impact",
         "technology.hardware",
         "customer_type.smb",
-        "customer_type.government",
         "stage.pre-seed",
         "stage.early",
         "benefit.mentorship",
-        "geography.united-states",
         "geography.europe",
-        "geography.france",
         "geography.switzerland",
         "geography.central-eastern-europe",
         "geography.middle-east",
         "geography.africa",
-        "geography.southeast-asia",
-        "geography.east-asia",
         "geography.latin-america"
       ],
       "openReviewIds": [],
-      "contentHash": "a5705989e22896ceabcdf01c4c9b6ee1f7a2089578b4424fa96cbdcb123c2e0a"
+      "contentHash": "24648491f1d156184ac827451c0d54a4848dd667e22810336f15a2561c7d5c4b"
     },
     {
       "programId": "sequoia",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -7903,7 +7877,7 @@
         "technology.ai"
       ],
       "openReviewIds": [],
-      "contentHash": "9f1c7db99e459520bc7b6ffb34b35702b0650321f93babae400761b452de031e"
+      "contentHash": "81e23116df2ac813fea3764710c6b20d0b2ade0ab0e1933c8f87f4c5583a64a5"
     },
     {
       "programId": "sequoia-arc",
@@ -8125,7 +8099,7 @@
     },
     {
       "programId": "social-alpha",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -8135,16 +8109,12 @@
         "program_type.incubator",
         "program_type.residency",
         "program_type.investor",
-        "program_type.corporate-innovation",
         "program_type.grant",
         "sector.health",
-        "sector.life-sciences",
         "sector.climate",
         "sector.energy",
         "sector.agrifood",
         "sector.mobility",
-        "sector.aerospace",
-        "sector.defense",
         "sector.manufacturing",
         "sector.logistics",
         "sector.social-impact",
@@ -8152,22 +8122,18 @@
         "technology.ai",
         "technology.hardware",
         "technology.quantum",
-        "business_model.b2c",
-        "business_model.marketplace",
         "customer_type.consumer",
         "stage.seed",
         "stage.early",
-        "stage.idea",
         "stage.growth",
         "instrument.convertible-note",
         "benefit.mentorship",
         "benefit.lab-space",
-        "geography.united-states",
-        "geography.boston",
+        "benefit.demo-day",
         "geography.india"
       ],
       "openReviewIds": [],
-      "contentHash": "9ae4f01cb210eaa702a2fe4e5adaaed408ba3ab56393a73709ba9888b792c0c4"
+      "contentHash": "9346085743825f79346d57bf4cda29fd21af60bde4fca618e72725f681370559"
     },
     {
       "programId": "sosv",
@@ -8284,7 +8250,7 @@
     },
     {
       "programId": "southern-tier-startup-alliance",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -8318,7 +8284,7 @@
         "geography.new-york"
       ],
       "openReviewIds": [],
-      "contentHash": "4fac2266343d5fa67c634bd63366710430a9fa2c00ace42b7388fe7ccc58da42"
+      "contentHash": "496ef5136da2f38ae54169714057ef711fa0920374fb38e26e4df4f81bf1a78e"
     },
     {
       "programId": "space-capital",
@@ -8523,7 +8489,7 @@
     },
     {
       "programId": "startup-autobahn",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -8573,11 +8539,11 @@
         "geography.latin-america"
       ],
       "openReviewIds": [],
-      "contentHash": "3e8d794d8baa8730324d3c7205e1e189556b2e68221b8838f3036968bbbf04ba"
+      "contentHash": "c390fa282f9164e1715f23474efedecbe9ad3ea04644ede70c74a4bc06c68368"
     },
     {
       "programId": "startup-bahrain",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -8604,7 +8570,7 @@
         "geography.middle-east"
       ],
       "openReviewIds": [],
-      "contentHash": "3d57e9fae1ab1304463bfa42d60c571e767e9fba53359237f7a72a7de1af80d5"
+      "contentHash": "5b187f1f7b5587a8285b8ad63c9adad746cd62d77b2538133fe6769a3d3edf88"
     },
     {
       "programId": "startup-braga",
@@ -8998,7 +8964,7 @@
     },
     {
       "programId": "stellaris-vp",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -9016,7 +8982,7 @@
         "geography.india"
       ],
       "openReviewIds": [],
-      "contentHash": "0505b722b56d4e1d31436f0847026cce8456d17c48c328ebe56116c9ffa7b808"
+      "contentHash": "8c5c950792b2b53b2ad9c8cebb68feb88d6f294421092bb3a414eae719362222"
     },
     {
       "programId": "sting",
@@ -9175,7 +9141,7 @@
     },
     {
       "programId": "t-hub",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -9188,6 +9154,7 @@
         "program_type.community",
         "program_type.education",
         "program_type.grant",
+        "sector.fintech",
         "sector.health",
         "sector.climate",
         "sector.energy",
@@ -9214,11 +9181,11 @@
         "geography.india"
       ],
       "openReviewIds": [],
-      "contentHash": "34ae9822327acddc4ab0bd90481a9d100e443b63d3c49451add18dfbe9bbc5e7"
+      "contentHash": "7bd5f95e765ceda9a58564e39c7878ebf73d32da65369105612bf22ea64655a2"
     },
     {
       "programId": "tech-fort-worth",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -9247,7 +9214,7 @@
         "benefit.investor-access"
       ],
       "openReviewIds": [],
-      "contentHash": "4cc877cc48f2d3f40f265a497237ee3aea653c50daa90ceaec3469f9c6a6e5b1"
+      "contentHash": "054a735cdf6d174f15016385aa57b03d04713204aca6dcbcf49393aae2dfd3b9"
     },
     {
       "programId": "tech-nexus",
@@ -9365,7 +9332,7 @@
     },
     {
       "programId": "techstars",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "network"
       ],
@@ -9374,30 +9341,23 @@
         "program_type.accelerator",
         "program_type.incubator",
         "program_type.investor",
-        "program_type.university",
         "program_type.community",
         "program_type.grant",
         "sector.fintech",
         "sector.health",
-        "sector.education",
+        "sector.climate",
+        "sector.energy",
         "sector.mobility",
         "sector.defense",
-        "sector.web3",
-        "sector.media",
+        "sector.insurance",
         "sector.logistics",
         "technology.ai",
-        "technology.hardware",
+        "technology.robotics",
         "technology.blockchain",
-        "technology.quantum",
-        "technology.xr",
-        "business_model.b2b",
-        "business_model.b2c",
-        "business_model.marketplace",
         "customer_type.enterprise",
         "stage.pre-seed",
         "stage.seed",
         "stage.early",
-        "instrument.convertible-note",
         "benefit.mentorship",
         "benefit.demo-day",
         "geography.united-states",
@@ -9407,24 +9367,19 @@
         "geography.united-kingdom",
         "geography.london",
         "geography.europe",
-        "geography.france",
-        "geography.germany",
         "geography.netherlands",
-        "geography.iberia",
-        "geography.middle-east",
         "geography.india",
-        "geography.southeast-asia",
         "geography.east-asia"
       ],
       "openReviewIds": [
         "techstars:stale:homepage",
         "techstars:stale:official-logo"
       ],
-      "contentHash": "6629b3f29967625fffe014698d4ff5938904b268bc33550b66e13cafe9a7d269"
+      "contentHash": "3751741bef967598046cc38be41745a842c1996c71d43e6ea44d553ba5e274a7"
     },
     {
       "programId": "techstars-anywhere",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -9433,31 +9388,22 @@
         "program_type.accelerator",
         "program_type.incubator",
         "program_type.investor",
-        "program_type.university",
         "program_type.community",
         "program_type.grant",
         "sector.fintech",
         "sector.health",
-        "sector.education",
-        "sector.mobility",
+        "sector.climate",
+        "sector.energy",
         "sector.defense",
-        "sector.web3",
-        "sector.media",
+        "sector.insurance",
         "sector.logistics",
         "technology.ai",
         "technology.robotics",
-        "technology.hardware",
         "technology.blockchain",
-        "technology.quantum",
-        "technology.xr",
-        "business_model.b2b",
-        "business_model.b2c",
-        "business_model.marketplace",
         "customer_type.enterprise",
         "stage.pre-seed",
         "stage.seed",
         "stage.early",
-        "instrument.convertible-note",
         "benefit.mentorship",
         "benefit.demo-day",
         "geography.united-states",
@@ -9467,21 +9413,16 @@
         "geography.united-kingdom",
         "geography.london",
         "geography.europe",
-        "geography.france",
-        "geography.germany",
         "geography.netherlands",
-        "geography.iberia",
-        "geography.middle-east",
         "geography.india",
-        "geography.southeast-asia",
         "geography.east-asia"
       ],
       "openReviewIds": [],
-      "contentHash": "c364c6699237fe35ca23586abba79159b138d54ff56a80a1eca2c7ebf3d1627d"
+      "contentHash": "3db5f5405d00646357fc2d50e67805790286bc853ef3afd3e17a05bd088412ab"
     },
     {
       "programId": "techstars-chicago",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -9490,30 +9431,22 @@
         "program_type.accelerator",
         "program_type.incubator",
         "program_type.investor",
-        "program_type.university",
         "program_type.community",
         "program_type.grant",
         "sector.fintech",
         "sector.health",
-        "sector.education",
-        "sector.mobility",
+        "sector.climate",
+        "sector.energy",
         "sector.defense",
-        "sector.web3",
-        "sector.media",
+        "sector.insurance",
         "sector.logistics",
         "technology.ai",
-        "technology.hardware",
+        "technology.robotics",
         "technology.blockchain",
-        "technology.quantum",
-        "technology.xr",
-        "business_model.b2b",
-        "business_model.b2c",
-        "business_model.marketplace",
         "customer_type.enterprise",
         "stage.pre-seed",
         "stage.seed",
         "stage.early",
-        "instrument.convertible-note",
         "benefit.mentorship",
         "benefit.workspace",
         "benefit.demo-day",
@@ -9524,21 +9457,16 @@
         "geography.united-kingdom",
         "geography.london",
         "geography.europe",
-        "geography.france",
-        "geography.germany",
         "geography.netherlands",
-        "geography.iberia",
-        "geography.middle-east",
         "geography.india",
-        "geography.southeast-asia",
         "geography.east-asia"
       ],
       "openReviewIds": [],
-      "contentHash": "967fb2be3ea6d34a4e105fd4a30f74483739c6868a9a725ed67b20d6a53592b9"
+      "contentHash": "c5a26ecd4aabf99bdb3d7bdc2a4d17efd911756429a623c7881d53c0a6ff664a"
     },
     {
       "programId": "techstars-london",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "london-march-2027"
       ],
@@ -9547,30 +9475,22 @@
         "program_type.accelerator",
         "program_type.incubator",
         "program_type.investor",
-        "program_type.university",
         "program_type.community",
         "program_type.grant",
         "sector.fintech",
         "sector.health",
-        "sector.education",
-        "sector.mobility",
+        "sector.climate",
+        "sector.energy",
         "sector.defense",
-        "sector.web3",
-        "sector.media",
+        "sector.insurance",
         "sector.logistics",
         "technology.ai",
-        "technology.hardware",
+        "technology.robotics",
         "technology.blockchain",
-        "technology.quantum",
-        "technology.xr",
-        "business_model.b2b",
-        "business_model.b2c",
-        "business_model.marketplace",
         "customer_type.enterprise",
         "stage.pre-seed",
         "stage.seed",
         "stage.early",
-        "instrument.convertible-note",
         "benefit.mentorship",
         "benefit.demo-day",
         "geography.united-states",
@@ -9580,24 +9500,19 @@
         "geography.united-kingdom",
         "geography.london",
         "geography.europe",
-        "geography.france",
-        "geography.germany",
         "geography.netherlands",
         "geography.nordics",
-        "geography.iberia",
-        "geography.middle-east",
         "geography.india",
-        "geography.southeast-asia",
         "geography.east-asia"
       ],
       "openReviewIds": [
         "techstars-london:stale:london-schedule"
       ],
-      "contentHash": "47af5dff7ca536d230cca952e7cb71e9f1d8e4fce688b406863f5824b8a1603a"
+      "contentHash": "94b84012c4b29af2d399cb1f7b1a3272754f8b700de94984c427382154325781"
     },
     {
       "programId": "techstars-usc",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -9611,26 +9526,18 @@
         "program_type.grant",
         "sector.fintech",
         "sector.health",
-        "sector.education",
-        "sector.mobility",
         "sector.defense",
-        "sector.web3",
-        "sector.media",
+        "sector.insurance",
         "sector.logistics",
         "sector.deep-tech",
         "technology.ai",
-        "technology.hardware",
+        "technology.robotics",
         "technology.blockchain",
         "technology.quantum",
-        "technology.xr",
-        "business_model.b2b",
-        "business_model.b2c",
-        "business_model.marketplace",
         "customer_type.enterprise",
         "stage.pre-seed",
         "stage.seed",
         "stage.early",
-        "instrument.convertible-note",
         "benefit.mentorship",
         "benefit.workspace",
         "benefit.demo-day",
@@ -9642,17 +9549,12 @@
         "geography.united-kingdom",
         "geography.london",
         "geography.europe",
-        "geography.france",
-        "geography.germany",
         "geography.netherlands",
-        "geography.iberia",
-        "geography.middle-east",
         "geography.india",
-        "geography.southeast-asia",
         "geography.east-asia"
       ],
       "openReviewIds": [],
-      "contentHash": "1b49e60d14bf7883aa0e965fa4576bf98d17585c2d8d52947f318e88988a938e"
+      "contentHash": "c832a4818b85d560768ee0eaf9eca902216aab6eb4aedb8eb2d1410aa80ebc0b"
     },
     {
       "programId": "tenity",
@@ -9768,7 +9670,7 @@
     },
     {
       "programId": "thinktiv",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -9779,11 +9681,11 @@
         "stage.early"
       ],
       "openReviewIds": [],
-      "contentHash": "462a95eca1bc142280449ac45dedde22f92b6fcbdbfd0c95a1f9fae6feaf4019"
+      "contentHash": "3fe3c0e94be50d6c4c65f4d7c2efe51014dc44489a25ebb63b0a9a248535b1f6"
     },
     {
       "programId": "third-derivative",
-      "checkedAt": "2026-11-17T00:44:46.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -9808,7 +9710,7 @@
         "geography.middle-east"
       ],
       "openReviewIds": [],
-      "contentHash": "604e1ddcef8af722d8260b8b3668d32ed1565e1a0eb36128f128426e1f6da8e0"
+      "contentHash": "2e892b92848d3d94cf74f6989a260dbfabcfc99985a11ba29d6e4808460f7802"
     },
     {
       "programId": "third-derivative-rmi",
@@ -9905,7 +9807,7 @@
     },
     {
       "programId": "ucl-business",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -9923,11 +9825,10 @@
         "customer_type.consumer",
         "stage.early",
         "geography.united-kingdom",
-        "geography.london",
-        "geography.europe"
+        "geography.london"
       ],
       "openReviewIds": [],
-      "contentHash": "a00b7e7dda7981aa4e39a9855689d2ab22cc954e2a10de4d52eaec9ca98b486d"
+      "contentHash": "acc2c2693f857dc87dc2077f9feaf60ebe0368afe5437c353b6f9309b6a3b024"
     },
     {
       "programId": "ucla-anderson",
@@ -10264,7 +10165,7 @@
     },
     {
       "programId": "village-capital",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -10286,23 +10187,17 @@
         "sector.property",
         "sector.insurance",
         "sector.govtech",
-        "sector.commerce",
-        "sector.logistics",
         "sector.social-impact",
         "technology.ai",
-        "business_model.b2b",
-        "business_model.b2c",
         "customer_type.enterprise",
         "customer_type.smb",
         "stage.seed",
         "stage.early",
-        "instrument.convertible-note",
         "instrument.non-dilutive",
         "benefit.mentorship",
         "geography.united-states",
         "geography.new-york",
         "geography.europe",
-        "geography.netherlands",
         "geography.iberia",
         "geography.middle-east",
         "geography.africa",
@@ -10310,7 +10205,7 @@
         "geography.latin-america"
       ],
       "openReviewIds": [],
-      "contentHash": "d99feeb3d70d68e80045cd0a428dc0484f1f77aebb497530e3ca89bc84ffd172"
+      "contentHash": "0030f0e6a2636b9a12e68ffdeda854581f8097ede6e2562e04bc3f663d018d31"
     },
     {
       "programId": "village-global",
@@ -10464,7 +10359,7 @@
     },
     {
       "programId": "wayra",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "public-page"
       ],
@@ -10494,7 +10389,7 @@
         "geography.latin-america"
       ],
       "openReviewIds": [],
-      "contentHash": "fdec0c6047340d4c3691e8a4e83fb5fecf1ba8fedfdcb0db873e67b708cbb05c"
+      "contentHash": "8e4bf091d6ec1367bdfae0c90435093288b9c4205c6e5a6d526564b52edc8904"
     },
     {
       "programId": "wennovation",
@@ -10589,7 +10484,7 @@
     },
     {
       "programId": "y-combinator",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
+      "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
         "w2027"
       ],
@@ -10606,6 +10501,7 @@
         "sector.fintech",
         "sector.life-sciences",
         "sector.education",
+        "sector.commerce",
         "sector.logistics",
         "technology.ai",
         "technology.hardware",
@@ -10615,7 +10511,8 @@
         "stage.pre-revenue",
         "benefit.demo-day",
         "geography.united-states",
-        "geography.new-york",
+        "geography.bay-area",
+        "geography.boston",
         "geography.canada",
         "geography.united-kingdom",
         "geography.southeast-asia",
@@ -10625,7 +10522,7 @@
         "y-combinator:stale:yc-apply-cycle",
         "y-combinator:inaccessible:yc-portal-login"
       ],
-      "contentHash": "8c0b86ba357bc960cdbbc09ec83fa5175d23a94b5441c8bf7acb0668dd657fc8"
+      "contentHash": "1ffdd25a2eb581aa6d449d8e73e751a4526f93bbc9ca032d7094b344e4b0ff74"
     },
     {
       "programId": "y-combinator-startup-school",

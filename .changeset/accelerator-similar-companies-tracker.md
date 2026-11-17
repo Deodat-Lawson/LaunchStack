@@ -30,3 +30,14 @@ Application routes are kept once per page (https preferred, tracking parameters
 removed), and quoted deal wording is rejoined from overlapping quote windows and cut
 at sentence boundaries, with "…" marking a cut that has none. A scraped deal gets no
 generated summary; its components carry the terms.
+
+Fit freshness hashes the company profile without its build time (`hashProfile`), so
+rebuilding an unchanged profile leaves saved results current. Evidence typed into the
+company profile (`origin: "profile"`) rests on no document: `documentEvidence` leaves it
+out of document readability, provenance and export checks, so drafts that cite it can
+still be rewritten, reviewed, reused and exported.
+
+News, press, announcement and case-study pages give a Program only announcements
+(deadlines, intake, applications open, routes), never its deal, location, format or
+acceptance rate. The low end of an acceptance-rate range must be a percentage, so
+"2021 - 5%" is a plain 5%.

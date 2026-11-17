@@ -409,6 +409,20 @@ describeDb("proposal export audience (integration)", () => {
         await expectDenied(await draftApplication([evidence(cited.id)]));
     });
 
+    it("allows citing a value typed into the company profile, which rests on no document", async () => {
+        const cited = await source();
+        const typed: Evidence = {
+            n: 2,
+            documentId: null,
+            title: "Headquarters",
+            page: null,
+            quote: "Portland, Oregon",
+            url: null,
+            origin: "profile",
+        };
+        await expectAllowed(await draftApplication([evidence(cited.id), typed], [1, 2]));
+    });
+
     it("allows equal inherited folder restrictions without a per-document grant", async () => {
         const cited = await source("Research/Nested");
         await restrictFolder("Research", userGrants("writer"));

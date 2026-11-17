@@ -75,6 +75,15 @@ export function documentCount(evidence: Evidence[]): number {
     return new Set(evidence.map(e => e.documentId ?? `t:${e.title}`)).size;
 }
 
+/**
+ * Evidence that rests on a document. A value typed into the company profile
+ * (`origin: "profile"`) has no document behind it, so document readability,
+ * provenance and export checks pass over it rather than treating it as unknown.
+ */
+export function documentEvidence<T extends Pick<Evidence, "origin">>(evidence: readonly T[]): T[] {
+    return evidence.filter(item => item.origin !== "profile");
+}
+
 /** A legacy model draft is not proven source-free merely because its cites are public. */
 export function sectionSourceProvenance(
     section: Pick<SectionRecord, "status" | "draftMeta">
@@ -90,7 +99,7 @@ export function sectionSourceProvenance(
     )
         return { kind: "unknown" };
     const ids = new Set(meta?.sourceDocumentIds ?? []);
-    for (const evidence of meta?.evidence ?? []) {
+    for (const evidence of documentEvidence(meta?.evidence ?? [])) {
         if (evidence.documentId === null) return { kind: "unknown" };
         ids.add(evidence.documentId);
     }
@@ -120,15 +129,12 @@ export function generationSourceDocumentIds(input: {
     for (const item of input.library) {
         if (item.provenance.kind === "sources")
             for (const id of item.provenance.sourceDocumentIds) ids.add(id);
-        for (const evidence of item.evidence) {
-            // A typed profile value rests on no document, so it adds no dependency.
-            if (evidence.origin === "profile") continue;
+        for (const evidence of documentEvidence(item.evidence)) {
             if (evidence.documentId === null) return undefined;
             ids.add(evidence.documentId);
         }
     }
-    for (const evidence of input.evidence) {
-        if (evidence.origin === "profile") continue;
+    for (const evidence of documentEvidence(input.evidence)) {
         if (evidence.documentId === null) return undefined;
         ids.add(evidence.documentId);
     }

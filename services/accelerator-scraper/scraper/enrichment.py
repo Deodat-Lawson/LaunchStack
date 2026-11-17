@@ -2,8 +2,9 @@
 
 The homepage, sitemap URLs, and same-site links are classified (apply, faq, program,
 terms, dates, eligibility, about, and the older portfolio/batch buckets). At most
-15 pages are fetched. A page whose static HTML is too thin is rendered when
-Playwright is installed; otherwise that gap is recorded and the static text is kept.
+20 pages are fetched: the Program's own pages first, then at most 3 posts, news or
+people pages. A page whose static HTML is too thin is rendered when Playwright is
+installed; otherwise that gap is recorded and the static text is kept.
 """
 
 from __future__ import annotations
@@ -14,15 +15,20 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
-from . import CHECKS, DISCOVERIES, iso
-from .facts import Findings, classify, evidence_id, same_site
+from . import CHECKS, DISCOVERIES, VOCABULARY, iso
+from .facts import Findings, classify, evidence_id, is_article, same_site
 from .net import Fetcher
 from .parse import Page
 from .quotes import read
 from .records import write_if_changed
+from .tags import alias_pattern
 from .text import clip
 
-MAX_PAGES = 15
+MAX_PAGES = 20
+# Posts and listings report on a Program rather than state its terms; a few are read for
+# announced deadlines, never in place of its own pages.
+MAX_ARTICLES = 3
+ARTICLE_PENALTY = 10
 SITEMAP_URLS = 400
 PRIORITY = {"application": 0, "terms": 1, "batches": 2, "details": 3, "portfolio": 4}
 LOC = re.compile(r"<loc>\s*([^<]+)\s*</loc>", re.I)
@@ -111,7 +117,8 @@ def enrich(program: dict, fetcher: Fetcher, now: datetime) -> tuple[dict | None,
         return _empty_checks(program, now, []), discovery
     findings.read(home_url, "details", home)
     pages_read = [home_url]
-    quotes = [_quote(home_url, "details", home)]
+    home_quote = _quote(home_url, "details", home)
+    quotes = [home_quote, *_tag_quotes(home_url, home_quote, home)]
     queue: list[tuple[int, int, str, str]] = []
     seen = {home_url.rstrip("/")}
 
@@ -123,7 +130,8 @@ def enrich(program: dict, fetcher: Fetcher, now: datetime) -> tuple[dict | None,
         if urlparse(cleaned).scheme not in {"http", "https"} or not same_site(cleaned, seeds):
             return
         seen.add(key)
-        queue.append((PRIORITY.get(kind, 9), depth, cleaned, kind))
+        penalty = ARTICLE_PENALTY if is_article(cleaned) else 0
+        queue.append((PRIORITY.get(kind, 9) + penalty, depth, cleaned, kind))
 
     for href, kind, _anchor in linked_pages(program, home):
         push(href, kind, 1)
@@ -133,18 +141,26 @@ def enrich(program: dict, fetcher: Fetcher, now: datetime) -> tuple[dict | None,
     if apply_url.rstrip("/") != home_url.rstrip("/"):
         push(apply_url, classify(apply_url, "apply"), 1)
     status: dict[str, tuple[bool, str | None]] = {}
+    articles = 0
     while queue and len(pages_read) < MAX_PAGES:
         queue.sort()
         _priority, depth, href, kind = queue.pop(0)
+        article = is_article(href)
+        if article and articles >= MAX_ARTICLES:
+            continue
         try:
             _, page = read(fetcher, href)
         except Exception as error:
             status[href] = (False, blocked_reason(error))
             continue
+        articles += article
         status[href] = (True, _render_block(page))
         findings.read(href, kind, page)
         pages_read.append(href)
-        quotes.append(_quote(href, kind, page))
+        quote = _quote(href, kind, page)
+        quotes.append(quote)
+        if not article and kind != "portfolio":
+            quotes.extend(_tag_quotes(href, quote, page))
         if depth < 2 and len(pages_read) < MAX_PAGES:
             for child, child_kind, _anchor in linked_pages(program, page):
                 push(child, child_kind, depth + 1)
@@ -185,6 +201,46 @@ def _quote(url: str, kind: str, page: Page) -> dict:
         "page": kind if kind in {"details", "terms", "portfolio", "batches", "application", "other"} else "details",
         "excerpt": text,
     }
+
+
+SENTENCE = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\"“(])")
+MAX_TAG_QUOTES = 12
+_vocabulary: list[re.Pattern[str]] | None = None
+
+
+def _vocabulary_patterns() -> list[re.Pattern[str]]:
+    global _vocabulary
+    if _vocabulary is None:
+        entries = json.loads(VOCABULARY.read_text())["tags"]
+        _vocabulary = [
+            alias_pattern(alias, alias in set(entry.get("caseSensitive", [])))
+            for entry in entries
+            for alias in [entry["label"], *entry["aliases"]]
+        ]
+    return _vocabulary
+
+
+def _tag_quotes(url: str, excerpt: dict, page: Page) -> list[dict]:
+    """Sentences past the page's stored excerpt that name a tag-vocabulary term, each kept as
+    its own cited quote, so tags see the whole page rather than its first 1,400 characters."""
+    patterns = _vocabulary_patterns()
+    found: list[dict] = []
+    for sentence in SENTENCE.split(page.visible()):
+        sentence = sentence.strip()
+        if not 20 <= len(sentence) <= 400 or sentence in excerpt["excerpt"]:
+            continue
+        if any(pattern.search(sentence) for pattern in patterns):
+            found.append(
+                {
+                    "id": evidence_id("page", url, sentence),
+                    "url": url,
+                    "page": excerpt["page"],
+                    "excerpt": sentence,
+                }
+            )
+            if len(found) == MAX_TAG_QUOTES:
+                break
+    return found
 
 
 def save(program_id: str, checks: dict | None, discovery: dict) -> list[Path]:

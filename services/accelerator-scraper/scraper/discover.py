@@ -24,7 +24,7 @@ from urllib.parse import urlparse
 
 from . import CANDIDATES, DISCOVERY_SOURCES, PROGRAMS, iso
 from .enrichment import enrich, linked_pages, save
-from .facts import base_domain
+from .facts import base_domain, is_article
 from .net import Fetcher
 from .outcome import Outcome
 from .parse import Page
@@ -658,27 +658,53 @@ DEFUNCT = re.compile(r"\b(?:domain (?:is )?for sale|this domain has expired|buy 
 NOT_AN_ACCELERATOR = re.compile(r"\b(?:I-Corps|chamber of commerce|customer discovery training)\b", re.I)
 
 
-def vet_text(text: str) -> tuple[str, str, list[str]]:
+VETTING_PAGES = 3
+
+
+def vetting_text(fetcher: Fetcher, website: str, home: Page) -> str:
+    """The homepage plus up to VETTING_PAGES of the site's own program pages (apply, terms,
+    cohorts, program). Accelerators often describe the cohort and the investment there, not
+    on the homepage. Posts and news are skipped: they report on others."""
+    site = {"websiteUrl": website, "applyUrl": website}
+    links = [
+        href
+        for href, kind, _anchor in linked_pages(site, home)
+        if kind in {"application", "terms", "batches", "details"} and not is_article(href)
+    ]
+    texts = [home.visible()]
+    for href in links[:VETTING_PAGES]:
+        try:
+            texts.append(read(fetcher, href)[1].visible())
+        except Exception:
+            continue
+    return "\n".join(texts)
+
+
+def vet_text(text: str, name: str = "") -> tuple[str, str, list[str]]:
     """Return (accept|reject, reason, signals) from visible page text. No network.
 
-    An accelerator names itself as one (or runs a demo day), runs a cohort or invests on stated
-    terms, and takes applications. Anything less is rejected with the signals that were found.
+    An accelerator names itself as one (or runs a demo day), runs a cohort, invests on stated
+    terms or holds a demo day, and takes applications. Anything less is rejected with the
+    signals that were found. An organisation named for I-Corps or a chamber of commerce is
+    rejected outright; a mention on the page rejects only a site that does not itself show all
+    three, because accelerators often partner with both.
     """
-    signals = list(dict.fromkeys(name for name, pattern in ACCELERATOR_SIGNALS if pattern.search(text)))
+    signals = list(dict.fromkeys(signal for signal, pattern in ACCELERATOR_SIGNALS if pattern.search(text)))
     found = ", ".join(signals) if signals else "none"
+    identity = {"accelerator", "demo-day"} & set(signals)
+    structure = {"cohort", "investment", "demo-day"} & set(signals)
+    complete = bool(identity and structure and "application" in signals)
     if DEFUNCT.search(text):
         return "reject", "Defunct or parked domain.", signals
-    if NOT_AN_ACCELERATOR.search(text):
+    if NOT_AN_ACCELERATOR.search(name) or (NOT_AN_ACCELERATOR.search(text) and not complete):
         return "reject", f"Training program or member organisation, not an accelerator (found: {found}).", signals
     if COURSE.search(text) and "investment" not in signals and "cohort" not in signals:
         return "reject", "University course, not an accelerator program.", signals
-    identity = {"accelerator", "demo-day"} & set(signals)
-    structure = {"cohort", "investment"} & set(signals)
     if COWORKING.search(text) and not identity:
         return "reject", f"Coworking space that does not run an accelerator (found: {found}).", signals
     if INCUBATOR.search(text) and not identity:
         return "reject", f"Incubator that does not run an accelerator (found: {found}).", signals
-    if identity and structure and "application" in signals:
+    if complete:
         return "accept", f"Accelerator signals: {found}.", signals
     return "reject", f"Insufficient accelerator signals (found: {found}).", signals
 
@@ -727,7 +753,7 @@ def vet(
             entry["note"] = reason
             print(f"{'reject' if gone else 'held'}\t{entry['key']}\t{reason}")
             return
-        decision, reason, signals = vet_text(page.visible())
+        decision, reason, signals = vet_text(vetting_text(fetcher, website, page), entry["name"])
         entry["vetting"] = {"decision": decision, "reason": reason, "signals": signals}
         entry["website"] = website
         if decision == "accept":

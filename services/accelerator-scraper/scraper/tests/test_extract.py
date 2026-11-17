@@ -179,6 +179,28 @@ class Vetting(unittest.TestCase):
         )
         self.assertEqual(decision, "accept", reason)
 
+    def test_an_accelerator_that_partners_with_i_corps_is_still_an_accelerator(self) -> None:
+        from scraper.discover import vet_text
+
+        decision, reason, _signals = vet_text(
+            "Our health accelerator runs two cohorts a year with I-Corps alumni teams. Apply now."
+        )
+        self.assertEqual(decision, "accept", reason)
+        # An I-Corps hub is no accelerator, however its pages describe the cohort.
+        decision, reason, _signals = vet_text(
+            "Our accelerator cohort trains teams in customer discovery. Apply now.",
+            "NSF I-Corps Mid-South Region Hub",
+        )
+        self.assertEqual(decision, "reject", reason)
+
+    def test_a_demo_day_counts_as_program_structure(self) -> None:
+        from scraper.discover import vet_text
+
+        decision, reason, _signals = vet_text(
+            "The Awesome Inc accelerator ends with a demo day for investors. Applications are open."
+        )
+        self.assertEqual(decision, "accept", reason)
+
 
 if __name__ == "__main__":
     unittest.main()

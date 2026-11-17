@@ -1,0 +1,55 @@
+"""What the crawl reads first, and how tags see a whole page. No network."""
+
+import unittest
+
+from scraper.enrichment import _quote, _tag_quotes
+from scraper.facts import is_article
+from scraper.parse import Page
+
+FILLER = "Our community meets every week to share lessons and plan what comes next. " * 30
+
+
+class Articles(unittest.TestCase):
+    def test_posts_news_and_people_pages_are_articles(self) -> None:
+        for url in (
+            "https://acme.example/blog/applications-open-for-cohort-5",
+            "https://acme.example/news/demo-day-recap",
+            "https://acme.example/2025/06/new-partner",
+            "https://acme.example/portfolio/widgetco",
+            "https://acme.example/team",
+        ):
+            self.assertTrue(is_article(url), url)
+
+    def test_the_programs_own_pages_are_not(self) -> None:
+        for url in (
+            "https://acme.example/apply",
+            "https://acme.example/accelerator/terms",
+            "https://acme.example/faq",
+            "https://acme.example/cohort-start-dates",
+        ):
+            self.assertFalse(is_article(url), url)
+
+
+class TagQuotes(unittest.TestCase):
+    def test_tag_wording_past_the_excerpt_becomes_its_own_quote(self) -> None:
+        url = "https://acme.example/program"
+        page = Page.read(
+            url,
+            f"<main><p>{FILLER}</p><p>We back pre-seed B2B software companies. "
+            f"Lunch is served on Fridays.</p></main>",
+        )
+        excerpt = _quote(url, "details", page)
+        self.assertNotIn("pre-seed", excerpt["excerpt"])
+        quotes = _tag_quotes(url, excerpt, page)
+        self.assertEqual([quote["excerpt"] for quote in quotes], ["We back pre-seed B2B software companies."])
+        self.assertEqual(quotes[0]["url"], url)
+        self.assertNotEqual(quotes[0]["id"], excerpt["id"])
+
+    def test_wording_already_in_the_excerpt_is_not_repeated(self) -> None:
+        url = "https://acme.example/program"
+        page = Page.read(url, "<main><p>We back pre-seed B2B software companies.</p></main>")
+        self.assertEqual(_tag_quotes(url, _quote(url, "details", page), page), [])
+
+
+if __name__ == "__main__":
+    unittest.main()

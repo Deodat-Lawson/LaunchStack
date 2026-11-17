@@ -23,6 +23,20 @@ PAGE_RULES = (
     ("application", ("apply", "application")),
     ("details", ("eligibility", "about", "program", "overview", "accelerator")),
 )
+# Posts, news, people and portfolio listings. Their URLs often say "apply" or "cohort"
+# ("/blog/applications-open-for-cohort-5"), yet they report on the Program rather than state
+# its terms, so they are read last and only a few of them.
+ARTICLE = re.compile(
+    r"/(?:blog|news|posts?|press|stories|story|insights|articles?|media|events?|webinars?|"
+    r"podcasts?|portfolio|companies|team|people|careers|jobs)(?:/|$)|/(?:tag|category|author)/|/20\d\d/",
+    re.I,
+)
+
+
+def is_article(url: str) -> bool:
+    return ARTICLE.search(urlparse(url).path + "/") is not None
+
+
 FORM_HOSTS = (
     "typeform.com", "airtable.com", "jotform.com", "f6s.com", "forms.gle", "docs.google.com",
     "hubspot.com", "submittable.com", "fluxx.io", "smapply.io", "gust.com", "dealum.com",
@@ -94,9 +108,22 @@ STATUS_WORDS = (
     ),
 )
 BOUND = r"(less than|fewer than|under|below|about|around|approximately|roughly|over|more than|~)?\s*"
+QUALIFIERS = {
+    "less than": "under", "fewer than": "under", "under": "under", "below": "under",
+    "about": "about", "around": "about", "approximately": "about", "roughly": "about", "~": "about",
+    "over": "over", "more than": "over",
+}
+# The low end of a range ("a 1-2% acceptance rate") just before the matched number.
+RANGE_START = re.compile(r"\d(?:\.\d+)?\s?%?\s?[-–]\s?$")
 SELECTIVITY = (
     re.compile(rf"\b(?:acceptance|admission|admit)\s+rate\s+(?:of|is|was|:)?\s*{BOUND}(\d+(?:\.\d+)?)\s?%", re.I),
-    re.compile(rf"\b{BOUND}(\d+(?:\.\d+)?)\s?%\s+(?:acceptance\s+rate|of\s+(?:all\s+)?(?:applicants|applications))\b", re.I),
+    re.compile(rf"\b{BOUND}(\d+(?:\.\d+)?)\s?%\s+acceptance\s+rate\b", re.I),
+    # "N% of applicants" says nothing about admission on its own ("you'll beat 80% of applicants").
+    re.compile(
+        rf"\b{BOUND}(\d+(?:\.\d+)?)\s?%\s+of\s+(?:all\s+)?(?:applicants|applications)\s+"
+        r"(?:are|were|get|got|is|was)\s+(?:accepted|admitted|selected)\b",
+        re.I,
+    ),
     re.compile(
         rf"\baccept\w*\s+(?:only\s+)?{BOUND}(\d+(?:\.\d+)?)\s?%\s+of\s+(?:all\s+)?(?:the\s+)?"
         r"(?:applicants|applications|startups|companies|founders|teams)\b",
@@ -410,9 +437,14 @@ class Findings:
         for pattern in SELECTIVITY:
             for match in pattern.finditer(text):
                 bound, number = match.group(1), match.group(2)
-                rate = None if bound else round(float(number) / 100, 6)
+                # "1-2%" is at most 2%; a qualifier keeps the figure but says it is not exact.
+                ranged = RANGE_START.search(text[max(0, match.start(2) - 8) : match.start(2)]) is not None
+                qualifier = "under" if ranged else QUALIFIERS.get((bound or "").lower())
+                value = {"rate": round(float(number) / 100, 6), "bounded": qualifier is not None}
+                if qualifier:
+                    value["qualifier"] = qualifier
                 excerpt = window(text, match.start(), match.end(), 80)
-                self.add("selectivity", {"rate": rate, "bounded": bool(bound)}, self.cite("selectivity", url, kind, excerpt, title))
+                self.add("selectivity", value, self.cite("selectivity", url, kind, excerpt, title))
 
     def _deal(self, url: str, kind: str, text: str, title: str) -> None:
         """An amount next to offer wording ('we invest $150K for 7%'), never next to news wording."""

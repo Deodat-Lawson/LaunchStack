@@ -60,8 +60,22 @@ class Rules(unittest.TestCase):
     def test_deadlines_need_wording_a_year_and_a_future_date(self) -> None:
         self.assertEqual(sorted(self.values("deadlines")), ["2099-10-18", "2099-11-30", "2099-12-10"])
 
-    def test_selectivity_keeps_bounds_apart_from_exact_rates(self) -> None:
-        self.assertCountEqual(self.values("selectivity"), [{"rate": 0.03, "bounded": False}, {"rate": None, "bounded": True}])
+    def test_selectivity_keeps_the_figure_and_says_when_it_is_approximate(self) -> None:
+        self.assertCountEqual(
+            self.values("selectivity"),
+            [{"rate": 0.03, "bounded": False}, {"rate": 0.02, "bounded": True, "qualifier": "under"}],
+        )
+        about = read("<p>Cohort 22-1 was selected from 200 applicants, with an acceptance rate of ~7.5%.</p>")
+        self.assertEqual([item["value"] for item in about.found["selectivity"]], [{"rate": 0.075, "bounded": True, "qualifier": "about"}])
+        ranged = read("<p>We receive 700 applications and select around 10. That's a 1-2% acceptance rate.</p>")
+        self.assertEqual([item["value"] for item in ranged.found["selectivity"]], [{"rate": 0.02, "bounded": True, "qualifier": "under"}])
+
+    def test_beating_other_applicants_is_not_an_acceptance_rate(self) -> None:
+        # A Techstars workshop post was stored as an 80% acceptance rate.
+        advice = read("<p>Follow this advice and you're going to beat 80% of applicants.</p>", "https://acme.example/blog/tips")
+        self.assertEqual(advice.found["selectivity"], [])
+        stated = read("<p>Only 2% of applicants are accepted into each cohort.</p>", "https://acme.example/faq")
+        self.assertEqual([item["value"] for item in stated.found["selectivity"]], [{"rate": 0.02, "bounded": False}])
 
     def test_deal_wording_needs_an_offer_and_no_news(self) -> None:
         self.assertTrue(any("$150,000" in value for value in self.values("dealText")))

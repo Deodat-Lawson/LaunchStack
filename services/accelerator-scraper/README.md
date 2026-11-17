@@ -28,7 +28,8 @@ python3 services/accelerator-scraper/scrape.py refresh --due
 python3 services/accelerator-scraper/scrape.py refresh antler
 python3 services/accelerator-scraper/scrape.py check
 python3 services/accelerator-scraper/scrape.py discover vet
-python3 services/accelerator-scraper/scrape.py discover add-confirmed
+python3 services/accelerator-scraper/scrape.py discover confirm-listed
+python3 services/accelerator-scraper/scrape.py discover add-confirmed --workers 6
 python3 services/accelerator-scraper/scrape.py coverage
 ```
 

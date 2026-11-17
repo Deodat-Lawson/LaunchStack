@@ -133,7 +133,7 @@ pnpm --filter @launchstack/web db:migrate
 
 ### Refreshing the Catalogue (`services/accelerator-scraper`)
 
-The scraper is deterministic Python with no model calls; see `services/accelerator-scraper/README.md`. It honours robots.txt and crawl-delay, caches pages so reruns are stable, reads up to 15 relevant pages per Program (sitemap, apply, FAQ, terms, dates) and renders JavaScript pages with headless Chromium only when the static page is too thin. Every extracted value keeps its excerpt; a field it checked and could not find is recorded as not published with the pages checked. Y Combinator's pages are in scope by product decision, with robots.txt honoured.
+The scraper is deterministic Python with no model calls; see `services/accelerator-scraper/README.md`. It honours robots.txt and crawl-delay, caches pages so reruns are stable, reads up to 20 pages per Program (sitemap, apply, FAQ, terms, dates, program pages first; then at most 3 posts, news or people pages, which report on a Program rather than state its terms) and renders JavaScript pages with headless Chromium only when the static page is too thin. Every extracted value keeps its excerpt; a field it checked and could not find is recorded as not published with the pages checked. Tags see whole pages: besides each page's 1,400-character excerpt, every sentence on a Program page that names a tag term is kept as its own cited quote. Candidate vetting reads the homepage and up to 3 of the site's own program pages. Y Combinator's pages are in scope by product decision, with robots.txt honoured.
 
 ```sh
 uv venv --python 3.12 services/accelerator-scraper/.venv
@@ -144,6 +144,7 @@ services/accelerator-scraper/.venv/bin/python -m playwright install chromium
 S=services/accelerator-scraper/.venv/bin/python
 $S services/accelerator-scraper/scrape.py refresh            # every Program
 $S services/accelerator-scraper/scrape.py discover vet       # rule-based accept/reject of candidates, with reasons
+$S services/accelerator-scraper/scrape.py discover confirm-listed  # vet only review entries an official directory listed
 $S services/accelerator-scraper/scrape.py discover add-confirmed
 $S services/accelerator-scraper/scrape.py coverage           # rewrites fixtures/accelerators/COVERAGE.md
 

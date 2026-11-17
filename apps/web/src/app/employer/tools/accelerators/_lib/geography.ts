@@ -45,7 +45,7 @@ export const PLACES: Readonly<Record<string, Place>> = {
         radius: 0,
     },
     "geography.los-angeles": city(-118.24, 34.05),
-    "geography.middle-east": area(25, 27, 17),
+    "geography.middle-east": area(45, 27, 14),
     "geography.netherlands": area(5.3, 52.1, 1.6),
     "geography.new-york": city(-74.01, 40.71),
     "geography.nordics": area(15, 63, 8),

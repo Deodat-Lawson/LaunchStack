@@ -48,15 +48,17 @@ export function ProgramRow({
     const fitLabel =
         view.freshness.status === "not_assessed"
             ? t("fit.unmatched")
-            : score === null
-              ? t("fit.unknown")
-              : stale
-                ? `${t("fit.score", { score })} · ${t("fit.stale")}`
-                : t("fit.score", { score });
+            : stale && !view.fit
+              ? t("fit.stale")
+              : score === null
+                ? t("fit.unknown")
+                : stale
+                  ? `${t("fit.score", { score })} · ${t("fit.stale")}`
+                  : t("fit.score", { score });
     return (
         <ToolLink
             href={href}
-            aria-label={program.name}
+            aria-label={`${program.name}, ${fitLabel}`}
             className="hover:bg-panel-2 focus-visible:ring-brand/50 group flex min-w-0 items-center gap-3 rounded-lg px-2 py-2.5 outline-none transition-colors focus-visible:ring-2"
         >
             <ProgramLogo program={program} size="sm" />

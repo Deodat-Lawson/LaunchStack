@@ -15,6 +15,7 @@ import type { ProgramView, TrackerOpportunity } from "../api";
 import { useAccelerators } from "../_lib/context";
 import {
     facetValues,
+    hasFacet,
     publishedValue,
     hasRollingIntake,
     type DetailSlot,
@@ -33,16 +34,6 @@ import { LinkList, linkItem, pageLabel, type LinkListItem } from "./LinkList";
 import { ProgramLogo } from "./ProgramFacts";
 import { RegionMap } from "./RegionMap";
 
-/** One entry per page; several excerpts from the same page are one source. */
-function uniqueSources(sources: readonly DetailSource[]): DetailSource[] {
-    const byUrl = new Map<string, DetailSource>();
-    for (const source of sources) {
-        const seen = byUrl.get(source.url);
-        if (!seen || source.checkedAt > seen.checkedAt) byUrl.set(source.url, source);
-    }
-    return [...byUrl.values()];
-}
-
 /** A readable page title: the scraper's "Name — application page checked by …" becomes "Application page". */
 function sourceTitle(source: DetailSource): string {
     const generated = /^.+? — (.+?) checked by \S+$/.exec(source.title);
@@ -57,7 +48,8 @@ function sourceTitle(source: DetailSource): string {
 function SourceList({ sources }: { sources: readonly DetailSource[] }) {
     const t = useTranslations("accelerators.details");
     const format = useFormatter();
-    const unique = uniqueSources(sources).sort((left, right) =>
+    // The server already lists each page once.
+    const unique = [...sources].sort((left, right) =>
         right.checkedAt.localeCompare(left.checkedAt)
     );
     if (unique.length === 0) return null;
@@ -369,14 +361,15 @@ function AudienceNarrative({ details }: { details: ProgramDetails | undefined })
                 <Slot slot={details?.audience.narrative} render={readableNarrative} />
             </div>
             {long && (
-                <button
+                <Button
                     type="button"
+                    variant="link"
                     aria-expanded={expanded}
                     onClick={() => setExpanded(open => !open)}
-                    className="text-brand-ink focus-visible:ring-brand/50 rounded text-xs font-medium outline-none hover:underline focus-visible:ring-2"
+                    className="text-brand-ink h-auto p-0 text-xs"
                 >
                     {expanded ? t("readLess") : t("readMore")}
-                </button>
+                </Button>
             )}
         </div>
     );
@@ -422,11 +415,19 @@ export function OverviewTab({
                 <ul className="flex flex-wrap gap-1.5 pt-1">
                     {facetValues(details, facet, values).map(value => (
                         <li key={value.id} className="min-w-0">
-                            <FacetLink
-                                href={hrefFor(filter(value.id))}
-                                label={value.label}
-                                count={countFor(filter(value.id))}
-                            />
+                            {/* A value no filter can match (no tag carries it) would open a list
+                                without this Program, so it stays plain text. */}
+                            {hasFacet(details, [facet], value.id) ? (
+                                <FacetLink
+                                    href={hrefFor(filter(value.id))}
+                                    label={value.label}
+                                    count={countFor(filter(value.id))}
+                                />
+                            ) : (
+                                <span className="border-line text-ink-2 inline-flex max-w-full items-center rounded-full border px-2.5 py-1 text-xs">
+                                    <span className="truncate">{value.label}</span>
+                                </span>
+                            )}
                         </li>
                     ))}
                 </ul>

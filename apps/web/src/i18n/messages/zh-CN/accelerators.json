@@ -82,7 +82,7 @@
       "rubric_changed": "评分规则已更改"
     },
     "checked": "评分于 {date}",
-    "unmatchedHint": "没有已保存的匹配评估。只有在你选择为项目评分时才会开始评分。",
+    "unmatchedHint": "没有已保存的匹配评估。在你要求之前，不会评分，也不会扣除积分。",
     "short": "匹配",
     "about": "关于此评分"
   },
@@ -130,7 +130,8 @@
     "similarity": "相似度 {percent}",
     "scoreOne": "为此项目评分 · {credits} 积分",
     "updateOne": "更新评分 · {credits} 积分",
-    "rescoreOne": "重新评分 · {credits} 积分"
+    "rescoreOne": "重新评分 · {credits} 积分",
+    "scoringOne": "正在为此项目评分…"
   },
   "run": {
     "programs": "项目评分",

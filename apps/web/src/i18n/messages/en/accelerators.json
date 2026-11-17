@@ -130,7 +130,8 @@
     "similarity": "{percent} similar",
     "scoreOne": "Score this Program · {credits} credits",
     "updateOne": "Update score · {credits} credits",
-    "rescoreOne": "Score again · {credits} credits"
+    "rescoreOne": "Score again · {credits} credits",
+    "scoringOne": "Scoring this Program…"
   },
   "run": {
     "programs": "Scoring Programs",

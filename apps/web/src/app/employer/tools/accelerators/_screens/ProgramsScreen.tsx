@@ -10,6 +10,7 @@ import {
     useToolRouter,
     useToolSearchParams,
 } from "~/components/tool-app/nav";
+import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
 import type { ProgramView } from "../api";
@@ -37,6 +38,7 @@ import {
     DEFAULT_VISION_FILTERS,
     applyVisionFilters,
     daysBetween,
+    isConfirmedIneligible,
     nextDeadline,
     readVisionFilters,
     updateVisionParams,
@@ -119,12 +121,17 @@ export function ProgramsScreen() {
     const deadlineFor = (view: ProgramView) => nextDeadline(view.program, home.details, today);
     const recommended = recommendedPrograms(visible, RECOMMENDED);
 
-    const scored = home.programs.filter(view => currentScore(view) !== null);
+    // The figures describe the list they filter: confirmed-ineligible Programs are left
+    // out unless the list includes them, so the top score is always one you can see.
+    const counted = vision.includeIneligible
+        ? home.programs
+        : home.programs.filter(view => !isConfirmedIneligible(view));
+    const scored = counted.filter(view => currentScore(view) !== null);
     const best = scored.reduce<number | null>(
         (top, view) => Math.max(top ?? 0, currentScore(view) ?? 0),
         null
     );
-    const closingSoon = home.programs.filter(view => {
+    const closingSoon = counted.filter(view => {
         const deadline = deadlineFor(view);
         return deadline !== null && daysBetween(today, deadline) <= Number(SOON_WINDOW);
     }).length;
@@ -277,17 +284,18 @@ function Stat({
     return (
         <li className="flex">
             {onSelect ? (
-                <button
+                <Button
                     type="button"
+                    variant="ghost"
                     aria-pressed={active}
                     onClick={onSelect}
                     className={cn(
-                        "focus-visible:ring-brand/50 -mx-2 inline-flex items-baseline gap-1.5 rounded-md px-2 py-0.5 outline-none transition-colors focus-visible:ring-2",
-                        active ? "bg-brand-soft" : "hover:bg-panel-2"
+                        "-mx-2 h-auto items-baseline gap-1.5 px-2 py-0.5 font-normal",
+                        active && "bg-brand-soft"
                     )}
                 >
                     {body}
-                </button>
+                </Button>
             ) : (
                 <span className="inline-flex items-baseline gap-1.5 py-0.5">{body}</span>
             )}

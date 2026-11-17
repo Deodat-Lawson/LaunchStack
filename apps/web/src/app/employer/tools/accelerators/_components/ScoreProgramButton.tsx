@@ -68,7 +68,7 @@ export function ScoreProgramButton({ view }: { view: ProgramView }) {
             onClick={() => void start()}
         >
             {busy ? <Loader2 className="animate-spin motion-reduce:animate-none" /> : <Sparkles />}
-            {busy ? t("scoring") : label}
+            {busy ? t("scoringOne") : label}
         </Button>
     );
 

@@ -99,10 +99,12 @@ function RecommendedCard({
                 : null,
         tracked ? t(`tracker.statuses.${tracked.status}`) : null,
     ].filter(Boolean);
+    // Recommended cards exist only for scored Programs; the score must reach screen readers too.
+    const scoreLabel = t("fit.score", { score: score ?? 0 });
     return (
         <ToolLink
             href={href}
-            aria-label={program.name}
+            aria-label={[program.name, scoreLabel, ...meta].join(", ")}
             className="border-line bg-panel hover:border-brand/40 hover:bg-panel-2 focus-visible:ring-brand/50 group flex h-full min-w-0 items-center gap-3 rounded-xl border p-3 outline-none transition-colors focus-visible:ring-2"
         >
             <ProgramLogo program={program} size="sm" />
@@ -114,7 +116,7 @@ function RecommendedCard({
                     <p className="text-ink-3 truncate text-xs">{meta.join(" · ")}</p>
                 )}
             </div>
-            <ScoreRing score={score} label={t("fit.score", { score: score ?? 0 })} size="xs" />
+            <ScoreRing score={score} label={scoreLabel} size="xs" />
         </ToolLink>
     );
 }

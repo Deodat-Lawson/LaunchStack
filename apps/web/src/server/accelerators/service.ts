@@ -1,6 +1,6 @@
 import {
     AcceleratorError,
-    hashValue,
+    hashProfile,
     programFit,
     type ProgramView,
 } from "@launchstack/pipelines/accelerators";
@@ -43,21 +43,29 @@ export function toAcceleratorRunView(run: RunRecord): AcceleratorRunView {
 }
 
 export async function loadAccelerators(member: WorkspaceContext): Promise<AcceleratorsHome> {
+    const sharedScope = await companySharedScope(member.companyId);
     const [catalogue, matches, profile, details] = await Promise.all([
         listCatalogue(),
         listCompanyMatches(member.companyId),
-        loadOrgProfile(member.companyId, await companySharedScope(member.companyId)),
+        loadOrgProfile(member.companyId, sharedScope),
         loadProgramDetails(),
     ]);
-    const profileHash = profile ? hashValue(profile) : null;
+    const profileHash = profile ? hashProfile(profile) : null;
+    // A saved result's notes can quote whatever profile it was scored from. Where the
+    // workspace has private sources, only results scored from today's company-shared
+    // profile are shown; older ones read as out of date, with no grades or notes.
+    const restricted = sharedScope.kind !== "everything";
     // No ranking here: the homepage sorts and filters, and fit is one field among many.
-    const programs = catalogue.map(
-        ({ program, contentHash }): ProgramView => ({
+    const programs = catalogue.map(({ program, contentHash }): ProgramView => {
+        const saved = matches[program.id] ?? null;
+        const view = programFit(saved, { profileHash, programHash: contentHash });
+        const fromShared = !saved || saved.profileHash === profileHash;
+        return {
             program,
             contentHash,
-            ...programFit(matches[program.id] ?? null, { profileHash, programHash: contentHash }),
-        })
-    );
+            ...(restricted && !fromShared ? { ...view, fit: null } : view),
+        };
+    });
     return {
         programs,
         // Every grade must cite the profile, so a profile with nothing citable cannot score.
@@ -117,7 +125,7 @@ export async function matchPrograms(
         const programHashes = new Map(
             catalogue.map(({ program, contentHash }) => [program.id, contentHash])
         );
-        const profileHash = hashValue(profile);
+        const profileHash = hashProfile(profile);
         ids = chosen.filter(
             id =>
                 programFit(matches[id] ?? null, {

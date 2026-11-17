@@ -7,6 +7,7 @@ import {
     CatalogueProgramSchema,
     FIT_DIMENSION_KEYS,
     FIT_RUBRIC_VERSION,
+    hashProfile,
     hashValue,
     type CatalogueProgram,
     type FitAssessmentV1,
@@ -258,7 +259,8 @@ describe("discovery reads", () => {
         expect(body.details[dossier.programId].sources.length).toBeGreaterThan(0);
     });
 
-    it("marks stale fit without hiding the score or claiming it is current", async () => {
+    it("marks stale fit without hiding the score or claiming it is current, where nothing is private", async () => {
+        mockSharedScope.mockResolvedValue({ kind: "everything" });
         const fit: StoredFit = {
             assessment: ratedAssessment,
             profileHash: "previous-profile",
@@ -283,6 +285,28 @@ describe("discovery reads", () => {
         expect(mockQueue).not.toHaveBeenCalled();
     });
 
+    it("withholds the grades and notes of a result not scored from the company-shared profile", async () => {
+        // The workspace has private sources (SHARED_SCOPE denies some), and this result was
+        // scored from another profile, possibly one that included them: its notes could quote it.
+        mockMatches.mockResolvedValue({
+            [program.id]: {
+                assessment: ratedAssessment,
+                profileHash: "profile-with-private-sources",
+                programHash: hashValue(program),
+                rubricVersion: FIT_RUBRIC_VERSION,
+                checkedAt: "2026-10-24T00:00:00Z",
+            } satisfies StoredFit,
+        });
+        const response = await home(new NextRequest("http://x/api/accelerators"));
+        const [view] = (await response.json()).programs;
+        expect(view.fit).toBeNull();
+        expect(view.freshness).toMatchObject({
+            status: "out_of_date",
+            reasons: ["profile_changed"],
+        });
+        expect(JSON.stringify(view)).not.toContain(ratedAssessment.dimensions.sector.note);
+    });
+
     it("reports a result saved under an earlier rubric as out of date without grades", async () => {
         mockMatches.mockResolvedValue({
             [program.id]: {
@@ -304,11 +328,27 @@ describe("discovery reads", () => {
         expect(mockQueue).not.toHaveBeenCalled();
     });
 
+    it("keeps a result current and shown when the profile was only rebuilt, not changed", async () => {
+        mockMatches.mockResolvedValue({
+            [program.id]: {
+                assessment: ratedAssessment,
+                profileHash: hashProfile({ ...profile, builtAt: "2026-10-01T00:00:00.000Z" }),
+                programHash: hashValue(program),
+                rubricVersion: FIT_RUBRIC_VERSION,
+                checkedAt: "2026-10-24T00:00:00Z",
+            } satisfies StoredFit,
+        });
+        const response = await home(new NextRequest("http://x/api/accelerators"));
+        const [view] = (await response.json()).programs;
+        expect(view.freshness.status).toBe("current");
+        expect(view.fit).not.toBeNull();
+    });
+
     async function servedFit(assessment: FitAssessmentV1) {
         mockMatches.mockResolvedValue({
             [program.id]: {
                 assessment,
-                profileHash: hashValue(profile),
+                profileHash: hashProfile(profile),
                 programHash: hashValue(program),
                 rubricVersion: FIT_RUBRIC_VERSION,
                 checkedAt: "2026-11-09T00:00:00Z",
@@ -362,7 +402,7 @@ describe("discovery reads", () => {
         mockMatches.mockResolvedValue({
             [program.id]: {
                 assessment: ratedAssessment,
-                profileHash: hashValue(profile),
+                profileHash: hashProfile(profile),
                 programHash: "an-earlier-program-version",
                 rubricVersion: FIT_RUBRIC_VERSION,
                 checkedAt: "2026-11-09T00:00:00Z",
@@ -526,7 +566,7 @@ describe("matching access and admission", () => {
     describe("reuse of current results", () => {
         const current = (): StoredFit => ({
             assessment: ratedAssessment,
-            profileHash: hashValue(profile),
+            profileHash: hashProfile(profile),
             programHash: hashValue(program),
             rubricVersion: FIT_RUBRIC_VERSION,
             checkedAt: "2026-11-14T00:00:00.000Z",

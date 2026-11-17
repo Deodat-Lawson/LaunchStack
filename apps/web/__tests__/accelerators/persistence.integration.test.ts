@@ -11,6 +11,7 @@ import {
     CatalogueProgramSchema,
     FIT_DIMENSION_KEYS,
     FIT_RUBRIC_VERSION,
+    hashProfile,
     hashValue,
     type CatalogueProgram,
     type FitAssessmentV1,
@@ -487,6 +488,7 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
             });
             expect(finished.steps.every(step => step.status === "done")).toBe(true);
             const profile = await loadOrgProfile(companyId, { kind: "everything" });
+            expect(profile).not.toBeNull();
             expect(await listCompanyMatches(companyId)).toMatchObject({
                 [program.id]: {
                     assessment: {
@@ -497,7 +499,7 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
                         },
                     },
                     rubricVersion: FIT_RUBRIC_VERSION,
-                    profileHash: hashValue(profile),
+                    profileHash: hashProfile(profile!),
                     programHash: hashValue(program),
                 },
             });

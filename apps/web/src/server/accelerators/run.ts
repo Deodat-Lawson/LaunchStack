@@ -5,7 +5,7 @@ import {
     FIT_DIMENSION_KEYS,
     FIT_RUBRIC_VERSION,
     FitAssessmentV1Schema,
-    hashValue,
+    hashProfile,
     MAX_PROGRAMS_PER_RUN,
     portfolioDimension,
     type CatalogueProgram,
@@ -273,7 +273,7 @@ export async function prepareAcceleratorRun(
     const dossierOf = new Map(dossiers.map(({ dossier }) => [dossier.programId, dossier]));
     const selected = programIds.map(id => byId.get(id)!);
 
-    const profileHash = hashValue(profile);
+    const profileHash = hashProfile(profile);
     const availableCompanyEvidenceIds = profile.evidence.map(evidence => String(evidence.n));
     const companyEvidenceSchema = availableCompanyEvidenceIds.length
         ? z.array(z.enum(availableCompanyEvidenceIds as [string, ...string[]]))

@@ -5,6 +5,7 @@ import {
     CatalogueProgramSchema,
     FIT_DIMENSION_KEYS,
     FIT_RUBRIC_VERSION,
+    hashProfile,
     hashValue,
     MAX_PROGRAMS_PER_RUN,
     type CatalogueProgram,
@@ -162,7 +163,7 @@ it("completes the assessment by rubric rule and saves it under the current rubri
     expect(asked).toEqual([program.id]);
     expect(prepared.amount).toBe(PROPOSAL_CREDITS.programs);
     const [, profileHash, results] = mockSave.mock.calls[0]!;
-    expect(profileHash).toBe(hashValue(profile));
+    expect(profileHash).toBe(hashProfile(profile));
     expect(results).toEqual([
         {
             programId: program.id,
